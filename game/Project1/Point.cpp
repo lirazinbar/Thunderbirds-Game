@@ -1,7 +1,7 @@
 #include "Point.h"
 #include "Board.h"
 
-Point::Point(char _ch, Board* _pBoard): ch(_ch), pBoard(_pBoard) { // Maybe getObjectLocation() in Board?
+Point::Point(char ch, Board* _pBoard) : ch(ch), pBoard(_pBoard) { // Maybe getObjectLocation() in Board?
 	for (int row = 0; row < pBoard->Height && !*this; ++row) {
 		char curr;
 		for (int col = 0; (curr = pBoard->get(col, row)) != '\n' && !*this; ++col) {
@@ -20,11 +20,11 @@ void Point::move(int& difx, int& dify) {
 		difx = dify = 0;
 		return;
 	}
-	del();
+	deleteFromScreen();
 	pBoard->set(x, y, ' '); // del also from board
 	// TODO make sure not to get out of screen
 	x = new_x;
 	y = new_y;
-	draw();
+	drawOnScreen();
 	pBoard->set(x, y, ch); // draw also in board!
 }

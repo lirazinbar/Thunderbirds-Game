@@ -3,7 +3,7 @@
 #include <windows.h>
 #include "Game.h"
 
-void Game::run(){
+void Game::run() {
 	char key = 0;
 	bool keepRunning = true;
 	board.print();

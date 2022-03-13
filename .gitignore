@@ -33,3 +33,5 @@
 *.opendb
 *.suo
 *.vs
+*.ilk
+*.pdb

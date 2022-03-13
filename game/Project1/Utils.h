@@ -3,6 +3,7 @@
 void gotoxy(int, int);
 void clrscr();
 void hide_cursor();
+int printMainMenu();
 
 struct Keys {
 	constexpr static char ESC = 27;
