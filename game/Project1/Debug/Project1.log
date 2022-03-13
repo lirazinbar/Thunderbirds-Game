@@ -1,1 +1,7 @@
-﻿  Project1.vcxproj -> C:\Users\liraz\Desktop\c++ game\Project1\Debug\Project1.exe
+﻿  Board.cpp
+  Game.cpp
+  Point.cpp
+  Ship.cpp
+  main.cpp
+  Generating Code...
+  Project1.vcxproj -> C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Debug\Project1.exe

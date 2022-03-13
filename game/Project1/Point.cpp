@@ -22,7 +22,6 @@ void Point::move(int& difx, int& dify) {
 	}
 	deleteFromScreen();
 	pBoard->set(x, y, ' '); // del also from board
-	// TODO make sure not to get out of screen
 	x = new_x;
 	y = new_y;
 	drawOnScreen();

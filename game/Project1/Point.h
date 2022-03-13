@@ -11,7 +11,6 @@ class Point {
 	char ch;
 	Board* pBoard = nullptr;
 public:
-	Point();
 	Point(char ch, Board* _pBoard);
 	Point(int x1, int y1, char c, Board* _pBoard) : x(x1), y(y1), ch(c), pBoard(_pBoard) {}
 	bool operator!() const {
