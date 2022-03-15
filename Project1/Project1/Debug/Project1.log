@@ -1,0 +1,16 @@
+﻿  Block.cpp
+C:\Users\liraz\Desktop\my-game\Project1\Project1\Block.cpp(23,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\liraz\Desktop\my-game\Project1\Project1\Block.cpp(30,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\liraz\Desktop\my-game\Project1\Project1\Block.cpp(35,20): warning C4018: '<': signed/unsigned mismatch
+  Board.cpp
+C:\Users\liraz\Desktop\my-game\Project1\Project1\Board.cpp(6,50): warning C4018: '<': signed/unsigned mismatch
+C:\Users\liraz\Desktop\my-game\Project1\Project1\Board.cpp(8,69): warning C4018: '<': signed/unsigned mismatch
+  Game.cpp
+  Point.cpp
+  Ship.cpp
+C:\Users\liraz\Desktop\my-game\Project1\Project1\Ship.cpp(21,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\liraz\Desktop\my-game\Project1\Project1\Ship.cpp(28,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\liraz\Desktop\my-game\Project1\Project1\Ship.cpp(33,20): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+  Generating Code...
+  Project1.vcxproj -> C:\Users\liraz\Desktop\my-game\Project1\Debug\Project1.exe
