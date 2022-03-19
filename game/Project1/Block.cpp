@@ -1,33 +1,34 @@
+#include "Block.h"
 #include "Ship.h"
 #include "Point.h"
 #include "Board.h"
 
-Ship::Ship(char _ch, int _size, Board* _pBoard) : ch(_ch), size(_size), pBoard(_pBoard) {
+Block::Block(char _ch, int _size, Board* _pBoard) : ch(_ch), size(_size), pBoard(_pBoard) {
 	points = _pBoard->getPoints(_ch, _size);
 }
 
-void Ship::move(int& difx, int& dify) {
+void Block::move() {
 	for (int i = 0; i < size; i++) {
-		int new_x = points[i].getX() + difx;
-		int new_y = points[i].getY() + dify;
+		int new_x = points[i].getX() + dirx;
+		int new_y = points[i].getY() + diry;
 		if (pBoard->get(new_x, new_y) != ' ' && pBoard->get(new_x, new_y) != ch) { // pos is already taken
-			difx = dify = 0;
+			dirx = diry = 0;
 			return;
 		}
 	}
 	deleteFromScreen();
 	for (int i = 0; i < points.size(); i++) {
-		points[i].move(difx, dify);
+		points[i].move(dirx, diry);
 	}
 	drawOnScreen();
 }
 
-void Ship::drawOnScreen() const {
+void Block::drawOnScreen() const {
 	for (int i = 0; i < points.size(); i++) {
 		points[i].drawOnScreen();
 	}
 }
-void Ship::deleteFromScreen() const {
+void Block::deleteFromScreen() const {
 	for (int i = 0; i < points.size(); i++) {
 		points[i].deleteFromScreen();
 	}
