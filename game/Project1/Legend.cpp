@@ -6,17 +6,7 @@
 class Board;
 
 Legend::Legend(Board* _pBoard): pBoard(_pBoard) {
-	bool found = false;
-
-	for (size_t row = 0; row < pBoard->Height && !found; ++row) {
-		for (size_t col = 0; col < pBoard->Width && !found; col++) {
-			if (pBoard->get(col, row) == '&') {  // Find the legend place on board
-				legendLocation.setX(col);
-				legendLocation.setY(row);
-				found = true;
-			}
-		}
-	}
+	legendLocation = pBoard->findCharOnBoard(char(BoardSymbols::LEGEND));
 }
 
 void Legend::print(int activeShip, int timeLeft, int livesCount) const {

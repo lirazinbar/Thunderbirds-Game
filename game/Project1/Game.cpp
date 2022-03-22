@@ -9,16 +9,16 @@
 
 void Game::run() {
 	char key = 0;
-	int userChoice = 0;
+	char userChoice = 0;
 
 	while (userChoice != Keys::ESC) {
 		printMainMenu(userChoice);
-		if (userChoice == 1) {
+		if (userChoice == '1') {
 			resetScreen();
 			keepPlaying = true;
 			while (keepPlaying == true) {
 				ships[activeShip].move(dirx, diry);
-				Sleep(500);
+				Sleep(100);
 				timer.tick();
 				if (checkTime() <= 0) { //If time runs out
 					decreseLives();
@@ -30,9 +30,10 @@ void Game::run() {
 					key = _getch();
 					assignKey(key);
 				}
+				checkGameWin();
 			}
 		}
-		else if (userChoice == 8) {
+		else if (userChoice == '8') {
 			//presentInstructions();
 		}
 	}
@@ -83,7 +84,7 @@ int Game::checkTime() {
 };
 
 void Game::pauseGame() {
-	char key = ' ';
+	char key = 0;
 
 	clrscr();
 	gotoxy(10, 10);
@@ -105,8 +106,10 @@ void Game::pauseGame() {
 }
 
 void Game::changeActiveShip(ShipsIndex _activeShip) {
-	activeShip = int(_activeShip);
-	legend.printActiveShip(activeShip);
+	if (ships[int(_activeShip)].endPointStatus() == false) {
+		activeShip = int(_activeShip);
+		legend.printActiveShip(activeShip);
+	}
 }
 
 bool Game::checkGameLose() {
@@ -118,6 +121,15 @@ bool Game::checkGameLose() {
 		printLoseMessage();
 	}
 	return isLost;
+}
+
+void Game::checkGameWin() {
+	// If both ships has reaced the end point
+	if (ships[int(ShipsIndex::BIG_SHIP)].endPointStatus() == true &&
+		ships[int(ShipsIndex::SMALL_SHIP)].endPointStatus() == true) {
+		keepPlaying = false;
+		printWinMessage();
+	}
 }
 
 void Game::resetScreen() {

@@ -7,13 +7,10 @@
 
 enum class ShipsIndex { BIG_SHIP, SMALL_SHIP };
 
-class Point;
-class Board;
-
-class Ship
-{
+class Ship {
 	char ch;
 	int size;
+	bool hasReachedEndPoint = false;
 	Board* pBoard = nullptr;
 	std::vector<Point> points;
 public:
@@ -22,5 +19,6 @@ public:
 	void move(int& difx, int& dify);
 	void drawOnScreen() const;
 	void deleteFromScreen() const;
+	bool endPointStatus() { return hasReachedEndPoint; }
 };
 

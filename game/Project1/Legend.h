@@ -8,7 +8,7 @@ enum class LegendElementsXLocation { ACTIVE_SHIP = 13, TIMER = 36, LIVES = 53 };
 class Board;
 
 class Legend {
-	Point legendLocation{ 3, 1 };  // Default location
+	Point legendLocation;
 	Board* pBoard = nullptr;
 public:
 	Legend(Board* _pBoard);

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <ios>
+#include <limits>
 #include <windows.h>
 #include <process.h>
 #include <conio.h>
@@ -28,7 +30,7 @@ void hide_cursor() {
 	SetConsoleCursorInfo(consoleHandle, &info);
 }
 
-void printMainMenu(int& userChoice) {
+void printMainMenu(char& userChoice) {
 	bool isValid = false;
 
 	clrscr();
@@ -38,18 +40,26 @@ void printMainMenu(int& userChoice) {
 	std::cout << "(8) Present instructions and keys" << std::endl;
 	std::cout << "(9) EXIT" << std::endl;
 	while (!isValid) {
-		std::cin >> userChoice;
-		isValid = (userChoice == 1 || userChoice == 8 || userChoice == 9);
+		if (_kbhit()) {
+			userChoice = _getch();
+			isValid = (userChoice == '1' || userChoice == '8' || userChoice == '9');
+		}
 	}
 	clrscr();
 }
 
 void printWinMessage() {
 	clrscr();
-	std::cout << "Good job! You Won!" << std::endl;
+	gotoxy(40, 10);
+	std::cout << "Good job! You Won!\n" << std::endl;
+	gotoxy(40, 12);
+	system("pause");
 }
 
 void printLoseMessage() {
 	clrscr();
+	gotoxy(40, 10);
 	std::cout << "Game Over! You lost!" << std::endl;
+	gotoxy(40, 12);
+	system("pause");
 }

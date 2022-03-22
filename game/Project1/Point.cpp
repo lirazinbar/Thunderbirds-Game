@@ -1,4 +1,5 @@
 #include "Point.h"
+#include "Utils.h"
 #include "Board.h"
 
 void Point::move(int& difx, int& dify) {
@@ -13,6 +14,6 @@ void Point::drawOnScreen() const {
 }
 void Point::deleteFromScreen() const {	
 	gotoxy(x, y);
-	std::cout << ' ';
-	pBoard->set(x, y, ' '); // del also from board
+	std::cout << char(BoardSymbols::BLANK);
+	pBoard->set(x, y, char(BoardSymbols::BLANK)); // del also from board
 }

@@ -9,7 +9,7 @@
 
 class Game {
 	Board board;
-	Ship ships[2] = { {'#', 4, &board}, {'@', 2, &board} }; // Index 0 is big ship and 1 is small ship
+	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board}, {char(BoardSymbols::SMALL_SHIP), 2, &board} }; // Index 0 is big ship and 1 is small ship
 	Block block = {'$', 3, &board};
 	Legend legend{ &board };
 	Timer timer;
@@ -29,5 +29,5 @@ public:
 	void resetShips();
 	//void resetBlocks();
 	bool checkGameLose();
-	//bool checkWin() {};
+	void checkGameWin();
 };

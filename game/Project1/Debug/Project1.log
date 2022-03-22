@@ -1,2 +1,19 @@
-﻿  Game.cpp
+﻿  Block.cpp
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\Block.cpp(20,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\Block.cpp(27,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\Block.cpp(32,20): warning C4018: '<': signed/unsigned mismatch
+  Board.cpp
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\Board.cpp(10,50): warning C4018: '<': signed/unsigned mismatch
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\Board.cpp(12,69): warning C4018: '<': signed/unsigned mismatch
+  Game.cpp
+  Legend.cpp
+  Point.cpp
+  Ship.cpp
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\Ship.cpp(22,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\Ship.cpp(30,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\Ship.cpp(35,20): warning C4018: '<': signed/unsigned mismatch
+  Timer.cpp
+  Utils.cpp
+  main.cpp
+  Generating Code...
   Project1.vcxproj -> C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Debug\Project1.exe

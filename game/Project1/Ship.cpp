@@ -8,18 +8,22 @@ Ship::Ship(char _ch, int _size, Board* _pBoard) : ch(_ch), size(_size), pBoard(_
 
 void Ship::move(int& difx, int& dify) {
 	for (int i = 0; i < size; i++) {
-		int new_x = points[i].getX() + difx;
-		int new_y = points[i].getY() + dify;
-		if (pBoard->get(new_x, new_y) != ' ' && pBoard->get(new_x, new_y) != ch) { // pos is already taken
+		char newPoint = pBoard->get((points[i].getX() + difx), (points[i].getY() + dify));
+		if (newPoint != char(BoardSymbols::BLANK) && newPoint != ch) { // pos is already taken
 			difx = dify = 0;
-			return;
+			// If at least one of the points of the ship has reachd the end point
+			if (newPoint == char(BoardSymbols::END_POINT)) {
+				hasReachedEndPoint = true;
+			}
 		}
 	}
 	deleteFromScreen();
-	for (int i = 0; i < points.size(); i++) {
-		points[i].move(difx, dify);
+	if (hasReachedEndPoint == false) {
+		for (int i = 0; i < points.size(); i++) {
+			points[i].move(difx, dify);
+		}
+		drawOnScreen();
 	}
-	drawOnScreen();
 }
 
 void Ship::drawOnScreen() const {

@@ -1,11 +1,6 @@
 #pragma once
 
-void gotoxy(int, int);
-void clrscr();
-void hide_cursor();
-void printMainMenu(int& userChoice);
-void printWinMessage();
-void printLoseMessage();
+enum class BoardSymbols { END_POINT = 'E', LEGEND = '&', BIG_SHIP = '#', SMALL_SHIP = '@', BLANK = ' ' };
 
 struct Keys {
 	constexpr static char ESC = 27;
@@ -16,3 +11,10 @@ struct Keys {
 	constexpr static char BigShip = 'b';
 	constexpr static char SmallShip = 's';
 };
+
+void gotoxy(int, int);
+void clrscr();
+void hide_cursor();
+void printMainMenu(char& userChoice);
+void printWinMessage();
+void printLoseMessage();
