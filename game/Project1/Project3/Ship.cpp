@@ -4,7 +4,7 @@
 #include "Utils.h"
 #include "Color.h"
 
-Ship::Ship(char _ch, int _size, Board* _pBoard) : ch(_ch), size(_size), pBoard(_pBoard) {
+Ship::Ship(char _ch, int _size, Board* _pBoard, int _blockSizeCapacity) : ch(_ch), size(_size), pBoard(_pBoard), blockSizeCapacity(_blockSizeCapacity){
 	points = _pBoard->getPoints(_ch, _size);
 }
 
@@ -31,12 +31,12 @@ Ship::Ship(char _ch, int _size, Board* _pBoard) : ch(_ch), size(_size), pBoard(_
 
 void Ship::move(int difx, int dify) {
 	deleteFromScreen();
-	if (hasReachedEndPoint == false) {
-		for (int i = 0; i < points.size(); i++) {
-			points[i].move(difx, dify);
-		}
-		drawOnScreen();
+	if (hasReachedEndPoint) return;
+
+	for (int i = 0; i < points.size(); i++) {
+		points[i].move(difx, dify);
 	}
+	drawOnScreen();
 }
 
 void Ship::drawOnScreen() const {
@@ -51,4 +51,13 @@ void Ship::deleteFromScreen() const {
 	for (int i = 0; i < points.size(); i++) {
 		points[i].deleteFromScreen();
 	}
+}
+
+bool Ship::isShipIncludesPoint(Point p) {
+	for (int i = 0; i < points.size(); i++) {
+		if (points[i].getX() == p.getX() && points[i].getY() == p.getY())
+			return true;
+	}
+
+	return false;
 }

@@ -28,8 +28,18 @@ void Block::drawOnScreen() const {
 		points[i].drawOnScreen();
 	}
 }
+
 void Block::deleteFromScreen() const {
 	for (int i = 0; i < points.size(); i++) {
 		points[i].deleteFromScreen();
 	}
+}
+
+bool Block::isBlockIncludesPoint(Point p) {
+	for (int i = 0; i < points.size(); i++) {
+		if (points[i].getX() == p.getX() && points[i].getY() == p.getY())
+			return true;
+	}
+
+	return false;
 }

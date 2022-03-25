@@ -25,4 +25,5 @@ public:
 	void move(int dirx, int diry);
 	void drawOnScreen() const;
 	void deleteFromScreen() const;
+	bool isBlockIncludesPoint(Point p);
 };

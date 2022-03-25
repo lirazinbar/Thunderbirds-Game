@@ -10,8 +10,9 @@
 
 class Game {
 	Board board;
-	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board}, {char(BoardSymbols::SMALL_SHIP), 2, &board} }; // Index 0 is big ship and 1 is small ship
-	Block block = { '$', 3, &board };
+	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 6}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 2} }; // Index 0 is big ship and 1 is small ship
+	Block blocks[2] = { {'$', 4, &board}, {'%', 2, &board} };
+	int blocksAmount = 2;
 	Legend legend{ &board };
 	Timer timer;
 	//Color color;
@@ -24,14 +25,20 @@ public:
 	void run();
 	void assignKey(char& key);
 	void changeActiveShip(ShipsIndex _activeShip);
-	void decreseLives() { livesCount -= 1; }
+	void decreseLives() { livesCount -= 1; resetScreen();}
 	int checkTime();
 	void pauseGame();
 	void resetScreen();
 	void resetShips();
-	//void resetBlocks();
+	void resetBlocks();
 	bool checkGameLose();
 	void checkGameWin();
 	void moveShip();
-	void moveBlockVertically();
+	void moveBlocksVertically();
+	bool areCharsInVec(std::vector<Point> points, char* charsArr, int size);
+	bool isArrayIncludesChar(char* arr, int size, char ch);
+	bool isBlockCanMove(int blockIndex);
+	bool checkShipPushBlock(std::vector<Point> points);
+	void checkBlockFallsOnShip(std::vector<Point> points, int blockSize);
+	void resetGame(); 
 };

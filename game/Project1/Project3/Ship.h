@@ -11,10 +11,11 @@ class Ship {
 	char ch;
 	int size;
 	bool hasReachedEndPoint = false;
+	int blockSizeCapacity;
 	Board* pBoard = nullptr;
 	std::vector<Point> points;
 public:
-	Ship(char _ch, int _size, Board* _pBoard);
+	Ship(char _ch, int _size, Board* _pBoard, int _blockSizeCapacity);
 	void resetLocatin() { points = pBoard->getPoints(ch, size); }
 	std::vector<Point> getPoints() const { return points; }
 	int getSize() const { return size; }
@@ -23,5 +24,8 @@ public:
 	void drawOnScreen() const;
 	void deleteFromScreen() const;
 	bool endPointStatus() { return hasReachedEndPoint; }
+	void setHasReachedEndPoint(bool _hasReachedEndPoint) { hasReachedEndPoint = _hasReachedEndPoint; }
+	bool isShipIncludesPoint(Point p);
+	int getBlockSizeCapacity() { return blockSizeCapacity; }
 };
 

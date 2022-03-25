@@ -1,0 +1,12 @@
+﻿  Block.cpp
+  Board.cpp
+C:\Users\liraz\Desktop\game-v3\Thunderbirds-Game\game\Project1\Project3\Board.cpp(40,7): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\liraz\Desktop\game-v3\Thunderbirds-Game\game\Project1\Project3\Board.cpp(41,35): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  Game.cpp
+  Legend.cpp
+  Point.cpp
+  Ship.cpp
+  Timer.cpp
+  main.cpp
+  Generating Code...
+  Project3.vcxproj -> C:\Users\liraz\Desktop\game-v3\Thunderbirds-Game\game\Project1\x64\Debug\Project3.exe

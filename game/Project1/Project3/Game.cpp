@@ -6,32 +6,28 @@
 #include "Timer.h"
 #include "Legend.h"
 
-
 void Game::run() {
 	char key = 0;
 	char userChoice = 0;
 
 	while (userChoice != Keys::ESC) {
 		printMainMenu(userChoice);
+		resetGame();
 		if (userChoice == '1') {
-			resetScreen();
-			keepPlaying = true;
 			while (keepPlaying == true) {
 				moveShip();
-				moveBlockVertically();
-				Sleep(100);
+				moveBlocksVertically();
+				Sleep(500);
 				timer.tick();
 				if (checkTime() <= 0) { //If time runs out
 					decreseLives();
-					if (!checkGameLose()) {
-						resetScreen();
-					}
 				}
+				checkGameWin();
+				checkGameLose();
 				if (_kbhit()) {
 					key = _getch();
 					assignKey(key);
 				}
-				checkGameWin();
 			}
 		}
 		else if (userChoice == '8') {
@@ -73,6 +69,12 @@ void Game::assignKey(char& key) {
 		diry = 0;
 		break;
 	}
+}
+
+void Game::resetGame() {
+	livesCount = 3;
+	resetScreen();
+	keepPlaying = true;
 }
 
 int Game::checkTime() {
@@ -140,7 +142,7 @@ void Game::resetScreen() {
 	board.resetCurrentBoard();
 	timer.resetTimer();
 	resetShips();
-	//resetBlocks();
+	resetBlocks();
 	board.print();
 	legend.print(activeShip, timer.getTimeLeft(), livesCount);
 }
@@ -150,19 +152,107 @@ void Game::resetShips() {
 	ships[1].resetLocatin();
 }
 
-//void Game::resetBlocks() {
-//	for (size_t i; i < blocks.size(); i++) {
-//		blocks[i].resetLocation();
-//	}
-//}
-
-void Game::moveShip() {
-	if ((dirx != 0 || diry != 0) && board.checkMooving(ships[activeShip].getPoints(), ships[activeShip].getSize(), ships[activeShip].getChar(), dirx, diry).size() == 0) ships[activeShip].move(dirx, diry);
-	else {
-		dirx = diry = 0;
+void Game::resetBlocks() {
+	for (int i = 0; i < blocksAmount; i++) {
+		blocks[i].resetLocatin();
 	}
 }
 
-void Game::moveBlockVertically() {
-	if (board.checkMooving(block.getPoints(), block.getSize(), block.getChar(), 0, 1).size() == 0) block.move(0, 1);
+void Game::moveShip() {
+	if (dirx == 0 && diry == 0) return;
+	std::vector<Point> points = board.checkMooving(ships[activeShip].getPoints(), ships[activeShip].getSize(), ships[activeShip].getChar(), dirx, diry);
+	if (points.size() == 0) {
+		ships[activeShip].move(dirx, diry);
+		return;
+	}
+	// check collisions wall & ships
+	char staticChars[2] = { (char)BoardSymbols::WALL, ships[(activeShip+1)%2].getChar() };
+	if (areCharsInVec(points, staticChars, 2)) {
+		dirx = diry = 0;
+		return;
+	}
+
+	if (checkShipPushBlock(points)) return;
+
+	char exit[1] = { (char)BoardSymbols::END_POINT };
+
+	if (areCharsInVec(points, exit, 1)) {
+		ships[activeShip].setHasReachedEndPoint(true);
+		ships[activeShip].move(dirx, diry);
+		dirx = diry = 0;
+		return;
+	}
+}
+
+bool Game::checkShipPushBlock(std::vector<Point> points) {
+	int pointsIndex, blocksIndex;
+
+	for (pointsIndex = 0; pointsIndex < points.size(); pointsIndex++) {
+		for (blocksIndex = 0; blocksIndex < blocksAmount; blocksIndex++) {
+			if (blocks[blocksIndex].isBlockIncludesPoint(points[pointsIndex]) && 
+				blocks[blocksIndex].getSize() <= ships[activeShip].getBlockSizeCapacity()) {
+				if (isBlockCanMove(blocksIndex)) {
+					blocks[blocksIndex].move(dirx, diry);
+					ships[activeShip].move(dirx, diry);
+				}
+				else {
+					dirx = diry = 0;
+				}
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool Game::isBlockCanMove(int blockIndex) {
+	return (board.checkMooving(blocks[blockIndex].getPoints(), 
+		blocks[blockIndex].getSize(), blocks[blockIndex].getChar(), dirx, diry).size() == 0);
+}
+
+// add chaeck of falling on ship
+void Game::moveBlocksVertically() {
+	std::vector<Point> points;
+	int i;
+	for (i = 0; i < blocksAmount; i++) {
+		points = board.checkMooving(blocks[i].getPoints(), blocks[i].getSize(), blocks[i].getChar(), 0, 1);
+		if (points.size() == 0) {
+			blocks[i].move(0, 1);
+		}
+		else {
+			checkBlockFallsOnShip(points, blocks[i].getSize());
+		}
+	}
+}
+
+void Game::checkBlockFallsOnShip(std::vector<Point> points, int blockSize) {
+	int shipIndex, pointIndex;
+	for (pointIndex = 0; pointIndex < points.size(); pointIndex++) {
+		for (shipIndex = 0; shipIndex < 2; shipIndex++) {
+			if (ships[shipIndex].isShipIncludesPoint(points[pointIndex]) &&
+				blockSize > ships[shipIndex].getBlockSizeCapacity()) {
+				decreseLives();
+				return;
+			}
+		}
+	}
+}
+
+bool Game::areCharsInVec(std::vector<Point> points, char* charsArr, int size) {
+	int i; 
+	for (i = 0; i < points.size(); i++) {
+		if (isArrayIncludesChar(charsArr, size, points[i].getCh())) return true;
+	}
+
+	return false;
+}
+
+bool Game::isArrayIncludesChar(char* arr, int size, char ch) {
+	int i;
+	for (i = 0; i < size; i++) {
+		if (arr[i] == ch) return true;
+	}
+
+	return false;
 }
