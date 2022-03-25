@@ -1,0 +1,5 @@
+﻿  Ship.cpp
+C:\Users\liraz\source\repos\Project3\Project3\Ship.cpp(35,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\liraz\source\repos\Project3\Project3\Ship.cpp(44,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\liraz\source\repos\Project3\Project3\Ship.cpp(51,20): warning C4018: '<': signed/unsigned mismatch
+  Project3.vcxproj -> C:\Users\liraz\source\repos\Project3\Debug\Project3.exe
