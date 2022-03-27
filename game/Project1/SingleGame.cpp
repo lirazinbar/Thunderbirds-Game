@@ -75,6 +75,9 @@ bool SingleGame::isTimeRanOut() {
 		timer.resetTickStartTime();
 		// if time runs out
 		if (timer.getTimeLeft() < 0) {
+			if (livesCount != 1) {
+				printLoseMessage("Time is up!");
+			}
 			return true;
 		}
 	}
@@ -205,6 +208,7 @@ void SingleGame::checkBlockFallsOnShip(std::vector<Point> points, int blockSize)
 			if (ships[shipIndex].isShipIncludesPoint(points[pointIndex]) &&
 				blockSize > ships[shipIndex].getBlockSizeCapacity()) {
 				keepPlaying = false;
+				printLoseMessage("Your ship has been smashed by a block!");
 				return;
 			}
 		}

@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-enum class Time { GAME_TIME  = 120};  // 120 seconds
+enum class Time { GAME_TIME  = 120 };  // 120 seconds
 
 class Timer {
 	std::chrono::steady_clock::time_point tickStartTime;  //The start time for each "tick"

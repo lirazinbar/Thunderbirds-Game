@@ -77,7 +77,7 @@ void Board::Legend::print(int activeShip, int timeLeft, int livesCount) const {
 }
 
 void Board::Legend::printActiveShip(int activeShip) const {
-	gotoxy(legendLocation.getX() + int(LegendElementsXLocation::ACTIVE_SHIP), legendLocation.getY());
+	gotoxy(legendLocation.getX() + int(PrintPoints::ACTIVE_SHIP_X), legendLocation.getY());
 	if (activeShip == int(ShipsIndex::BIG_SHIP)) {
 		std::cout << "Big  ";
 	}
@@ -87,23 +87,23 @@ void Board::Legend::printActiveShip(int activeShip) const {
 }
 
 void Board::Legend::printLives(int livesCount) const {
-	gotoxy(legendLocation.getX() + int(LegendElementsXLocation::LIVES), legendLocation.getY());
+	gotoxy(legendLocation.getX() + int(PrintPoints::LIVES_X), legendLocation.getY());
 	std::cout << livesCount;
 }
 
 void Board::Legend::printTimer(int timeLeft) const {
 	// x coordination of the timer
-	int x = getLegendLocation().getX() + int(LegendElementsXLocation::TIMER);
+	int x = getLegendLocation().getX() + int(PrintPoints::TIMER_X);
 	// y coordination of the timer
 	int y = getLegendLocation().getY();
 	gotoxy(x, y);
 	std::cout << timeLeft;
 	if (timeLeft == 99) {
 		gotoxy(x + 2, y);
-		std::cout << ' ';  // Erase last digit
+		std::cout << char(BoardSymbols::BLANK);  // Erase last digit
 	}
 	else if (timeLeft == 9) {
 		gotoxy(x + 1, y);
-		std::cout << ' ';  // Erase last digit
+		std::cout << char(BoardSymbols::BLANK);  // Erase last digit
 	}
 }

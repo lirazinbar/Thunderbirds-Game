@@ -10,7 +10,7 @@ public:
 	constexpr static int Height = 25;
 private:
 	// The X locations of the legend values
-	enum class LegendElementsXLocation { ACTIVE_SHIP = 13, TIMER = 36, LIVES = 53 }; 
+	enum class LegendElementsXLocation {  }; 
 
 	class Legend {
 		Point legendLocation;
@@ -28,17 +28,17 @@ private:
 	   "W  &                                                                           W\n",
 	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n",
 	   "W                                       W               W                 W    W\n",
-	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW    W               W                 W    W\n",
-	   "W                                  W    W                WWWW         WWWWW    W\n",
+	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW    W               W         $$      W    W\n",
+	   "W                                  W    W                WWWW     $$  WWWWW    W\n",
 	   "WWWWWWWWWWWWWWWWWWWWWWWW  WW       W    W                   W             W    W\n",
 	   "W                         W        W    WWWWWWWWWWWWWWWWWWWWW             W    W\n",
-	   "W                         WWWW     W                                  @@  W    W\n",
+	   "W                         WWWW     W                                    @@W    W\n",
 	   "W    WWWWWWWWWWW  W        W     WWWWWWWWWWWWWWWWWWWWWWWWWWWWW  WWWWWWWWWWW    W\n",
-	   "W    W            W$$      W      LIRAZ'S AND EYAL'S      W               W    W\n",
-	   "W    W   WWWWWWWWWW$$      W      THUNDERBIRDS PROJECT    W               W    W\n",
+	   "W    W            W        W      LIRAZ'S AND EYAL'S      W               W    W\n",
+	   "W    W   WWWWWWWWWW%%      W      THUNDERBIRDS PROJECT    W               W    W\n",
 	   "W    W            W##       WWWWWWWWWWWWWWWWWWWWWWWWW     W                    W\n",
 	   "W    WWWWWWWWWW   W##                               WWWWWWWWW    WWW           W\n",
-	   "W    W            W    %%                                       W   W          W\n",
+	   "W    W            W                                             W   W          W\n",
 	   "W    W  WWWWWWWWWWW    W     WWWWWWWWWWWWWW   W                 WWWWW         WW\n",
 	   "W    W       W         W     W            W   W     W                          W\n",
 	   "W    W       W         W     W            W   W     W                          W\n",

@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "singleGame.h"
+#include "Utils.h"
 
 // Initialize static boolean and int for Game and SingleGame 
 bool Game::keepPlaying;
