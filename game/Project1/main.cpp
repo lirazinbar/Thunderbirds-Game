@@ -1,6 +1,6 @@
 #include "Game.h"
+#include "utils.h"
 
 int main() {
-	hide_cursor();
 	Game().run();
 }
