@@ -1,2 +1,0 @@
-# Thunderbirds-Game
-game

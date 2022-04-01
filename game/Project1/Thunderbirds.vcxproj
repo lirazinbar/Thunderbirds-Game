@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2b55409f-b1f3-4022-a3e4-313450955fd6}</ProjectGuid>
+    <ProjectGuid>{f11c9de3-5198-43bc-84d1-11e7d2c9a5fa}</ProjectGuid>
     <RootNamespace>Thunderbirds</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -139,16 +139,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="SingleGame.cpp" />
     <ClCompile Include="Utils.cpp" />
-    <ClCompile Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Block.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="Ship.h" />
+    <ClInclude Include="singleGame.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="README.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
