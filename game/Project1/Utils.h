@@ -14,9 +14,19 @@ struct Keys {
 	constexpr static char SmallShip = 's';
 };
 
-void gotoxy(int, int);
+// get x and y and set the cursor at this point on the screen
+void gotoxy(int x, int y);
+// Clearing the screen
 void clrscr();
+// Hiding the cursor from the screen
 void hide_cursor();
+// Printing the main menu
 void printMainMenu(char& userChoice);
+// Presnting the game instrucions and asks the user if he wants to play in color
+bool presentInstructions();
+// Printing winning message
 void printWinMessage();
-void printLoseMessage(const char* deathReason = " ");
+// Printing losing message
+void printLoseMessage(const char* deathReason);
+// Printing an exit message
+void printExitMessage();

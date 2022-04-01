@@ -18,17 +18,17 @@ SingleGame::~SingleGame() {
 void SingleGame::play() {
 	char key = 0;
 
-	while (keepPlaying == true) {
+	while (keepPlayingSingleGame == true) {
+		moveShip();
+		moveBlocksVertically();
+		Sleep(100);
+		timer.tick();
+		if (isTimeRanOut() || isGameWon()) {
+			keepPlayingSingleGame = false;
+		}
 		if (_kbhit()) {
 			key = _getch();
 			assignKey(key);
-		}
-		moveShip();
-		moveBlocksVertically();
-		Sleep(400);
-		timer.tick();
-		if (isTimeRanOut() || isGameWon()) {
-			keepPlaying = false;
 		}
 	}
 }
@@ -75,9 +75,7 @@ bool SingleGame::isTimeRanOut() {
 		timer.resetTickStartTime();
 		// if time runs out
 		if (timer.getTimeLeft() < 0) {
-			if (livesCount != 1) {
-				printLoseMessage("Time is up!");
-			}
+			printLoseMessage("Time is up!");
 			return true;
 		}
 	}
@@ -95,7 +93,8 @@ void SingleGame::pauseGame() {
 			key = _getch();
 		}
 		if (key == '9') {
-			keepPlaying = false;
+			keepPlayingSingleGame = false;
+			Game::stopPlaying();
 			clrscr();
 		}
 		else if (key == Keys::ESC) {
@@ -127,43 +126,141 @@ void SingleGame::moveShip() {
 	if (dirx == 0 && diry == 0) return;
 	// Get the points that will collide with another object
 	std::vector<Point> points = board.checkMoving(ships[activeShip].getPoints(), ships[activeShip].getSize(), ships[activeShip].getChar(), dirx, diry);
+	
 	// If the ships doesn't collide with anything
 	if (points.size() == 0) {
-		checkBlocksAdjacentShip(ships[activeShip].getAboveShipPoints());
+		checkBlocksAboveShip(ships[activeShip].getAboveShipPoints());
 		ships[activeShip].move(dirx, diry);
 		return;
 	}
 	// Check collision with wall & ships
 	char collisionChars[2] = { (char)BoardSymbols::WALL, ships[(activeShip + 1) % 2].getChar() };
-	if (areCharsInVec(points, collisionChars, 2)) {
+	if (arePointsHaveChars(points, collisionChars, 2)) {
 		dirx = diry = 0;
 		return;
 	}
-	// Check collision with block(s)
-	if (checkShipPushBlock(points)) return;
 	// check reaching the end point
 	char exit[1] = { (char)BoardSymbols::END_POINT };
-	if (areCharsInVec(points, exit, 1)) {
+	if (arePointsHaveChars(points, exit, 1)) {
 		ships[activeShip].setHasReachedEndPoint(true);
 		ships[activeShip].move(dirx, diry);
 		dirx = diry = 0;
 		return;
 	}
+	// Check collision with block(s)
+	if (checkShipPushBlock(points)) {
+		checkBlocksAboveShip(ships[activeShip].getAboveShipPoints());
+	}
 }
 
 bool SingleGame::checkShipPushBlock(std::vector<Point> points) {
-	// Checks if there are blocks the ship can move
-	if (checkBlocksAdjacentShip(points)) {
-		// Checks if there are blocks on top the ship, and if they can move
-		checkBlocksAdjacentShip(ships[activeShip].getAboveShipPoints());
-		ships[activeShip].move(dirx, diry);
-		return true;
+	bool canMove, isColide;
+	//std::vector<int> blocksIndexesToMove = getBlocksCanMoveAfterCollideByShip(points, canMove, isColide);
+	std::set<int> blocksIndexesToMove = getBlocksCanMoveAfterCollideByShip(points, canMove, isColide);
+	int totalSize = getTotalSizeOfBlocks(blocksIndexesToMove);
+
+	if (!canMove || totalSize > ships[activeShip].getBlockSizeCapacity()) {
+		dirx = diry = 0;
+		return isColide;
 	}
-	dirx = diry = 0;
-	return false;
+
+	if (isColide) {
+		MoveBlocksAndShip(blocksIndexesToMove);
+	}
+	return isColide;
 }
 
-bool SingleGame::checkBlocksAdjacentShip(std::vector<Point> adjacentShipPoints) {
+std::set<int> SingleGame::getBlocksCanMoveAfterCollideByShip(std::vector<Point> points, bool& canMove, bool& isColide) {
+	int blocksIndex, pointsIndex;
+	//std::vector<int> blocksIndexesToMove;
+	std::set<int> blocksIndexesToMove, nextBlocksIndexesToMove;
+	std::vector<Point> allCollisionPoints;
+	isColide = false;
+
+	// if all points are not collide return null set - blocksIndexesToMove;
+	if (areAllPointsIncludeChar(points, ' ')) {
+		isColide = true;
+		canMove = true;
+		return blocksIndexesToMove;
+	}
+
+	// if one of the points colides with wall return is colide-true, and canMove-false, or the other ship
+	char staticChars[2] = { (char)BoardSymbols::WALL, ships[(activeShip + 1) % 2].getChar() };
+	if (arePointsHaveChars(points, staticChars, 2)) {
+		isColide = true;
+		canMove = false;
+		return blocksIndexesToMove;
+	}
+
+	// get the blocks that the points are collide with
+	for (pointsIndex = 0; pointsIndex < points.size(); pointsIndex++) {
+		for (blocksIndex = 0; blocksIndex < blocksAmount; blocksIndex++) {
+			if (blocks[blocksIndex].isBlockIncludesPoint(points[pointsIndex])) { // the point is collide with the block
+				isColide = true;
+				blocksIndexesToMove.insert(blocksIndex);
+			}
+		}
+	}
+
+	allCollisionPoints = getTheNextCollisionPointsOfBlocks(blocksIndexesToMove);
+	nextBlocksIndexesToMove = getBlocksCanMoveAfterCollideByShip(allCollisionPoints, canMove, isColide);
+
+	if (canMove) {
+		std::set<int> newSet;
+		std::set_union(blocksIndexesToMove.begin(), blocksIndexesToMove.end(), nextBlocksIndexesToMove.begin(), nextBlocksIndexesToMove.end(), std::inserter(newSet, newSet.begin()));
+		return newSet;
+	}
+
+	std::set<int> emptySet;
+	return emptySet;
+}
+
+int SingleGame::getTotalSizeOfBlocks(std::set<int> blocksIndexesToMove) {
+	std::set<int>::iterator itr;
+	int totalSize = 0;
+
+	for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end(); itr++) {
+		totalSize += blocks[*itr].getSize();
+	}
+
+	return totalSize;
+}
+
+std::vector<Point> SingleGame::getTheNextCollisionPointsOfBlocks(std::set<int> blocksIndexesToMove) {
+	std::vector<Point> points, tempPoints;
+	std::set<int>::iterator itr;
+
+	for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end(); itr++) {
+		tempPoints = board.checkMoving(blocks[*itr].getPoints(), blocks[*itr].getSize(), blocks[*itr].getChar(), dirx, diry);
+		points.reserve(points.size() + tempPoints.size());
+		points.insert(points.end(), tempPoints.begin(), tempPoints.end());
+	}
+
+	return points;
+}
+
+void SingleGame::MoveBlocksAndShip(std::set<int> blocksIndexesToMove) {
+	std::set<int>::iterator itr;
+
+	//for (int i = 0; i< blocksIndexesToMove.size(); i++) {
+	for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end(); itr++) {
+		blocks[*itr].deleteFromScreen();
+	}
+
+	for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end(); itr++) {
+		blocks[*itr].setPointsIndexes(dirx, diry);
+		blocks[*itr].drawOnScreen();
+	}
+
+	ships[activeShip].move(dirx, diry);
+}
+
+bool SingleGame::isBlockCanMove(int blockIndex) {
+	return (board.checkMoving(blocks[blockIndex].getPoints(),
+		blocks[blockIndex].getSize(), blocks[blockIndex].getChar(), dirx, diry).size() == 0);
+}
+
+bool SingleGame::checkBlocksAboveShip(std::vector<Point> adjacentShipPoints) {
 	int pointsIndex, blocksIndex;
 	bool found = false;
 
@@ -182,11 +279,6 @@ bool SingleGame::checkBlocksAdjacentShip(std::vector<Point> adjacentShipPoints) 
 	return false;
 }
 
-bool SingleGame::isBlockCanMove(int blockIndex) {
-	return (board.checkMoving(blocks[blockIndex].getPoints(),
-		blocks[blockIndex].getSize(), blocks[blockIndex].getChar(), dirx, diry).size() == 0);
-}
-
 void SingleGame::moveBlocksVertically() {
 	std::vector<Point> points;
 	int i;
@@ -195,27 +287,29 @@ void SingleGame::moveBlocksVertically() {
 		if (points.size() == 0) {
 			blocks[i].move(0, 1);
 		}
-		else {
-			checkBlockFallsOnShip(points, blocks[i].getSize());
+		// Return true if the ship has been smashed by a block
+		else if (checkBlockFallsOnShip(points, blocks[i].getSize())) {
+			break;
 		}
 	}
 }
 
-void SingleGame::checkBlockFallsOnShip(std::vector<Point> points, int blockSize) {
+bool SingleGame::checkBlockFallsOnShip(std::vector<Point> points, int blockSize) {
 	int shipIndex, pointIndex;
 	for (pointIndex = 0; pointIndex < points.size(); pointIndex++) {
 		for (shipIndex = 0; shipIndex < 2; shipIndex++) {
 			if (ships[shipIndex].isShipIncludesPoint(points[pointIndex]) &&
 				blockSize > ships[shipIndex].getBlockSizeCapacity()) {
-				keepPlaying = false;
+				keepPlayingSingleGame = false;
 				printLoseMessage("Your ship has been smashed by a block!");
-				return;
+				return true;
 			}
 		}
 	}
+	return false;
 }
 
-bool SingleGame::areCharsInVec(std::vector<Point> points, char* charsArr, int size) {
+bool SingleGame::arePointsHaveChars(std::vector<Point> points, char* charsArr, int size) {
 	int i;
 	for (i = 0; i < points.size(); i++) {
 		if (isArrayIncludesChar(charsArr, size, points[i].getCh())) return true;
@@ -229,4 +323,13 @@ bool SingleGame::isArrayIncludesChar(char* arr, int size, char ch) {
 		if (arr[i] == ch) return true;
 	}
 	return false;
+}
+
+bool SingleGame::areAllPointsIncludeChar(std::vector<Point> points, char ch) {
+	int i;
+	for (i = 0; i < points.size(); i++) {
+		if (points[i].getCh() != ch) return false;
+	}
+
+	return true;
 }

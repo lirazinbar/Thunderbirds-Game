@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "singleGame.h"
 #include "Utils.h"
+#include <fstream>
+#include <string>
 
 // Initialize static boolean and int for Game and SingleGame 
 bool Game::keepPlaying;
@@ -10,15 +12,16 @@ void Game::run() {
 	char userChoice = 0;
 	hide_cursor();
 	
-	while (userChoice != Keys::ESC) {
+	while (userChoice != '9') {
 		printMainMenu(userChoice);
 		if (userChoice == '1') {
 			play();
 		}
 		else if (userChoice == '8') {
-			//color.setColorMode(presentInstructions());
+			Color::setColorMode(presentInstructions());
 		}
 	}
+	printExitMessage();
 }
 
 void Game::play() {
@@ -31,9 +34,5 @@ void Game::play() {
 }
 
 bool Game::isGameLost() {
-	if (livesCount == 0) {
-		printLoseMessage();
-		return true;
-	}
-	return false;
+	return (livesCount == 0);
 }

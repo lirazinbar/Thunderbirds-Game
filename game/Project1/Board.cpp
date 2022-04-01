@@ -27,6 +27,7 @@ void Board::print(int activeShip, int timeLeft, int livesCount) const {
 	}
 	legend.print(activeShip, timeLeft, livesCount);
 }
+
 void Board::resetCurrentBoard() {
 	for (size_t row = 0; row < Height; ++row) {
 		strcpy_s(currentBoard[row], initialBoard[row]);
@@ -57,13 +58,9 @@ std::vector<Point> Board::checkMoving(std::vector<Point> points, int size, char 
 		Point newPoint(new_x, new_y, currentBoard[new_y][new_x], this);
 		if (currentBoard[new_y][new_x] != ' ' && currentBoard[new_y][new_x] != ch) { // pos is already taken
 			collisionPoints.push_back(newPoint);
-			// TODO: return all the chars collide with, if it's a wall we will put it first
-			// return false;
 		}
 	}
-
 	return collisionPoints;
-	//return true;
 }
 
 void Board::Legend::print(int activeShip, int timeLeft, int livesCount) const {

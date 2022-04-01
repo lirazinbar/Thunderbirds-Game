@@ -25,7 +25,8 @@ class Color
 {
 	static bool isInColorMode;
 public:
-	//Color() { isInColorMode = false; }
+	// Change the color mode
 	static void setColorMode(bool mode) { isInColorMode = mode; }
+	// Change the color of the text
 	static void setTextColor(TextColor color);
 };

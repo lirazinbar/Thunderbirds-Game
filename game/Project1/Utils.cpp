@@ -49,6 +49,44 @@ void printMainMenu(char& userChoice) {
 	clrscr();
 }
 
+bool presentInstructions() {
+	int key = 0;
+	char ch = ' ';
+	bool returnedValue, isValid = false;
+
+	std::cout << "KEY:     |       EXPLANATION: " << std::endl;
+	std::cout << "A        |			LEFT " << std::endl;
+	std::cout << "D        |			RIGHT" << std::endl;
+	std::cout << "W        |			UP" << std::endl;
+	std::cout << "X        |			DOWN" << std::endl;
+	std::cout << "B        |			Switch To The Big Ship" << std::endl;
+	std::cout << "S        |			Switch To The Small Ship" << std::endl;
+
+	std::cout << "Do You Want To Use The Colorful Version? " << std::endl;
+	std::cout << "Y - Yes" << std::endl;
+	std::cout << "N - NO" << std::endl;
+
+	while (!isValid) {
+		if (_kbhit()) {
+			ch = _getch();
+			isValid = (ch == 'Y' || ch == 'y' || ch == 'N' || ch == 'n');
+		}
+	}
+
+	if (ch == 'Y' || ch == 'y') returnedValue = true;
+	else returnedValue = false;
+
+	std::cout << "Press 9 to return the menu" << std::endl;
+
+	while (ch != '9') {
+		if (_kbhit()) {
+			ch = _getch();
+		}
+	}
+
+	return returnedValue;
+}
+
 void printWinMessage() {
 	clrscr();
 	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y));
@@ -72,5 +110,13 @@ void printLoseMessage(const char* deathReason) {
 		std::cout << "Game Over! You lost!";
 	}
 	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y) + 4);
+	system("pause");
+}
+
+void printExitMessage() {
+	clrscr();
+	gotoxy(40, 10);
+	std::cout << "Goodbye, thank you for playing!" << std::endl;
+	gotoxy(40, 12);
 	system("pause");
 }
