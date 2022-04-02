@@ -5,6 +5,7 @@
 #include <process.h>
 #include <conio.h>
 #include "utils.h"
+#include "Game.h"
 
 // function definition -- requires windows.h
 void gotoxy(int x, int y) {
@@ -88,17 +89,27 @@ bool presentInstructions() {
 
 void printWinMessage() {
 	clrscr();
-	gotoxy(40, 10);
+	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y));
 	std::cout << "Good job! You Won!\n" << std::endl;
-	gotoxy(40, 12);
+	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y) + 2);
 	system("pause");
 }
 
-void printLoseMessage() {
+void printLoseMessage(const char* deathReason) {
 	clrscr();
-	gotoxy(40, 10);
-	std::cout << "Game Over! You lost!" << std::endl;
-	gotoxy(40, 12);
+	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y));
+	int currentLivesCount = Game::getLivesCount() - 1;
+	if (currentLivesCount > 0) {
+		std::cout << deathReason << " You got " << currentLivesCount << " more lives" << std::endl;
+	}
+	else {
+		std::cout << deathReason;
+		gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y) + 1);
+		std::cout << "Unfortunately, You don't have more lives...";
+		gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y) + 2);
+		std::cout << "Game Over! You lost!";
+	}
+	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y) + 4);
 	system("pause");
 }
 

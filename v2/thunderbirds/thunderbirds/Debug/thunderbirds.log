@@ -1,7 +1,0 @@
-﻿  SingleGame.cpp
-C:\Users\galsh\Desktop\liraz-game\Thunderbirds-Game\game\Project1\SingleGame.cpp(193,36): warning C4018: '<': signed/unsigned mismatch
-C:\Users\galsh\Desktop\liraz-game\Thunderbirds-Game\game\Project1\SingleGame.cpp(264,37): warning C4018: '<': signed/unsigned mismatch
-C:\Users\galsh\Desktop\liraz-game\Thunderbirds-Game\game\Project1\SingleGame.cpp(296,17): warning C4101: 'pointIndex': unreferenced local variable
-C:\Users\galsh\Desktop\liraz-game\Thunderbirds-Game\game\Project1\SingleGame.cpp(312,16): warning C4018: '<': signed/unsigned mismatch
-C:\Users\galsh\Desktop\liraz-game\Thunderbirds-Game\game\Project1\SingleGame.cpp(328,16): warning C4018: '<': signed/unsigned mismatch
-  thunderbirds.vcxproj -> C:\Users\galsh\Desktop\liraz-game-v2\thunderbirds\Debug\thunderbirds.exe

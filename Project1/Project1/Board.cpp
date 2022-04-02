@@ -1,8 +1,11 @@
 #include "Board.h"
 #include "Point.h"
+#include "Ship.h"
+#include "Color.h"
 
 Board::Board() {
 	resetCurrentBoard();
+	legend.legendLocation = findCharOnBoard(char(BoardSymbols::LEGEND));
 }
 
 std::vector<Point> Board::getPoints(char _ch, int _size) {
@@ -19,11 +22,13 @@ std::vector<Point> Board::getPoints(char _ch, int _size) {
 	return points;
 }
 
-void Board::print() const {
+void Board::print(int activeShip, int timeLeft, int livesCount) const {
 	for (size_t row = 0; row < Height; ++row) {
 		std::cout << currentBoard[row];
 	}
+	legend.print(activeShip, timeLeft, livesCount);
 }
+
 void Board::resetCurrentBoard() {
 	for (size_t row = 0; row < Height; ++row) {
 		strcpy_s(currentBoard[row], initialBoard[row]);
@@ -46,7 +51,7 @@ Point Board::findCharOnBoard(char ch) {
 	return res;
 }
 
-std::vector<Point> Board::checkMooving(std::vector<Point> points, int size, char ch, int dirx, int diry) {
+std::vector<Point> Board::checkMoving(std::vector<Point> points, int size, char ch, int dirx, int diry) {
 	std::vector<Point> collisionPoints;
 	for (int i = 0; i < size; i++) {
 		int new_x = points[i].getX() + dirx;
@@ -54,11 +59,57 @@ std::vector<Point> Board::checkMooving(std::vector<Point> points, int size, char
 		Point newPoint(new_x, new_y, currentBoard[new_y][new_x], this);
 		if (currentBoard[new_y][new_x] != ' ' && currentBoard[new_y][new_x] != ch) { // pos is already taken
 			collisionPoints.push_back(newPoint);
-			// TODO: return all the chars collide with, if it's a wall we will put it first
-			// return false;
 		}
 	}
-
 	return collisionPoints;
-	//return true;
+}
+
+void Board::Legend::print(int activeShip, int timeLeft, int livesCount) const {
+	gotoxy(legendLocation.getX(), legendLocation.getY());
+	Color::setTextColor(TextColor::GREEN);
+	std::cout << "Active Ship: ";
+	printActiveShip(activeShip);
+	Color::setTextColor(TextColor::YELLOW);
+	std::cout << "       Time Left: ";
+	printTimer(timeLeft);
+	Color::setTextColor(TextColor::LIGHTRED);
+	std::cout << "       Lives: ";
+	printLives(livesCount);
+	Color::setTextColor(TextColor::WHITE);
+}
+
+void Board::Legend::printActiveShip(int activeShip) const {
+	Color::setTextColor(TextColor::GREEN);
+	gotoxy(legendLocation.getX() + int(PrintPoints::ACTIVE_SHIP_X), legendLocation.getY());
+	if (activeShip == int(ShipsIndex::BIG_SHIP)) {
+		std::cout << "Big  ";
+	}
+	else {
+		std::cout << "Small";
+	}
+	Color::setTextColor(TextColor::WHITE);
+}
+
+void Board::Legend::printLives(int livesCount) const {
+	gotoxy(legendLocation.getX() + int(PrintPoints::LIVES_X), legendLocation.getY());
+	std::cout << livesCount;
+}
+
+void Board::Legend::printTimer(int timeLeft) const {
+	Color::setTextColor(TextColor::YELLOW);
+	// x coordination of the timer
+	int x = getLegendLocation().getX() + int(PrintPoints::TIMER_X);
+	// y coordination of the timer
+	int y = getLegendLocation().getY();
+	gotoxy(x, y);
+	std::cout << timeLeft;
+	if (timeLeft == 99) {
+		gotoxy(x + 2, y);
+		std::cout << char(BoardSymbols::BLANK);  // Erase last digit
+	}
+	else if (timeLeft == 9) {
+		gotoxy(x + 1, y);
+		std::cout << char(BoardSymbols::BLANK);  // Erase last digit
+	}
+	Color::setTextColor(TextColor::WHITE);
 }

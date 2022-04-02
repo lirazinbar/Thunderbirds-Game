@@ -5,29 +5,10 @@
 #include "Color.h"
 
 Ship::Ship(char _ch, int _size, Board* _pBoard, int _blockSizeCapacity) : ch(_ch), size(_size), pBoard(_pBoard), blockSizeCapacity(_blockSizeCapacity) {
+	points.reserve(_size);
 	points = _pBoard->getPoints(_ch, _size);
+	setTopPoints();
 }
-
-//std::vector<Point> Ship::checkMooving(int difx, int dify) const{
-//	std::vector<Point> collisionPoints;
-//	for (int i = 0; i < size; i++) {
-//		int newX = points[i].getX() + difx;
-//		int newY = points[i].getY() + dify;
-//		Point newPoint = { newX, newY,  pBoard->get(newX, newY), pBoard };
-//		//char newPoint = pBoard->get((points[i].getX() + difx), (points[i].getY() + dify));
-//		if (newPoint.getCh() != char(BoardSymbols::BLANK) && newPoint.getCh() != ch) { // pos is already taken
-//			//difx = dify = 0;
-//			// If at least one of the points of the ship has reachd the end point
-//			// Error - if 1 point of the ship is collide with wall...
-//			//if (newPoint == char(BoardSymbols::END_POINT)) {
-//			//	hasReachedEndPoint = true;
-//			//}
-//			collisionPoints.push_back(newPoint);
-//		}
-//	}
-//
-//	return collisionPoints;
-//}
 
 void Ship::move(int difx, int dify) {
 	deleteFromScreen();
@@ -53,7 +34,7 @@ void Ship::deleteFromScreen() const {
 	}
 }
 
-bool Ship::isShipIncludesPoint(Point p) {
+bool Ship::isShipIncludesPoint(Point p) const {
 	for (int i = 0; i < points.size(); i++) {
 		if (points[i].getX() == p.getX() && points[i].getY() == p.getY())
 			return true;
@@ -61,3 +42,39 @@ bool Ship::isShipIncludesPoint(Point p) {
 
 	return false;
 }
+
+bool Ship::isShipIncludesSomePoints(std::vector<Point> collisionPoints) const {
+	for (int i = 0; i < collisionPoints.size(); i++) {
+		if (isShipIncludesPoint(collisionPoints[i]))
+			return true;
+	}
+
+	return false;
+}
+
+void Ship::setTopPoints() {
+	char ch = points[0].getCh();
+	int index = 0;
+
+	for (int i = 0; i < points.size(); i++) {
+		// Serching all ths points representing the top layer of the ship
+		if (pBoard->get(points[i].getX(), points[i].getY() - 1) != ch) {
+			topPointsIndexes[index] = i;
+			index++;
+		}
+	}
+}
+
+std::vector<Point> Ship::getAboveShipPoints() const {
+	std::vector<Point> abovePoints;
+
+	// Iterating the indexes of the top point and insert them to "points"
+	for (int i = 0; i < 2; i++) {
+		int new_y = points[topPointsIndexes[i]].getY() - 1;
+		int x = points[topPointsIndexes[i]].getX();
+		Point newPoint(x, new_y, pBoard->get(x, new_y), pBoard);
+		abovePoints.insert(abovePoints.end(), newPoint);
+	}
+	return abovePoints;
+}
+
