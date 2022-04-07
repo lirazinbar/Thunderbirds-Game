@@ -4,10 +4,10 @@
 #include "Board.h"
 #include "Color.h"
 
-Block::Block(char _ch, int _size, Board* _pBoard) : ch(_ch), size(_size), pBoard(_pBoard) {
-	points.reserve(_size);
-	points = _pBoard->getPoints(_ch, _size);
-}
+//Block::Block(char _ch, int _size, Board* _pBoard) : ch(_ch), size(_size), pBoard(_pBoard) {
+//	points.reserve(_size);
+//	points = _pBoard->getPoints(_ch, _size);
+//}
 
 void Block::move(int dirx, int diry) {
 	deleteFromScreen();

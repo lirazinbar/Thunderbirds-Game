@@ -15,7 +15,8 @@ class Block {
 	std::vector<Point> points;
 public:
 	// Ctor
-	Block(char _ch, int _size, Board* _pBoard);
+	//Block(char _ch, int _size, Board* _pBoard);
+	Block(char _ch, int _size, Board* _pBoard, std::vector<Point> _points) : ch(_ch), size(_size), pBoard(_pBoard), points(_points) {}
 	// Return the points of the block
 	std::vector<Point> getPoints() const { return points; }
 	// Return the size of the block

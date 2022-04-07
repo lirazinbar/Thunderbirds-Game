@@ -16,17 +16,18 @@ class SingleGame {
 	bool keepPlayingSingleGame = true;
 	Board board;
 	Timer timer;
-	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 6}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 2} }; // Index 0 is big ship and 1 is small ship
+	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 10}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 2} }; // Index 0 is big ship and 1 is small ship
 	int activeShip = int(ShipsIndex::BIG_SHIP);
-	constexpr static int blocksAmount = 5;
-	Block blocks[blocksAmount] = { {'+', 4, &board}, {'^', 2, &board}, {'%', 2, &board}, {'!', 8, &board}, {'*', 1, &board} };
+	int blocksAmount;
+	std::vector<Block> blocks;
+	//Block blocks[blocksAmount] = { {'+', 4, &board}, {'^', 2, &board}, {'%', 2, &board}, {'!', 8, &board}, {'*', 1, &board} };
 	int livesCount;
 	Color color;
 	int dirx = 0;
 	int diry = 0;
 public:
 	// Ctor - get the lives count and prints the board
-	SingleGame(int _livesCount) : livesCount(_livesCount) { board.print(activeShip, timer.getTimeLeft(), livesCount); };
+	SingleGame(int _livesCount);
 	// Destructor - If the player wins, exit the whole game. Otherwise, decrease one live
 	~SingleGame();
 	// The function who run the single game - until exit, winning or lives decrease
@@ -46,12 +47,12 @@ public:
 	// Checks if the ship can push the block(s)
 	bool checkShipPushBlock(std::vector<Point> points);
 	// Return all the blocks indexes in "blocks" array which can move after a ship pushed them
-	std::set<int> getBlocksCanMoveAfterCollideByShip(std::vector<Point> points, bool& canMove, bool& isColide);
+	std::set<int> getBlocksCanMoveAfterCollideByShip(std::vector<Point> points, bool& canMove, bool& isColide, std::set<int>& blocksAbove);
 	// Clculate the total size of all the blocks in "blocksIndexesToMove"
 	int getTotalSizeOfBlocks(std::set<int> blocksIndexesToMove) const;
 	// Return the collision points of the blocks in "blocksIndexesToMove",
 	// The points which are not BLANK or the points char itself
-	std::vector<Point> getTheNextCollisionPointsOfBlocks(std::set<int> blocksIndexesToMove);
+	std::vector<Point> getTheNextCollisionPointsOfBlocks(std::set<int> blocksIndexesToMove, int _dirx, int _diry);
 	// Move the blocks in "blocksToMove" and the ships
 	void MoveBlocksAndShip(std::set<int> blocksToMove);
 	// Chceks if the block can move on board
@@ -68,4 +69,11 @@ public:
 	bool isArrayIncludesChar(char* arr, int size, char ch) const;
 	// Return true of all the points have ch
 	bool areAllPointsIncludeChar(std::vector<Point> points, char ch) const;
+	void getBlocksFallOnShipTopPoints(std::vector<Point> points, std::set<int>& blocksIndexesAbove);
+	std::vector<Point> getPointsAboveBlocks(std::set<int> blocksIndexesAbove);
+	std::set<int> getAllBlocksAboveBlock(std::vector<Point> points);
+	std::set<int> getOnlyBlocksAboveToMove(std::set<int> blocksAbove, std::set<int> blocksIndexesToMove);
+	bool isExistInSet(std::set<int> setToCheck, int num);
+	void checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove);
+	void moveBlocks(std::set<int> blocksIndexesToMove);
 };

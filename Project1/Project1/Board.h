@@ -3,6 +3,9 @@
 #include <vector>
 #include <string>
 #include "Point.h"
+#include "Block.h"
+
+class Block;
 
 class Board {
 public:
@@ -26,30 +29,30 @@ private:
 	};
 	Legend legend;
 	char initialBoard[Height][Width] = {
-	"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n",
+	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n",
 	   "W  &                                                                           W\n",
 	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n",
-	   "W@@                  ^^                 W               W                 W    W\n",
+	   "W                    ^^                 W               W                 W    W\n",
 	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW    W               W                 W    W\n",
 	   "W                 W                W    W                WWWW         WWWWW    W\n",
 	   "W                WW       WW       W    W                   W             W    W\n",
 	   "W                         W        W    WWWWWWWWWWWWWWWWWWWW   +          W    W\n",
 	   "W                         WWWW     W                          +++         W    W\n",
 	   "W    WWWWWW  WWWWWW        W   WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  WWWWWWWWWWW    W\n",
-	   "W    W            W        W      LIRAZ'S AND EYAL'S      W               W    W\n",
-	   "W    W   WWWWWWWWWW        W      THUNDERBIRDS GAME       W               W    W\n",
+	   "W    W            W        W                              W               W    W\n",
+	   "W    W   WWWWWWWWWW        W                              W               W    W\n",
 	   "W    W            W         WWWWWWWWWWWWWWWWWWWWWWWWW     W                    W\n",
 	   "W    WWWWWWWWWW   W                                 WWWWWWWWW    WWW           W\n",
-	   "W    W            W                 *               W           W   W          W\n",
-	   "W    W  WWWWWWWWWWW    W     WWWWWW WWWWWWW         W           WWWWW        WWW\n",
+	   "W    W            W                            **   W           W   W          W\n",
+	   "W    W  WWWWWWWWWWW    W     WWWWWW WWWWWWW    ^^   W           WWWWW        WWW\n",
 	   "W    W       W         W     W            W   W     W                          W\n",
 	   "W    W       W         W     W            W   W     W                          W\n",
 	   "W            W         W     W            W   W      WWWWWWWWWWWWWWWWWWWWW     W\n",
-	   "W            W         W     W            W %%W                                W\n",
-	   "W      WWWWWWWWWWWWWWWWWWWWWWW            W  WW                                W\n",
-	   "W      W                                  W   WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n",
-	   "W      W                          !!!     W                              ##    W\n",
-	   "W  E   W                         !!!!!    W                              ##    W\n",
+	   "W            W         W     W            W   W  @@                            W\n",
+	   "W      WWWWWWWWWWWWWWWWWWWWWWW            W  WWW                               W\n",
+	   "W      W                                  W  WW    ^!!                         W\n",
+	   "W      W                          !!!     W        %%     ##                   W\n",
+	   "W  E   W                         !!!!!    W        ***    ##                   W\n",
 	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n",
 	};
 	char currentBoard[Height][Width];
@@ -76,4 +79,9 @@ public:
 	// don't collide with something that is not empty space or the ch itself,
 	// after moving them dirx, diry
 	std::vector<Point> checkMoving(std::vector<Point> points, int size, char ch, int dirx, int diry);
+	std::vector<Block> loadBlocksRec();
+	std::vector<Point> loadBlockWithChar(char ch, int col, int row, std::vector<Block> blocks, std::vector<Point>& checkedPoints);
+	bool blocksIncludePoint(std::vector<Block> blocks, Point p);
+	bool arePointsIncludePoint(std::vector<Point> points, int x, int y) const;
+	bool isCharOfBlock(char ch);
 };

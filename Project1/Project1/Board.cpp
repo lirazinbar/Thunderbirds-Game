@@ -22,6 +22,86 @@ std::vector<Point> Board::getPoints(char _ch, int _size) {
 	return points;
 }
 
+std::vector<Block> Board::loadBlocksRec() {
+	std::vector<Point> points;
+	std::vector<Block> blocks;
+	std::vector<Point> checkedPoints;
+
+	for (int row = 0; row < Height; ++row) {
+		char curr;
+		for (int col = 0; (curr = get(col, row)) != '\n'; ++col) {
+			if (isCharOfBlock(curr)) {
+				checkedPoints.clear();
+				points = loadBlockWithChar(curr, col, row, blocks, checkedPoints);
+
+				if (points.size() > 0) {
+					Block block = Block(curr, points.size(), this, points);
+					blocks.push_back(block);
+				}
+			}
+		}
+	}
+	return blocks;
+}
+
+bool Board::isCharOfBlock(char ch) {
+	return (ch != (char)BoardSymbols::SMALL_SHIP && ch != (char)BoardSymbols::BIG_SHIP 
+		&& ch!= (char)BoardSymbols::WALL && ch != (char)BoardSymbols::BLANK
+		&& ch != (char)BoardSymbols::END_POINT && ch != (char)BoardSymbols::LEGEND);
+}
+
+std::vector<Point> Board::loadBlockWithChar(char ch, int col, int row, std::vector<Block> blocks, std::vector<Point> &checkedPoints) {
+	std::vector<Point> points, temp;
+	char curr = get(col, row);
+
+	Point p = Point(col, row, ch, this);
+	checkedPoints.push_back(p);
+	if (curr == ch && !blocksIncludePoint(blocks, p)) {
+		points.push_back(p);
+
+		if (!arePointsIncludePoint(checkedPoints, col + 1, row)) {
+			temp = loadBlockWithChar(ch, col + 1, row, blocks, checkedPoints);
+			points.insert(points.end(), temp.begin(), temp.end());
+		}
+
+		if (!arePointsIncludePoint(checkedPoints, col - 1, row)) {
+			temp = loadBlockWithChar(ch, col - 1, row, blocks, checkedPoints);
+			points.insert(points.end(), temp.begin(), temp.end());
+		}
+
+		if (!arePointsIncludePoint(checkedPoints, col, row + 1)) {
+			temp = loadBlockWithChar(ch, col, row + 1, blocks, checkedPoints);
+			points.insert(points.end(), temp.begin(), temp.end());
+		}
+
+		if (!arePointsIncludePoint(checkedPoints, col, row - 1)) {
+			temp = loadBlockWithChar(ch, col, row - 1, blocks, checkedPoints);
+			points.insert(points.end(), temp.begin(), temp.end());
+		}
+	}
+		
+	return points;
+}
+
+bool Board::arePointsIncludePoint(std::vector<Point> points, int x, int y) const {
+	for (int i = 0; i < points.size(); i++) {
+		if (points[i].getX() == x && points[i].getY() == y)
+			return true;
+	}
+
+	return false;
+}
+
+bool Board::blocksIncludePoint(std::vector<Block> blocks, Point p) {
+	int i;
+
+	for (i = 0; i < blocks.size(); i++) {
+		if (blocks[i].isBlockIncludesPoint(p)) return true;
+	}
+
+	return false;
+}
+
 void Board::print(int activeShip, int timeLeft, int livesCount) const {
 	for (size_t row = 0; row < Height; ++row) {
 		std::cout << currentBoard[row];
