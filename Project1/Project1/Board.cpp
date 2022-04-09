@@ -137,7 +137,9 @@ std::vector<Point> Board::checkMoving(std::vector<Point> points, int size, char 
 		int new_x = points[i].getX() + dirx;
 		int new_y = points[i].getY() + diry;
 		Point newPoint(new_x, new_y, currentBoard[new_y][new_x], this);
-		if (currentBoard[new_y][new_x] != ' ' && currentBoard[new_y][new_x] != ch) { // pos is already taken
+		// TODO send the points of the block / ship and check if the point exiat in the vector indtead of currentBoard[new_y][new_x] != ch
+		//if (currentBoard[new_y][new_x] != ' ' && currentBoard[new_y][new_x] != ch) { // pos is already taken
+		if (currentBoard[new_y][new_x] != ' ' && !arePointsIncludePoint(points, new_x, new_y)) { // pos is already taken
 			collisionPoints.push_back(newPoint);
 		}
 	}
