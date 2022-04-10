@@ -44,5 +44,6 @@ public:
 	void setTopPoints();
 	// Return vector with the top points of the ship
 	std::vector<Point> getAboveShipPoints() const;
+	void setPointsIndexes(int dirx, int diry);
 };
 

@@ -50,7 +50,7 @@ private:
 	   "W            W         WWW   W            W   W      WWWWWWWWWWWWWWWWWWWWW     W\n",
 	   "W            W         W     W            W   W                                W\n",
 	   "W      WWWWWWWWWWWWWWWWWWWWWWW            W  WWW                               W\n",
-	   "W      W                                  W  WW 11 !!  3                       W\n",
+	   "W      W                                  W  WW 112!!  3                       W\n",
 	   "W      W                          !!!     W     1##!  33                       W\n",
 	   "W  E   W                         !!!!!    W     1##*****  ***                  W\n",
 	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n",

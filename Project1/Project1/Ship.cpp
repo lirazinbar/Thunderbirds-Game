@@ -78,3 +78,8 @@ std::vector<Point> Ship::getAboveShipPoints() const {
 	return abovePoints;
 }
 
+void Ship::setPointsIndexes(int dirx, int diry) {
+	for (int i = 0; i < points.size(); i++) {
+		points[i].move(dirx, diry);
+	}
+}

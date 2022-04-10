@@ -136,7 +136,7 @@ void SingleGame::moveShip() {
 	// If the ships doesn't collide with anything
 	if (points.size() == 0) {
 		checkBlocksAboveShip(ships[activeShip].getAboveShipPoints());
-		ships[activeShip].move(dirx, diry);
+		//ships[activeShip].move(dirx, diry);
 		return;
 	}
 	// Check collision with wall & ships
@@ -312,7 +312,7 @@ std::vector<Point> SingleGame::getTheNextCollisionPointsOfBlocks(std::set<int> b
 
 void SingleGame::MoveBlocksAndShip(std::set<int> blocksIndexesToMove) {
 	moveBlocks(blocksIndexesToMove);
-	ships[activeShip].move(dirx, diry);
+	//ships[activeShip].move(dirx, diry);
 }
 
 // TODO have to be a recursive check
@@ -321,6 +321,8 @@ void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove) {
 	std::set<int> blocksAbove, getblocksToMove, movedBlocks;
 	std::set<int>::iterator itr;
 
+	ships[activeShip].deleteFromScreen();
+
 	for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end() && !isExistInSet(movedBlocks, *itr); itr++) {
 		getblocksToMove = getBlocksCanMoveAfterCollideByShip(blocks[*itr].getPoints(), canMove, isColide, blocksAbove);
 		if (canMove) {
@@ -328,6 +330,9 @@ void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove) {
 			std::set_union(getblocksToMove.begin(), getblocksToMove.end(), movedBlocks.begin(), movedBlocks.end(), std::inserter(movedBlocks, movedBlocks.begin()));
 		}
 	}
+
+	ships[activeShip].setPointsIndexes(dirx, diry);
+	ships[activeShip].drawOnScreen();
 }
 
 void SingleGame::moveBlocks(std::set<int> blocksIndexesToMove) {
@@ -341,6 +346,7 @@ void SingleGame::moveBlocks(std::set<int> blocksIndexesToMove) {
 		blocks[*itr].setPointsIndexes(dirx, diry);
 		blocks[*itr].drawOnScreen();
 	}
+
 }
 
 bool SingleGame::isBlockCanMove(int blockIndex) {
@@ -371,14 +377,18 @@ bool SingleGame::checkBlocksAboveShip(std::vector<Point> adjacentShipPoints) {
 	//}
 
 	// TODO total size of blocks is checked in other function
-	if (blocksAbove.size() == 0 || getTotalSizeOfBlocks(blocksAbove) > ships[activeShip].getBlockSizeCapacity()) return false;
+	if (blocksAbove.size() == 0) {
+		ships[activeShip].move(dirx, diry);
+		return false;
+	}
 
 
-	for (itr = blocksAbove.begin(); itr != blocksAbove.end(); itr++) {
+	/*for (itr = blocksAbove.begin(); itr != blocksAbove.end(); itr++) {
 		if (isBlockCanMove(*itr)) {
 			blocks[*itr].move(dirx, diry);
 		}
-	}
+	}*/
+	checkBlocksAboveAndMove(blocksAbove);
 	return true;
 }
 
