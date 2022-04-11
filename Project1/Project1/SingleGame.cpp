@@ -311,7 +311,7 @@ std::vector<Point> SingleGame::getTheNextCollisionPointsOfBlocks(std::set<int> b
 }
 
 void SingleGame::MoveBlocksAndShip(std::set<int> blocksIndexesToMove) {
-	moveBlocks(blocksIndexesToMove);
+	moveBlocks(blocksIndexesToMove, dirx, diry);
 	//ships[activeShip].move(dirx, diry);
 }
 
@@ -326,7 +326,7 @@ void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove) {
 	for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end() && !isExistInSet(movedBlocks, *itr); itr++) {
 		getblocksToMove = getBlocksCanMoveAfterCollideByShip(blocks[*itr].getPoints(), canMove, isColide, blocksAbove);
 		if (canMove) {
-			moveBlocks(getblocksToMove);
+			moveBlocks(getblocksToMove, dirx, diry);
 			std::set_union(getblocksToMove.begin(), getblocksToMove.end(), movedBlocks.begin(), movedBlocks.end(), std::inserter(movedBlocks, movedBlocks.begin()));
 		}
 	}
@@ -335,7 +335,129 @@ void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove) {
 	ships[activeShip].drawOnScreen();
 }
 
-void SingleGame::moveBlocks(std::set<int> blocksIndexesToMove) {
+void SingleGame::checkBlocksVerticalMove() {
+	bool canMove, isColide;
+	std::set<int> getblocksToMove, checkedBlocks, blocksToCheck;
+	int i;
+
+	for (i = 0; i < blocks.size() && !isExistInSet(checkedBlocks, i); i++) {
+		getblocksToMove = getBlocksCanMoveVertical(blocks[i].getPoints(), canMove, isColide);
+		if (canMove) {
+			moveBlocks(getblocksToMove, 0, 1);
+		}
+		if (isColide) {
+			std::set_union(getblocksToMove.begin(), getblocksToMove.end(), blocksToCheck.begin(), blocksToCheck.end(), std::inserter(blocksToCheck, blocksToCheck.begin()));
+		}
+		std::set_union(getblocksToMove.begin(), getblocksToMove.end(), checkedBlocks.begin(), checkedBlocks.end(), std::inserter(checkedBlocks, checkedBlocks.begin()));
+	}
+	if (blocksToCheck.size())
+		checkBlocksSmashShips(blocksToCheck);
+}
+
+void SingleGame::checkBlocksSmashShips(std::set<int> blocksToCheck) {
+	int totalSizeSmall, totalSizeBig, totalSizeOfBlocks;
+	std::set<int> blocksIndexesAboveSmall, blocksIndexesAboveBig, allSmallBlocks, allBigBlocks, smallCheck, bigCheck, SmallAndBigBlocks;
+
+	getBlocksFallOnShipTopPoints(ships[1].getAboveShipPoints(), blocksIndexesAboveSmall); // TODO check each ship & move all the blocks in 1 piece
+	getBlocksFallOnShipTopPoints(ships[0].getAboveShipPoints(), blocksIndexesAboveBig); // TODO check each ship & move all the blocks in 1 piece
+
+	allSmallBlocks = getIndexesInBothSets(blocksIndexesAboveSmall, blocksToCheck);
+	allBigBlocks = getIndexesInBothSets(blocksIndexesAboveBig, blocksToCheck);
+
+	smallCheck = reduceSets(allSmallBlocks, allBigBlocks);
+	bigCheck = reduceSets(allBigBlocks, allSmallBlocks);
+
+	std::set_union(allSmallBlocks.begin(), allSmallBlocks.end(), allBigBlocks.begin(), allBigBlocks.end(), std::inserter(SmallAndBigBlocks, SmallAndBigBlocks.begin()));
+	
+	totalSizeOfBlocks = getTotalSizeOfBlocks(SmallAndBigBlocks);
+	totalSizeSmall = getTotalSizeOfBlocks(smallCheck);
+	totalSizeBig = getTotalSizeOfBlocks(bigCheck);
+
+	if (totalSizeOfBlocks > ships[0].getBlockSizeCapacity() + ships[1].getBlockSizeCapacity() ||
+		totalSizeSmall > ships[1].getBlockSizeCapacity() ||
+		totalSizeBig > ships[0].getBlockSizeCapacity()) {
+		keepPlayingSingleGame = false;
+		printLoseMessage("Your ship has been smashed by a block! ");
+	}
+}
+
+std::set<int> SingleGame::getIndexesInBothSets(std::set<int> set1, std::set<int> set2) {
+	std::set<int> commonSet;
+	std::set<int>::iterator itr;
+
+	for (itr = set1.begin(); itr != set1.end(); itr++) {
+		if (isExistInSet(set2, *itr)) {
+			commonSet.insert(*itr);
+		}
+	}
+
+	return commonSet;
+}
+
+std::set<int> SingleGame::reduceSets(std::set<int> set1, std::set<int> set2) {
+	std::set<int> newSet;
+	std::set<int>::iterator itr;
+
+	for (itr = set1.begin(); itr != set1.end(); itr++) {
+		if (!isExistInSet(set2, *itr)) {
+			newSet.insert(*itr);
+		}
+	}
+
+	return newSet;
+}
+
+
+std::set<int> SingleGame::getBlocksCanMoveVertical(std::vector<Point> points, bool& canMove, bool& isColide) {
+	int blocksIndex, pointsIndex;
+	std::set<int> blocksIndexesToMove, nextBlocksIndexesToMove, tempBlocks;
+	std::vector<Point> allCollisionPoints, collisionPointsAbove;
+	isColide = false;
+
+	// if all points are not collide return null set - blocksIndexesToMove;
+	if (areAllPointsIncludeChar(points, ' ')) {
+		canMove = true;
+		return blocksIndexesToMove;
+	}
+
+	// if one of the points colides with wall return is colide-true, and canMove-false, or the other ship
+	char wall[1] = { (char)BoardSymbols::WALL };
+	if (arePointsHaveChars(points, wall, 1)) {
+		canMove = false;
+		return blocksIndexesToMove;
+	}
+
+	char shipsChars[2] = { ships[0].getChar(), ships[1].getChar() };
+	if (arePointsHaveChars(points, shipsChars, 2)) {
+		isColide = true;
+		canMove = false;
+		return blocksIndexesToMove;
+	}
+
+	// get the blocks that the points are collide with
+	for (pointsIndex = 0; pointsIndex < points.size(); pointsIndex++) {
+		for (blocksIndex = 0; blocksIndex < blocksAmount; blocksIndex++) {
+			if (blocks[blocksIndex].isBlockIncludesPoint(points[pointsIndex])) { // the point is collide with the block
+				isColide = true;
+				blocksIndexesToMove.insert(blocksIndex);
+			}
+		}
+	}
+
+	allCollisionPoints = getTheNextCollisionPointsOfBlocks(blocksIndexesToMove, 0, 1);
+	nextBlocksIndexesToMove = getBlocksCanMoveVertical(allCollisionPoints, canMove, isColide);
+
+	//if (canMove) {
+		std::set<int> newSet;
+		std::set_union(blocksIndexesToMove.begin(), blocksIndexesToMove.end(), nextBlocksIndexesToMove.begin(), nextBlocksIndexesToMove.end(), std::inserter(newSet, newSet.begin()));
+		return newSet;
+	//}
+
+	/*std::set<int> emptySet;
+	return emptySet;*/
+}
+
+void SingleGame::moveBlocks(std::set<int> blocksIndexesToMove, int _dirx, int _diry) {
 	std::set<int>::iterator itr;
 
 	for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end(); itr++) {
@@ -343,7 +465,7 @@ void SingleGame::moveBlocks(std::set<int> blocksIndexesToMove) {
 	}
 
 	for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end(); itr++) {
-		blocks[*itr].setPointsIndexes(dirx, diry);
+		blocks[*itr].setPointsIndexes(_dirx, _diry);
 		blocks[*itr].drawOnScreen();
 	}
 
@@ -399,30 +521,32 @@ void SingleGame::moveBlocksVertically() {
 	std::set<int> blocksIndexesAbove;
 
 
-	for (i = 0; i < 2; i++) {
-		getBlocksFallOnShipTopPoints(ships[i].getAboveShipPoints(), blocksIndexesAbove); // TODO check each ship & move all the blocks in 1 piece
-		totalSizeOfBlocks = getTotalSizeOfBlocks(blocksIndexesAbove);
+	//for (i = 0; i < 2; i++) {
+	//	getBlocksFallOnShipTopPoints(ships[i].getAboveShipPoints(), blocksIndexesAbove); // TODO check each ship & move all the blocks in 1 piece
+	//	totalSizeOfBlocks = getTotalSizeOfBlocks(blocksIndexesAbove);
 
-		if (ships[i].getBlockSizeCapacity() < totalSizeOfBlocks) { // TODO check if the other ship / the walls are not already hold the blocks
-			keepPlayingSingleGame = false;
-			printLoseMessage("Your ship has been smashed by a block! ");
-			return;
-		}
-		blocksIndexesAbove.clear();
-	}
+	//	if (ships[i].getBlockSizeCapacity() < totalSizeOfBlocks) { // TODO check if the other ship / the walls are not already hold the blocks
+	//		keepPlayingSingleGame = false;
+	//		printLoseMessage("Your ship has been smashed by a block! ");
+	//		return;
+	//	}
+	//	blocksIndexesAbove.clear();
+	//}
 
 
-	for (i = 0; i < blocksAmount; i++) {
-		points = board.checkMoving(blocks[i].getPoints(), blocks[i].getSize(), blocks[i].getChar(), 0, 1);
-		if (points.size() == 0) {
-			blocks[i].move(0, 1);
-		}
-		// TODO - else - check recursive + checking of ship smash
-		// Return true if the ship has been smashed by a block
-		/*else if (!arePointsHaveChars(points, staticChars, 2) && checkBlockFallsOnShip(points, blocks[i].getSize())) {
-			break;
-		}*/
-	}
+	//for (i = 0; i < blocksAmount; i++) {
+	//	points = board.checkMoving(blocks[i].getPoints(), blocks[i].getSize(), blocks[i].getChar(), 0, 1);
+	//	if (points.size() == 0) {
+	//		blocks[i].move(0, 1);
+	//	}
+	//	// TODO - else - check recursive + checking of ship smash
+	//	// Return true if the ship has been smashed by a block
+	//	/*else if (!arePointsHaveChars(points, staticChars, 2) && checkBlockFallsOnShip(points, blocks[i].getSize())) {
+	//		break;
+	//	}*/
+	//}
+
+	checkBlocksVerticalMove();
 }
 
 void SingleGame::getBlocksFallOnShipTopPoints(std::vector<Point> pointsAbove, std::set<int> &blocksIndexesAbove) {

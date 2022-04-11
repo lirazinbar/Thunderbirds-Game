@@ -16,7 +16,7 @@ class SingleGame {
 	bool keepPlayingSingleGame = true;
 	Board board;
 	Timer timer;
-	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 22}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 20} }; // Index 0 is big ship and 1 is small ship
+	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 8}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 8} }; // Index 0 is big ship and 1 is small ship
 	int activeShip = int(ShipsIndex::BIG_SHIP);
 	int blocksAmount;
 	std::vector<Block> blocks;
@@ -75,5 +75,10 @@ public:
 	std::set<int> getOnlyBlocksAboveToMove(std::set<int> blocksAbove, std::set<int> blocksIndexesToMove);
 	bool isExistInSet(std::set<int> setToCheck, int num);
 	void checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove);
-	void moveBlocks(std::set<int> blocksIndexesToMove);
+	void moveBlocks(std::set<int> blocksIndexesToMove, int dirx, int diry);
+	void checkBlocksVerticalMove();
+	std::set<int> getBlocksCanMoveVertical(std::vector<Point> points, bool& canMove, bool& isColide);
+	void checkBlocksSmashShips(std::set<int> blocksToCheck);
+	std::set<int> getIndexesInBothSets(std::set<int> set1, std::set<int> set2);
+	std::set<int> reduceSets(std::set<int> set1, std::set<int> set2);
 };
