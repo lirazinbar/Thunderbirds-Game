@@ -301,15 +301,20 @@ void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove) {
 	bool canMove, isColide;
 	std::set<int> blocksAbove, getblocksToMove, movedBlocks;
 	std::set<int>::iterator itr;
+	int totalSizeOfBlocks;
 
 	ships[activeShip].deleteFromScreen();
+	totalSizeOfBlocks = getTotalSizeOfBlocks(blocksIndexesToMove);
 
-	for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end(); itr++) {
-		if (!isExistInSet(movedBlocks, *itr)) {
-			getblocksToMove = getBlocksCanMoveAfterCollideByShip(blocks[*itr].getPoints(), canMove, isColide, blocksAbove);
-			if (canMove) {
-				moveBlocks(getblocksToMove, dirx, diry);
-				std::set_union(getblocksToMove.begin(), getblocksToMove.end(), movedBlocks.begin(), movedBlocks.end(), std::inserter(movedBlocks, movedBlocks.begin()));
+	if (totalSizeOfBlocks <= ships[activeShip].getBlockSizeCapacity()) {
+		for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end(); itr++) {
+			if (!isExistInSet(movedBlocks, *itr)) {
+				getblocksToMove = getBlocksCanMoveAfterCollideByShip(blocks[*itr].getPoints(), canMove, isColide, blocksAbove);
+				if (canMove) {
+					moveBlocks(getblocksToMove, dirx, diry);
+					std::set_union(getblocksToMove.begin(), getblocksToMove.end(), movedBlocks.begin(), movedBlocks.end(), std::inserter(movedBlocks, movedBlocks.begin()));
+				}
+				// maybe TODO - if canMove = false then dont move all the blocks above
 			}
 		}
 	}
@@ -388,7 +393,7 @@ std::set<int> SingleGame::getBlocksCanMoveVertical(std::vector<Point> points, bo
 	}
 
 	char shipsChars[2] = { ships[0].getChar(), ships[1].getChar() };
-	if (arePointsHaveChars(points, shipsChars, 2)) {
+	if (areAllPointsIncludeChars(points, shipsChars, 2)) {
 		isColide = true;
 		canMove = false;
 		return blocksIndexesToMove;
@@ -495,4 +500,13 @@ bool SingleGame::arePointsHaveChars(std::vector<Point> points, char* charsArr, i
 		if (isArrayIncludesChar(charsArr, size, points[i].getCh())) return true;
 	}
 	return false;
+}
+
+bool SingleGame::areAllPointsIncludeChars(std::vector<Point> points, char* charsArr, int size) const {
+	int i;
+	for (i = 0; i < points.size(); i++) {
+		if (!isArrayIncludesChar(charsArr, size, points[i].getCh())) return false;
+	}
+
+	return true;
 }

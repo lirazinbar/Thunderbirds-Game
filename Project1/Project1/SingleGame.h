@@ -16,7 +16,7 @@ class SingleGame {
 	bool keepPlayingSingleGame = true;
 	Board board;
 	Timer timer;
-	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 1}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 8} }; // Index 0 is big ship and 1 is small ship
+	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 2}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 8} }; // Index 0 is big ship and 1 is small ship
 	int activeShip = int(ShipsIndex::BIG_SHIP);
 	int blocksAmount;
 	std::vector<Block> blocks;
@@ -77,4 +77,6 @@ public:
 	bool arePointsHaveChars(std::vector<Point> points, char* charsArr, int size) const;
 	// Return true of all the points have ch
 	bool areAllPointsIncludeChar(std::vector<Point> points, char ch) const;
+	// Return true of all the points have chars
+	bool areAllPointsIncludeChars(std::vector<Point> points, char* charsArr, int size) const;
 };
