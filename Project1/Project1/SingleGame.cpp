@@ -358,6 +358,7 @@ void SingleGame::checkBlocksSmashShips(std::set<int> blocksToCheck) {
 	totalSizeSmall = getTotalSizeOfBlocks(smallCheck);
 	totalSizeBig = getTotalSizeOfBlocks(bigCheck);
 
+	// TODO also check recursive if the blocks on air or on wall at the end
 	if (totalSizeOfBlocks > ships[0].getBlockSizeCapacity() + ships[1].getBlockSizeCapacity() ||
 		totalSizeSmall > ships[1].getBlockSizeCapacity() ||
 		totalSizeBig > ships[0].getBlockSizeCapacity()) {
@@ -381,6 +382,7 @@ std::set<int> SingleGame::getBlocksCanMoveVertical(std::vector<Point> points, bo
 	// if one of the points colides with wall return is colide-true, and canMove-false, or the other ship
 	char wall[1] = { (char)BoardSymbols::WALL };
 	if (arePointsHaveChars(points, wall, 1)) {
+		isColide = false;
 		canMove = false;
 		return blocksIndexesToMove;
 	}
