@@ -328,11 +328,11 @@ void SingleGame::checkBlocksVerticalMove() {
 			getblocksToMove = getBlocksCanMoveVertical(blocks[i].getPoints(), canMove, isColide);
 			if (canMove) {
 				moveBlocks(getblocksToMove, 0, 1);
+				std::set_union(getblocksToMove.begin(), getblocksToMove.end(), checkedBlocks.begin(), checkedBlocks.end(), std::inserter(checkedBlocks, checkedBlocks.begin()));
 			}
 			if (isColide) {
 				std::set_union(getblocksToMove.begin(), getblocksToMove.end(), blocksToCheck.begin(), blocksToCheck.end(), std::inserter(blocksToCheck, blocksToCheck.begin()));
 			}
-			std::set_union(getblocksToMove.begin(), getblocksToMove.end(), checkedBlocks.begin(), checkedBlocks.end(), std::inserter(checkedBlocks, checkedBlocks.begin()));
 		}
 	}
 	if (blocksToCheck.size())
@@ -407,9 +407,7 @@ std::set<int> SingleGame::getBlocksCanMoveVertical(std::vector<Point> points, bo
 
 	std::set<int> newSet;
 
-	if (canMove) {
-		std::set_union(blocksIndexesToMove.begin(), blocksIndexesToMove.end(), nextBlocksIndexesToMove.begin(), nextBlocksIndexesToMove.end(), std::inserter(newSet, newSet.begin()));
-	}
+	std::set_union(blocksIndexesToMove.begin(), blocksIndexesToMove.end(), nextBlocksIndexesToMove.begin(), nextBlocksIndexesToMove.end(), std::inserter(newSet, newSet.begin()));
 
 	return newSet;
 }

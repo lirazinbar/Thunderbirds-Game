@@ -1,14 +1,3 @@
-﻿  Block.cpp
-  Board.cpp
-C:\Users\liraz\Desktop\git-game-v8\Thunderbirds-Game\Project1\Project1\Board.cpp(38,59): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\liraz\Desktop\git-game-v8\Thunderbirds-Game\Project1\Project1\Board.cpp(125,7): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\liraz\Desktop\git-game-v8\Thunderbirds-Game\Project1\Project1\Board.cpp(126,35): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  Game.cpp
-  main.cpp
-  Point.cpp
-  Ship.cpp
-  SingleGame.cpp
+﻿  SingleGame.cpp
 C:\Users\liraz\Desktop\git-game-v8\Thunderbirds-Game\Project1\Project1\SingleGame.cpp(11,30): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  Utils.cpp
-  Generating Code...
   Project1.vcxproj -> C:\Users\liraz\Desktop\git-game-v8\Thunderbirds-Game\Project1\x64\Debug\Project1.exe
