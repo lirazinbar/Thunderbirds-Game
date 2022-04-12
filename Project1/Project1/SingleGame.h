@@ -16,11 +16,10 @@ class SingleGame {
 	bool keepPlayingSingleGame = true;
 	Board board;
 	Timer timer;
-	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 8}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 8} }; // Index 0 is big ship and 1 is small ship
+	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 80}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 10} }; // Index 0 is big ship and 1 is small ship
 	int activeShip = int(ShipsIndex::BIG_SHIP);
 	int blocksAmount;
 	std::vector<Block> blocks;
-	//Block blocks[blocksAmount] = { {'+', 4, &board}, {'^', 2, &board}, {'%', 2, &board}, {'!', 8, &board}, {'*', 1, &board} };
 	int livesCount;
 	Color color;
 	int dirx = 0;
@@ -45,40 +44,37 @@ public:
 	// Moving the ships
 	void moveShip();
 	// Checks if the ship can push the block(s)
-	bool checkShipPushBlock(std::vector<Point> points);
+	void checkShipPushBlock(std::vector<Point> points);
 	// Return all the blocks indexes in "blocks" array which can move after a ship pushed them
 	std::set<int> getBlocksCanMoveAfterCollideByShip(std::vector<Point> points, bool& canMove, bool& isColide, std::set<int>& blocksAbove);
-	// Clculate the total size of all the blocks in "blocksIndexesToMove"
+	// Calculate the total size of all the blocks in "blocksIndexesToMove"
 	int getTotalSizeOfBlocks(std::set<int> blocksIndexesToMove) const;
 	// Return the collision points of the blocks in "blocksIndexesToMove",
 	// The points which are not BLANK or the points char itself
 	std::vector<Point> getTheNextCollisionPointsOfBlocks(std::set<int> blocksIndexesToMove, int _dirx, int _diry);
-	// Move the blocks in "blocksToMove" and the ships
-	void MoveBlocksAndShip(std::set<int> blocksToMove);
 	// Chceks if the block can move on board
 	bool isBlockCanMove(int blockIndex);
-	// Checks if there are block abpve the ships and move the accordingly
-	bool checkBlocksAboveShip(std::vector<Point> adjacentShipPoints);
-	// Move all the blocks vertically, "Free fall"
-	void moveBlocksVertically();
-	// Checks if blocks fall on the ships, and if they can hold them or not
-	bool checkBlockFallsOnShip(std::vector<Point> points, int blockSize);
-	// Checks if the points have the chars in charsArr
-	bool arePointsHaveChars(std::vector<Point> points, char* charsArr, int size) const;
-	// Checks if arr has ch in it  
-	bool isArrayIncludesChar(char* arr, int size, char ch) const;
-	// Return true of all the points have ch
-	bool areAllPointsIncludeChar(std::vector<Point> points, char ch) const;
-	void getBlocksFallOnShipTopPoints(std::vector<Point> points, std::set<int>& blocksIndexesAbove);
+	// Checks if there are block above the ships and move the accordingly
+	void checkBlocksAboveShip(std::vector<Point> adjacentShipPoints);
+	// get the blocks that fall on ship recursive
+	void getBlocksFallOnShipTopPoints(std::vector<Point> points, std::set<int>& blocksIndexesAbove, int shipIndex);
+	// get all the points above the blocksIndexes
 	std::vector<Point> getPointsAboveBlocks(std::set<int> blocksIndexesAbove);
-	std::set<int> getAllBlocksAboveBlock(std::vector<Point> points);
+	// get all the blocks above the points recursive
+	std::set<int> getAllBlocksAbovePoints(std::vector<Point> points);
+	// get only the blocks above that the ship is not collide with
 	std::set<int> getOnlyBlocksAboveToMove(std::set<int> blocksAbove, std::set<int> blocksIndexesToMove);
-	bool isExistInSet(std::set<int> setToCheck, int num);
+	// Move the blocks in "blocksToMove"
 	void checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove);
 	void moveBlocks(std::set<int> blocksIndexesToMove, int dirx, int diry);
+	// Move all the blocks vertically, "Free fall"
 	void checkBlocksVerticalMove();
+	// get all the blocks can move vertically recursive
 	std::set<int> getBlocksCanMoveVertical(std::vector<Point> points, bool& canMove, bool& isColide);
+	// check if the blocks smash ship
 	void checkBlocksSmashShips(std::set<int> blocksToCheck);
-	std::set<int> getIndexesInBothSets(std::set<int> set1, std::set<int> set2);
-	std::set<int> reduceSets(std::set<int> set1, std::set<int> set2);
+	// Checks if the points have the chars in charsArr
+	bool arePointsHaveChars(std::vector<Point> points, char* charsArr, int size) const;
+	// Return true of all the points have ch
+	bool areAllPointsIncludeChar(std::vector<Point> points, char ch) const;
 };

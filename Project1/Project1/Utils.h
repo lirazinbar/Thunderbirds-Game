@@ -1,4 +1,7 @@
 #pragma once
+#include <set>
+#include <iterator>
+
 
 enum class BoardSymbols { END_POINT = 'E', LEGEND = '&', BIG_SHIP = '#', SMALL_SHIP = '@', BLANK = ' ', WALL = 'W' };
 
@@ -30,3 +33,12 @@ void printWinMessage();
 void printLoseMessage(const char* deathReason);
 // Printing an exit message
 void printExitMessage();
+// return true if the parameter exists in set
+bool isExistInSet(std::set<int> setToCheck, int num);
+// get the common indexes that exist in both sets
+std::set<int> getIndexesInBothSets(std::set<int> set1, std::set<int> set2);
+// get set1 minus set2
+std::set<int> reduceSets(std::set<int> set1, std::set<int> set2);
+// Checks if arr has ch in it  
+bool isArrayIncludesChar(char* arr, int size, char ch);
+
