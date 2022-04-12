@@ -27,7 +27,7 @@ void SingleGame::play() {
 	while (keepPlayingSingleGame == true) {
 		moveShip();
 		checkBlocksVerticalMove();
-		Sleep(800);
+		Sleep(700);
 		timer.tick();
 		if (isTimeRanOut() || isGameWon()) {
 			keepPlayingSingleGame = false;
@@ -299,7 +299,7 @@ std::vector<Point> SingleGame::getTheNextCollisionPointsOfBlocks(std::set<int> b
 
 void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove) {
 	bool canMove, isColide;
-	std::set<int> blocksAbove, getblocksToMove, movedBlocks;
+	std::set<int> blocksAbove, getblocksToMove, movedBlocks, blocksAboveNotToMove, checkedBlocks, blocksToMove, temp;
 	std::set<int>::iterator itr;
 	int totalSizeOfBlocks;
 
@@ -309,19 +309,26 @@ void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove) {
 
 	if (totalSizeOfBlocks <= ships[activeShip].getBlockSizeCapacity()) {
 		for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end(); itr++) {
-			if (!isExistInSet(movedBlocks, *itr)) {
+			if (!isExistInSet(checkedBlocks, *itr)) {
 				getblocksToMove = getBlocksCanMoveAfterCollideByShip(blocks[*itr].getPoints(), canMove, isColide, blocksAbove);
 				if (canMove) {
 					std::set_union(getblocksToMove.begin(), getblocksToMove.end(), movedBlocks.begin(), movedBlocks.end(), std::inserter(movedBlocks, movedBlocks.begin()));
 				}
-				// maybe TODO - if canMove = false then dont move all the blocks above
+				else {
+					temp = getAllBlocksAbovePoints(getTheNextCollisionPointsOfBlocks({ *itr }, 0, -1));
+					std::set_union(temp.begin(), temp.end(), checkedBlocks.begin(), checkedBlocks.end(), std::inserter(checkedBlocks, checkedBlocks.begin()));
+					std::set_union(temp.begin(), temp.end(), blocksAboveNotToMove.begin(), blocksAboveNotToMove.end(), std::inserter(blocksAboveNotToMove, blocksAboveNotToMove.begin()));
+				}
+				std::set_union(getblocksToMove.begin(), getblocksToMove.end(), checkedBlocks.begin(), checkedBlocks.end(), std::inserter(checkedBlocks, checkedBlocks.begin()));
 			}
 		}
 	}
 
-	totalSizeOfBlocks = getTotalSizeOfBlocks(movedBlocks);
+	blocksToMove = reduceSets(movedBlocks, blocksAboveNotToMove);
+
+	totalSizeOfBlocks = getTotalSizeOfBlocks(blocksToMove);
 	if (totalSizeOfBlocks <= ships[activeShip].getBlockSizeCapacity())
-		moveBlocks(getblocksToMove, dirx, diry);
+		moveBlocks(blocksToMove, dirx, diry);
 
 
 	ships[activeShip].setPointsIndexes(dirx, diry);
