@@ -304,6 +304,7 @@ void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove) {
 	int totalSizeOfBlocks;
 
 	ships[activeShip].deleteFromScreen();
+
 	totalSizeOfBlocks = getTotalSizeOfBlocks(blocksIndexesToMove);
 
 	if (totalSizeOfBlocks <= ships[activeShip].getBlockSizeCapacity()) {
@@ -311,13 +312,17 @@ void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove) {
 			if (!isExistInSet(movedBlocks, *itr)) {
 				getblocksToMove = getBlocksCanMoveAfterCollideByShip(blocks[*itr].getPoints(), canMove, isColide, blocksAbove);
 				if (canMove) {
-					moveBlocks(getblocksToMove, dirx, diry);
 					std::set_union(getblocksToMove.begin(), getblocksToMove.end(), movedBlocks.begin(), movedBlocks.end(), std::inserter(movedBlocks, movedBlocks.begin()));
 				}
 				// maybe TODO - if canMove = false then dont move all the blocks above
 			}
 		}
 	}
+
+	totalSizeOfBlocks = getTotalSizeOfBlocks(movedBlocks);
+	if (totalSizeOfBlocks <= ships[activeShip].getBlockSizeCapacity())
+		moveBlocks(getblocksToMove, dirx, diry);
+
 
 	ships[activeShip].setPointsIndexes(dirx, diry);
 	ships[activeShip].drawOnScreen();
