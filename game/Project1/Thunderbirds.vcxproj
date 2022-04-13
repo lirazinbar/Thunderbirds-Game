@@ -143,6 +143,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Ship.cpp" />
@@ -154,14 +155,18 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameScreen.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Ship.h" />
-    <ClInclude Include="singleGame.h" />
+    <ClInclude Include="SingleGame.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="README.txt" />
+    <Text Include="tb1.screen.txt" />
+    <Text Include="tb2.screen.txt" />
+    <Text Include="tb3.screen.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

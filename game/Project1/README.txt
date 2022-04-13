@@ -4,3 +4,4 @@ IDs:
 
 Bonus:
 - Color game
+- Smart Screen - we hope you will find the game challenging! :)

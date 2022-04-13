@@ -4,8 +4,9 @@
 #include "Utils.h"
 #include "Color.h"
 
-Ship::Ship(char _ch, int _size, Board* _pBoard, int _blockSizeCapacity) : ch(_ch), size(_size), pBoard(_pBoard), blockSizeCapacity(_blockSizeCapacity) {
-	points = _pBoard->getPoints(_ch, _size);
+void Ship::setShip() {
+	points.reserve(size);
+	points = pBoard->getPoints(ch, size);
 	setTopPoints();
 }
 
@@ -33,9 +34,18 @@ void Ship::deleteFromScreen() const {
 	}
 }
 
-bool Ship::isShipIncludesPoint(Point p) {
+bool Ship::isShipIncludesPoint(Point p) const {
 	for (int i = 0; i < points.size(); i++) {
 		if (points[i].getX() == p.getX() && points[i].getY() == p.getY())
+			return true;
+	}
+
+	return false;
+}
+
+bool Ship::isShipIncludesSomePoints(std::vector<Point> collisionPoints) const {
+	for (int i = 0; i < collisionPoints.size(); i++) {
+		if (isShipIncludesPoint(collisionPoints[i]))
 			return true;
 	}
 
@@ -55,7 +65,7 @@ void Ship::setTopPoints() {
 	}
 }
 
-std::vector<Point> Ship::getAboveShipPoints() {
+std::vector<Point> Ship::getAboveShipPoints() const {
 	std::vector<Point> abovePoints;
 
 	// Iterating the indexes of the top point and insert them to "points"
@@ -68,3 +78,8 @@ std::vector<Point> Ship::getAboveShipPoints() {
 	return abovePoints;
 }
 
+void Ship::setPointsIndexes(int dirx, int diry) {
+	for (int i = 0; i < points.size(); i++) {
+		points[i].move(dirx, diry);
+	}
+}

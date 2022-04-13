@@ -12,8 +12,19 @@ void Point::drawOnScreen() const {
 	std::cout << ch;
 	pBoard->set(x, y, ch); // draw also in board!
 }
-void Point::deleteFromScreen() const {	
+
+void Point::deleteFromScreen() const {
 	gotoxy(x, y);
 	std::cout << char(BoardSymbols::BLANK);
 	pBoard->set(x, y, char(BoardSymbols::BLANK)); // del also from board
+}
+
+bool Point::arePointsIncludePoint(std::vector<Point> points) const {
+	int i;
+
+	for (i = 0; i < points.size(); i++) {
+		if (points[i].getX() == x && points[i].getY() == y) return true;
+	}
+
+	return false;
 }
