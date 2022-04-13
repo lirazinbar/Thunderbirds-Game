@@ -1,0 +1,11 @@
+﻿  Board.cpp
+  Game.cpp
+  GameManager.cpp
+  main.cpp
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\main.cpp(5,1): error C2280: 'Game::Game(void)': attempting to reference a deleted function
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\Game.h(18): message : compiler has generated 'Game::Game' here
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\Game.h(18,1): message : 'Game::Game(void)': function was implicitly deleted because a data member 'Game::gameManager' has either no appropriate default constructor or overload resolution was ambiguous
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\Game.h(10): message : see declaration of 'Game::gameManager'
+  Point.cpp
+  Ship.cpp
+  Utils.cpp
