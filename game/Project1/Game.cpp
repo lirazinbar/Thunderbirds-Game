@@ -6,7 +6,6 @@
 
 // Initialize static boolean and int for Game and SingleGame 
 bool Game::keepPlaying;
-bool Game::gameWon;
 int Game::livesCount;
 
 void Game::run() {
@@ -27,23 +26,13 @@ void Game::run() {
 
 void Game::play() {
 	Game::keepPlaying = true;
-	Game::gameWon = false;
 	Game::livesCount = 3;
-	GameScreen screen;
-	std::string line;
-	
-	screen.chooseScreen();
+
 	while (!isGameLost() && keepPlaying) {
-		SingleGame(livesCount, screen).play();
-		screen.returnToFileBeginning();
-		if (Game::gameWon == true) {
-			Game::livesCount = 3; // Reset lives
-			Game::gameWon = false;
-			screen.openNextScreenFile();
-		}
+		SingleGame(livesCount).play();
 	}
 }
 
-bool Game::isGameLost() const {
+bool Game::isGameLost() {
 	return (livesCount == 0);
 }

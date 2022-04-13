@@ -1,9 +1,9 @@
 #include <iostream>
 #include <ios>
 #include <limits>
-#include <conio.h>
 #include <windows.h>
 #include <process.h>
+#include <conio.h>
 #include "utils.h"
 #include "Game.h"
 
@@ -119,48 +119,4 @@ void printExitMessage() {
 	std::cout << "Goodbye, thank you for playing!" << std::endl;
 	gotoxy(40, 12);
 	system("pause");
-}
-
-bool isExistInSet(std::set<int> setToCheck, int num) {
-	std::set<int>::iterator itr;
-
-	for (itr = setToCheck.begin(); itr != setToCheck.end(); itr++) {
-		if (*itr == num) return true;
-	}
-
-	return false;
-}
-
-std::set<int> getIndexesInBothSets(std::set<int> set1, std::set<int> set2) {
-	std::set<int> commonSet;
-	std::set<int>::iterator itr;
-
-	for (itr = set1.begin(); itr != set1.end(); itr++) {
-		if (isExistInSet(set2, *itr)) {
-			commonSet.insert(*itr);
-		}
-	}
-
-	return commonSet;
-}
-
-std::set<int> reduceSets(std::set<int> set1, std::set<int> set2) {
-	std::set<int> newSet;
-	std::set<int>::iterator itr;
-
-	for (itr = set1.begin(); itr != set1.end(); itr++) {
-		if (!isExistInSet(set2, *itr)) {
-			newSet.insert(*itr);
-		}
-	}
-
-	return newSet;
-}
-
-bool isArrayIncludesChar(char* arr, int size, char ch) {
-	int i;
-	for (i = 0; i < size; i++) {
-		if (arr[i] == ch) return true;
-	}
-	return false;
 }

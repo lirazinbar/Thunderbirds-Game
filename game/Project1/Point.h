@@ -2,10 +2,9 @@
 
 #include <iostream>
 #include "utils.h"
-#include <vector>
 
 class Board;
-
+	
 class Point {
 	int x = -1;
 	int y = -1;
@@ -44,6 +43,5 @@ public:
 	void drawOnScreen() const;
 	// Delete the point from screen
 	void deleteFromScreen() const;
-	// Check if points include the point
-	bool arePointsIncludePoint(std::vector<Point> points) const;
 };
+

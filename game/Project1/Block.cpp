@@ -4,6 +4,10 @@
 #include "Board.h"
 #include "Color.h"
 
+Block::Block(char _ch, int _size, Board* _pBoard) : ch(_ch), size(_size), pBoard(_pBoard) {
+	points = _pBoard->getPoints(_ch, _size);
+}
+
 void Block::move(int dirx, int diry) {
 	deleteFromScreen();
 	for (int i = 0; i < points.size(); i++) {
@@ -26,7 +30,7 @@ void Block::deleteFromScreen() const {
 	}
 }
 
-bool Block::isBlockIncludesPoint(Point p) const {
+bool Block::isBlockIncludesPoint(Point p) {
 	for (int i = 0; i < points.size(); i++) {
 		if (points[i].getX() == p.getX() && points[i].getY() == p.getY())
 			return true;

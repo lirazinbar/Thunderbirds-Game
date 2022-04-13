@@ -42,9 +42,6 @@
     <ClCompile Include="SingleGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameScreen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h">
@@ -53,7 +50,7 @@
     <ClInclude Include="Ship.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SingleGame.h">
+    <ClInclude Include="singleGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
@@ -74,21 +71,9 @@
     <ClInclude Include="Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameScreen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="README.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="tb1.screen.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="tb2.screen.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="tb3.screen.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
