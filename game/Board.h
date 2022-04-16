@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "Block.h"
 #include "GameScreen.h"
+#include "HorizontalGhost.h"
 
 class Block;
 
@@ -68,4 +69,5 @@ public:
 	// after moving them dirx, diry
 	std::vector<Point> checkMoving(std::vector<Point> points, int size, char ch, int dirx, int diry);
 	char* getRow(int row) { return currentBoard[row]; }
+	std::vector<HorizontalGhost> loadHorizontalGhosts();
 };

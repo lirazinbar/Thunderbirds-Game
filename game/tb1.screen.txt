@@ -9,21 +9,21 @@ W@@                  22                 W               W                 W     
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW    W               W                 W     W
 W                 W                W    W                WWWW         WWWWW     W
 W                WW       WW       W    W       $                         W     W
-W                         W        W    WWWWWWWWWWWWWWWWWWWW   1          W 555 W
-W                         WWW      W                          111         W 555 W
-W    WWWWWW  WWWWWW        W   WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  WWWWWWWWWWW 555 W
-W    W            W        W                              W               W     W
-W    W   WWWWWWWWWW        W          $                   3               W     W
-W    W            W         WWWWWWWWWWWWWWWWWWWWWWWWW     W               W     W
-W    WWWWWWWWWW   W                                 WWWWWWWWW    WWW            W
-W    W            W                 4               W           W 6 W         $ W
-W    W  WWWWWWWWWWW    W     WWWWWW WWWWWWW         W           WWWWW         WWW
+W                         W        W    WWWWWWWWWWWWWWWWWWWW   1          W     W
+W                         WWW      W                          111         W     W
+W    WWWWWW  WWWWWW        W   WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  WWWWWWWWWWW     W
+W    W            W        W                              W                     W
+W    W   WWWWWWWWWW        W          $                   3                66   W
+W    W            W         WWWWWWWWWWWWWWWWWWWWWWWWW     W                55   W
+W    WWWWWWWWWW   W                                 WWWWWWWWW    WWW      444   W
+W    W            W                 4               W           W 6 W     333   W
+W    W  WWWWWWWWWWW    W     WWWWWW WWWWWWW         W           WWWWW     222 WWW
 W    W       W         W     W            W   W     W                           W
 W    W       W         W     W            W   W     W                           W
 W            W         W     W            W   W      WWWWWWWWWWWWWWWWWWWWW      W
 W            W         W     W            W 00W                                 W
 W      WWWWWWWWWWWWWWWWWWWWWWW            W  WW                                 W
-W      W                                  W   WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
-W      W                          444     W                                ##   W
-W  E   W                         44444    W                                ##   W
+W      W                                  W   WW   333333                       W
+W      W                          444     W        3   ##                       W
+W  E   W                         44444    W        35  ##                       W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW

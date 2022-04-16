@@ -17,6 +17,24 @@ std::vector<Point> Board::getPoints(char _ch, int _size) {
 	return points;
 }
 
+std::vector<HorizontalGhost> Board::loadHorizontalGhosts() {
+	std::vector<HorizontalGhost> ghosts;
+
+	for (int row = 0; row < Height; ++row) {
+		char curr;
+		for (int col = 0; (curr = get(col, row)) != '\0'; ++col) {
+			if (curr == char(BoardSymbols::HORIZONTAL_GHOST)) {
+				Point p = Point(col, row, char(BoardSymbols::HORIZONTAL_GHOST), this);
+				HorizontalGhost ghost = HorizontalGhost(p, 1);
+
+				ghosts.push_back(ghost);
+			}
+		}
+	}
+
+	return ghosts;
+}
+
 std::vector<Block> Board::loadBlocksRec() {
 	std::vector<Point> points;
 	std::vector<Block> blocks;

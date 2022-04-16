@@ -45,6 +45,12 @@
     <ClCompile Include="GameScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalGhost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h">
@@ -75,6 +81,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghost.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HorizontalGhost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

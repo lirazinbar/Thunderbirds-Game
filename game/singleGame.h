@@ -18,10 +18,11 @@ class SingleGame {
 	int screenNumber;
 	Board board;
 	Timer timer;
-	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 6}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 2} }; // Index 0 is big ship and 1 is small ship
+	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 8}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 2} }; // Index 0 is big ship and 1 is small ship
 	int activeShip = int(ShipsIndex::BIG_SHIP);
 	int blocksAmount;
 	std::vector<Block> blocks;
+	std::vector<HorizontalGhost> horizntalGhosts;
 	int livesCount;
 	Color color;
 	int dirx = 0;
@@ -37,6 +38,8 @@ public:
 	void setShips();
 	// Set the blocks according to the chosen board
 	void setBlocks();
+	// Set the ghosts according to the chosen board
+	void setGhosts();
 	// The function who run the single game - until exit, winning or lives decrease
 	void play();
 	// Takes action according to the player's key
@@ -88,4 +91,5 @@ public:
 	bool arePointsHaveChars(std::vector<Point> points, char* charsArr, int size) const;;
 	// Return true of all the points have chars
 	bool areAllPointsIncludeChars(std::vector<Point> points, char* charsArr, int size) const;
+	void moveGhosts();
 };

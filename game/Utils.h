@@ -2,7 +2,15 @@
 #include <set>
 #include <iterator>
 
-enum class BoardSymbols { END_POINT = 'E', LEGEND = '&', BIG_SHIP = '#', SMALL_SHIP = '@', BLANK = ' ', WALL = 'W' };
+enum class BoardSymbols {
+	END_POINT = 'E',
+	LEGEND = '&',
+	BIG_SHIP = '#',
+	SMALL_SHIP = '@',
+	BLANK = ' ',
+	WALL = 'W',
+	HORIZONTAL_GHOST = '$',
+};
 
 enum class PrintPoints { MESSAGE_X = 40, MESSAGE_Y = 10, ACTIVE_SHIP_X = 13, TIMER_X = 34, LIVES_X = 50, SCREEN_X = 65 };
 
