@@ -8,6 +8,7 @@
 SingleGame::SingleGame(int _livesCount) : livesCount(_livesCount) {
 	board.print(activeShip, timer.getTimeLeft(), livesCount); 
 	blocks = board.loadBlocksRec(); 
+	horizntalGhosts = board.loadHorizontalGhosts();
 	blocksAmount = blocks.size();
 };
 
@@ -25,9 +26,10 @@ void SingleGame::play() {
 	char key = 0;
 
 	while (keepPlayingSingleGame == true) {
+		moveGhosts();
 		moveShip();
 		checkBlocksVerticalMove();
-		Sleep(700);
+		Sleep(50);
 		timer.tick();
 		if (isTimeRanOut() || isGameWon()) {
 			keepPlayingSingleGame = false;
@@ -125,6 +127,29 @@ bool SingleGame::isGameWon() {
 		printWinMessage();
 	}
 	return gameWon;
+}
+
+void SingleGame::moveGhosts() {
+	int i;
+	char ch;
+
+	for (i = 0; i < horizntalGhosts.size(); i++) {
+		ch = board.get(horizntalGhosts[i].getNextPointToMove());
+
+		if (ch == (char)BoardSymbols::BIG_SHIP || ch == (char)BoardSymbols::SMALL_SHIP) {
+			// kill ships
+			keepPlayingSingleGame = false;
+			printLoseMessage("Your ship has been killed by a ghost! ");
+			return;
+		}
+
+		if (ch == (char)BoardSymbols::BLANK) {
+			horizntalGhosts[i].move();
+		}
+		else {
+			horizntalGhosts[i].changeDir();
+		}		
+	}
 }
 
 void SingleGame::moveShip() {

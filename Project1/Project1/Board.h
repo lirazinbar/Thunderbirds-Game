@@ -4,6 +4,7 @@
 #include <string>
 #include "Point.h"
 #include "Block.h"
+#include "HorizontalGhost.h"
 
 class Block;
 
@@ -32,27 +33,27 @@ private:
 	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n",
 	   "W  &                                                                           W\n",
 	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n",
-	   "W                    ^^                 W               W                 W    W\n",
+	   "W@@                  ^^                 W               W                 W    W\n",
 	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW    W               W                 W    W\n",
 	   "W                 W                W    W                WWWW         WWWWW    W\n",
 	   "W                WW       WW       W    W                   W             W    W\n",
 	   "W                         W        W    WWWWWWWWWWWWWWWWWWWW   +          W    W\n",
 	   "W                         WWWW     W                          +++         W    W\n",
-	   "W    WWWWWW  WWWWWW 55     W   WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  WWWWWWWWWWW    W\n",
-	   "W    W            W 5      W                              W              66    W\n",
-	   "W    W   WWWWWWWWWW 5      W              2222222         W                11  W\n",
-	   "W    W            W 5       WWWWWWWWWWWWWWWWWWWWWWWWW     W                77  W\n",
-	   "W    WWWWWWWWWW   W                      44444444  WWWWWWWWW    WWW        99  W\n",
-	   "W    W            W                      33333333   W           W   W     888  W\n",
-	   "W    W  WWWWWWWWWWW    W     WWWWWW                 W           WWWWW    2222WWW\n",
-	   "W    W       W         W     W                      W                     ##   W\n",
-	   "W    W       W         W 6   W                      W                     ##   W\n",
-	   "W            W         WWW   W            W   W111   WWWWWWWWWWWWWWWWWWWWW     W\n",
-	   "W            W         W     W            W   W^^                              W\n",
-	   "W      WWWWWWWWWWWWWWWWWWWWWWW            W  WWW     5555                      W\n",
-	   "W 44   W                                  W  WW      544                       W\n",
-	   "W      W                          !!!     W @@       533                       W\n",
-	   "W  E   W                         !!!!!    W        *****  ***                  W\n",
+	   "W    WWWWWW  WWWWWW        W     WWWWWWWWWWWWWWWWWWWWWWWWWWWWW  WWWWWWWWWWW    W\n",
+	   "W    W            W    $   W      LIRAZ'S AND EYAL'S      W               W    W\n",
+	   "W    W   WWWWWWWWWW        W      THUNDERBIRDS GAME       W               W    W\n",
+	   "W    W            W         WWWWWWWWWWWWWWWWWWWWWWWWW     W                    W\n",
+	   "W    WWWWWWWWWW   W                                 WWWWWWWWW                  W\n",
+	   "W    W            W                 *               W  $                       W\n",
+	   "W    W  WWWWWWWWWWW    W     WWWWWW WWWWWWW         W                         WW\n",
+	   "W    W       W         W     W            W   W     W                          W\n",
+	   "W    W       W         W     W            W   W     W                    33    W\n",
+	   "W            W   $     W     W            W   W      WWWWWWWWWWWWWWWWWWWWW     W\n",
+	   "W            W         W     W            W %%W                                W\n",
+	   "W      WWWWWWWWWWWWWWWWWWWWWWW            W  WW                                W\n",
+	   "W      W                                  W   WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n",
+	   "W      W                          !!!     W                              ##    W\n",
+	   "W  E   W                         !!!!!    W                              ##    W\n",
 	   "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n",
 	};
 	char currentBoard[Height][Width];
@@ -84,4 +85,5 @@ public:
 	bool blocksIncludePoint(std::vector<Block> blocks, Point p);
 	bool arePointsIncludePoint(std::vector<Point> points, int x, int y) const;
 	bool isCharOfBlock(char ch);
+	std::vector<HorizontalGhost> loadHorizontalGhosts();
 };

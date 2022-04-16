@@ -7,6 +7,7 @@
 #include "Timer.h"
 #include "Color.h"
 #include "Game.h"
+#include "HorizontalGhost.h"
 #include <set>
 #include <iterator>
 #include <algorithm>
@@ -16,10 +17,11 @@ class SingleGame {
 	bool keepPlayingSingleGame = true;
 	Board board;
 	Timer timer;
-	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 20}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 8} }; // Index 0 is big ship and 1 is small ship
+	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 6}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 2} }; // Index 0 is big ship and 1 is small ship
 	int activeShip = int(ShipsIndex::BIG_SHIP);
 	int blocksAmount;
 	std::vector<Block> blocks;
+	std::vector<HorizontalGhost> horizntalGhosts;
 	int livesCount;
 	Color color;
 	int dirx = 0;
@@ -42,6 +44,7 @@ public:
 	// Checks if the player won the game (Both ships have reached the end point)
 	bool isGameWon();
 	// Moving the ships
+	void moveGhosts();
 	void moveShip();
 	// Checks if the ship can push the block(s)
 	void checkShipPushBlock(std::vector<Point> points);

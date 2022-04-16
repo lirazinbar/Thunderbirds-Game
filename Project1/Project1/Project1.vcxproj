@@ -143,6 +143,8 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Ghost.h" />
+    <ClInclude Include="HorizontalGhost.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Ship.h" />
@@ -154,6 +156,8 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="HorizontalGhost.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Ship.cpp" />
