@@ -13,12 +13,12 @@ void Game::run() {
 	char userChoice = 0;
 	hide_cursor();
 	
-	while (userChoice != '9') {
+	while (userChoice != Keys::Exit) {
 		printMainMenu(userChoice);
-		if (userChoice == '1') {
+		if (userChoice == Keys::StartNewGame) {
 			play();
 		}
-		else if (userChoice == '8') {
+		else if (userChoice == Keys::Instructions) {
 			Color::setColorMode(presentInstructions());
 		}
 	}
@@ -32,14 +32,17 @@ void Game::play() {
 	GameScreen screen;
 	std::string line;
 	
-	screen.chooseScreen();
-	while (!isGameLost() && keepPlaying) {
-		SingleGame(livesCount, screen).play();
-		screen.returnToFileBeginning();
-		if (Game::gameWon == true) {
-			Game::livesCount = 3; // Reset lives
-			Game::gameWon = false;
-			screen.openNextScreenFile();
+	// If there at least one screen file in the directory
+	if (Game::keepPlaying) {
+		screen.chooseScreen();
+		while (!isGameLost() && keepPlaying) {
+			SingleGame(livesCount, screen).play();
+			screen.returnToFileBeginning();
+			if (Game::gameWon == true) {
+				Game::livesCount = 3; // Reset lives
+				Game::gameWon = false;
+				screen.openNextScreenFile();
+			}
 		}
 	}
 }

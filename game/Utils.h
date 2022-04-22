@@ -12,7 +12,13 @@ enum class BoardSymbols {
 	HORIZONTAL_GHOST = '$',
 };
 
-enum class PrintPoints { MESSAGE_X = 40, MESSAGE_Y = 10, ACTIVE_SHIP_X = 13, TIMER_X = 34, LIVES_X = 50, SCREEN_X = 65 };
+enum class PrintPoints {
+	MESSAGE_X = 40,
+	MESSAGE_Y = 10,
+	ACTIVE_SHIP_X = 13,
+	TIMER_X = 34, LIVES_X = 50,
+	SCREEN_X = 65
+};
 
 struct Keys {
 	constexpr static char ESC = 27;
@@ -22,6 +28,13 @@ struct Keys {
 	constexpr static char Left = 'a';
 	constexpr static char BigShip = 'b';
 	constexpr static char SmallShip = 's';
+	constexpr static char StartNewGame = '1';
+	constexpr static char PlayFirstScreen = '1';
+	constexpr static char PlaySpecificScreen = '2';
+	constexpr static char Instructions = '8';
+	constexpr static char Exit = '9';
+	constexpr static char Yes = 'y';
+	constexpr static char No = 'n';
 };
 
 // get x and y and set the cursor at this point on the screen

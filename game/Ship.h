@@ -21,7 +21,7 @@ public:
 	// Set the ship data from screen
 	void setShip();
 	// Return the points vector of the ship
-	std::vector<Point> getPoints() const { return points; }
+	const std::vector<Point>& getPoints() const { return points; }
 	// Return the size of the ship
 	int getSize() const { return size; }
 	// Return the char of the ship
@@ -39,9 +39,9 @@ public:
 	// Delete the ship from screen
 	void deleteFromScreen() const;
 	// Checks if the ship includes the Point p
-	bool isShipIncludesPoint(Point p) const;
+	bool isShipIncludesPoint(const Point& p) const;
 	// Checks if the ship includes some of the points
-	bool isShipIncludesSomePoints(std::vector<Point> collisionPoints) const;
+	bool isShipIncludesSomePoints(const std::vector<Point>& collisionPoints) const;
 	// Checking which of the ship points are the top layer points and save their indexes
 	void setTopPoints();
 	// Return vector with the top points of the ship

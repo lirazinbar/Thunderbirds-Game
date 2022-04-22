@@ -1,0 +1,29 @@
+*Header*
+Time of the screen:
+140
+
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+W    &                                                                          W
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+WWWWWWWWWWWW  P  WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+WWWWWWWWWWW  YYY  WWWWWWWWWWWWWWWWW                            W C++        WWW1W
+WWWWWWWWWW  RRRRR  WWWWWWWWWWWWWWWW                 4          W       OOP  WWW1W
+WWWWWWWWW  AAAAAAA  WWWWWWWWWWWWWWW55     WWWWWWWWWW4WWW       W     WWWWWWWW##1
+WWWWWWWW  MMMMMMMMM  WWWWWW        5      W       W 3  W       WWWWWWW       ##  
+WWWWWWW  IIIIIIIIIII  WWWWW        56     W       W 333        222           @@ W
+WWWWWW  DDDDDDDDDDDDD  WWWW     WWWWW  WWW       WWWWWW        222           WWWW
+WWWWWWWWWWWWWWWWWWWWWWWWWWW     W    77                WWWWW   WWWWWWWWWWWWWWWWWW
+W E                       W     W    77                    W   W               WW
+W                         W     W    77                    W   W     9 W       WW
+WW W W W W W W W W W W    W     W   WWW  W              WWWWWWWW     9 W       WW
+WWWWWWWWWWWWWWWWWWWWWW    W           W  W      $                  WW9 W       WW
+W                         W           W  W                      WWWWWW W       WW
+W                   3 WWWWWWWWWWWWWWWWW  W                      88     W       WW
+W     WWWWWWWWWWWW 222                W  W                      88             WW
+W     W              WWWWWWWWWWW      W  WWWWWWWWWWWWWWWWWWWWWWWWWWWWW W       WW
+W     W                        W      W  W      000                  W W       WW
+W     WWWWWWWWWWWW   WWWWW     W      W  W      111                  W W       WW
+W                        WWWWWWW  WWWWW       WWWWWWWWWWWWWWWWWWW    W W       WW
+W                                                                              WW
+WWWWWWWWWWWWWWWWWW   W                     $                                   WW
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW

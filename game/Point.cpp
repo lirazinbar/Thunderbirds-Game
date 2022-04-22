@@ -19,7 +19,7 @@ void Point::deleteFromScreen() const {
 	pBoard->set(x, y, char(BoardSymbols::BLANK)); // del also from board
 }
 
-bool Point::arePointsIncludePoint(std::vector<Point> points) const {
+bool Point::arePointsIncludePoint(const std::vector<Point>& points) const {
 	int i;
 
 	for (i = 0; i < points.size(); i++) {

@@ -28,5 +28,5 @@ public:
 	// Change the color mode
 	static void setColorMode(bool mode) { isInColorMode = mode; }
 	// Change the color of the text
-	static void setTextColor(TextColor color);
+	static void setTextColor(const TextColor& color);
 };

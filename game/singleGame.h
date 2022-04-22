@@ -55,13 +55,13 @@ public:
 	// Moving the ships
 	void moveShip();
 	// Checks if the ship can push the block(s)
-	void checkShipPushBlock(std::vector<Point> points);
+	void checkShipPushBlock(std::vector<Point>& points);
 	// get only the blocks above that the ship is not collide with
 	std::set<int> getOnlyBlocksAboveToMove(std::set<int> blocksAbove, std::set<int> blocksIndexesToMove);
 	// Return all the blocks indexes in "blocks" array which can move after a ship pushed them
-	std::set<int> getBlocksCanMoveAfterCollideByShip(std::vector<Point> points, bool& canMove, bool& isColide, std::set<int>& blocksAbove);
+	std::set<int> getBlocksCanMoveAfterCollideByShip(const std::vector<Point>& points, bool& canMove, bool& isColide, std::set<int>& blocksAbove);
 	// get all the blocks above the points recursive
-	std::set<int> getAllBlocksAbovePoints(std::vector<Point> points);
+	std::set<int> getAllBlocksAbovePoints(const std::vector<Point>& points);
 	// Clculate the total size of all the blocks in "blocksIndexesToMove"
 	int getTotalSizeOfBlocks(std::set<int> blocksIndexesToMove) const;
 	// Return the collision points of the blocks in "blocksIndexesToMove",
@@ -74,22 +74,22 @@ public:
 	// check if the blocks smash ship
 	void checkBlocksSmashShips(std::set<int> blocksToCheck);
 	// get all the blocks can move vertically recursive
-	std::set<int> getBlocksCanMoveVertical(std::vector<Point> points, bool& canMove, bool& isColide);
+	std::set<int> getBlocksCanMoveVertical(const std::vector<Point>& points, bool& canMove, bool& isColide);
 	// Move the blocks in "blocksIndexesToMove" on screen according to dirx, diry
 	void moveBlocks(std::set<int> blocksIndexesToMove, int dirx, int diry);
 	// Chceks if the block can move on board
 	bool isBlockCanMove(int blockIndex);
 	// Checks if there are block above the ships and move the accordingly
-	void checkBlocksAboveShip(std::vector<Point> adjacentShipPoints);
+	void checkBlocksAboveShip(const std::vector<Point>& aboveShipPoints);
 	// get the blocks that fall on ship recursive
-	void getBlocksFallOnShipTopPoints(std::vector<Point> points, std::set<int>& blocksIndexesAbove, int shipIndex);
+	void getBlocksFallOnShipTopPoints(const std::vector<Point>& pointsAbove, std::set<int>& blocksIndexesAbove, int shipIndex);
 	// get all the points above the blocksIndexes
 	std::vector<Point> getPointsAboveBlocks(std::set<int> blocksIndexesAbove);
 	// Return true of all the points have ch
-	bool areAllPointsIncludeChar(std::vector<Point> points, char ch) const;
+	bool areAllPointsIncludeChar(const std::vector<Point>& points, char ch) const;
 	// Checks if the points have the chars in charsArr
-	bool arePointsHaveChars(std::vector<Point> points, char* charsArr, int size) const;;
+	bool arePointsHaveChars(const std::vector<Point>& points, char* charsArr, int size) const;;
 	// Return true of all the points have chars
-	bool areAllPointsIncludeChars(std::vector<Point> points, char* charsArr, int size) const;
+	bool areAllPointsIncludeChars(const std::vector<Point>& points, char* charsArr, int size) const;
 	void moveGhosts();
 };

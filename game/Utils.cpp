@@ -43,7 +43,8 @@ void printMainMenu(char& userChoice) {
 	while (!isValid) {
 		if (_kbhit()) {
 			userChoice = _getch();
-			isValid = (userChoice == '1' || userChoice == '8' || userChoice == '9');
+			isValid = (userChoice == Keys::StartNewGame ||
+				userChoice == Keys::Instructions || userChoice == Keys::Exit);
 		}
 	}
 	clrscr();
@@ -69,16 +70,17 @@ bool presentInstructions() {
 	while (!isValid) {
 		if (_kbhit()) {
 			ch = _getch();
-			isValid = (ch == 'Y' || ch == 'y' || ch == 'N' || ch == 'n');
+			ch = tolower(ch);
+			isValid = (ch == Keys::Yes || ch == Keys::No);
 		}
 	}
 
-	if (ch == 'Y' || ch == 'y') returnedValue = true;
+	if (ch == Keys::Yes) returnedValue = true;
 	else returnedValue = false;
 
 	std::cout << "Press 9 to return the menu" << std::endl;
 
-	while (ch != '9') {
+	while (ch != Keys::Exit) {
 		if (_kbhit()) {
 			ch = _getch();
 		}
@@ -90,7 +92,7 @@ bool presentInstructions() {
 void printWinMessage() {
 	clrscr();
 	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y));
-	std::cout << "Good job! You Won!\n" << std::endl;
+	std::cout << "Good job! You finished the screen!\n" << std::endl;
 	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y) + 2);
 	system("pause");
 }

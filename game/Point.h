@@ -45,5 +45,5 @@ public:
 	// Delete the point from screen
 	void deleteFromScreen() const;
 	// Check if points include the point
-	bool arePointsIncludePoint(std::vector<Point> points) const;
+	bool arePointsIncludePoint(const std::vector<Point>& points) const;
 };

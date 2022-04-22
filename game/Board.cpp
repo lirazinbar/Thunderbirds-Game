@@ -96,7 +96,7 @@ std::vector<Point> Board::loadBlockWithChar(char ch, int col, int row, std::vect
 	return points;
 }
 
-bool Board::arePointsIncludePoint(std::vector<Point> points, int x, int y) const {
+bool Board::arePointsIncludePoint(const std::vector<Point>& points, int x, int y) const {
 	for (int i = 0; i < points.size(); i++) {
 		if (points[i].getX() == x && points[i].getY() == y)
 			return true;
@@ -105,7 +105,7 @@ bool Board::arePointsIncludePoint(std::vector<Point> points, int x, int y) const
 	return false;
 }
 
-bool Board::blocksIncludePoint(std::vector<Block> blocks, Point p) {
+bool Board::blocksIncludePoint(const std::vector<Block>& blocks, Point p) {
 	int i;
 
 	for (i = 0; i < blocks.size(); i++) {
@@ -116,6 +116,7 @@ bool Board::blocksIncludePoint(std::vector<Block> blocks, Point p) {
 }
 
 void Board::print(int activeShip, int timeLeft, int livesCount, int screenNumber) const {
+	clrscr();
 	for (size_t row = 0; row < Height; ++row) {
 		std::cout << currentBoard[row] << std::endl;
 	}
@@ -138,7 +139,7 @@ Point Board::findCharOnBoard(char ch) {
 	return res;
 }
 
-std::vector<Point> Board::checkMoving(std::vector<Point> points, int size, char ch, int dirx, int diry) {
+std::vector<Point> Board::checkMoving(const std::vector<Point>& points, int size, char ch, int dirx, int diry) {
 	std::vector<Point> collisionPoints;
 	for (int i = 0; i < size; i++) {
 		int new_x = points[i].getX() + dirx;

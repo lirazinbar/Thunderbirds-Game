@@ -34,7 +34,7 @@ void Ship::deleteFromScreen() const {
 	}
 }
 
-bool Ship::isShipIncludesPoint(Point p) const {
+bool Ship::isShipIncludesPoint(const Point& p) const {
 	for (int i = 0; i < points.size(); i++) {
 		if (points[i].getX() == p.getX() && points[i].getY() == p.getY())
 			return true;
@@ -43,7 +43,7 @@ bool Ship::isShipIncludesPoint(Point p) const {
 	return false;
 }
 
-bool Ship::isShipIncludesSomePoints(std::vector<Point> collisionPoints) const {
+bool Ship::isShipIncludesSomePoints(const std::vector<Point>& collisionPoints) const {
 	for (int i = 0; i < collisionPoints.size(); i++) {
 		if (isShipIncludesPoint(collisionPoints[i]))
 			return true;

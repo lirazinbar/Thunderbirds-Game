@@ -1,1 +1,2 @@
-C:\Users\liraz\Desktop\thunderbirds-newVer\Thunderbirds-Game\game\x64\Debug\Thunderbirds.exe
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\Project1\x64\Debug\Thunderbirds.exe
+C:\Users\eyalp\source\repos\Thunderbirds-Game\game\x64\Debug\Thunderbirds.exe

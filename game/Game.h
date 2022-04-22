@@ -15,6 +15,8 @@ public:
 	static int getLivesCount() { return livesCount; }
 	// Decrese the live count by 1
 	static void decreseLives() { Game::livesCount -= 1; }
+	// Return true if the game should keep going
+	static bool getKeepPlayingSatus() { return Game::keepPlaying; }
 	// Set the "keepPlaying" falg to false
 	static void stopPlaying() { Game::keepPlaying = false; }
 	// Return the current game winning status

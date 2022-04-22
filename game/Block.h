@@ -17,7 +17,7 @@ public:
 	// Ctor
 	Block(char _ch, int _size, Board* _pBoard, std::vector<Point> _points) : ch(_ch), size(_size), pBoard(_pBoard), points(_points) {}
 	// Return the points of the block
-	std::vector<Point> getPoints() const { return points; }
+	const std::vector<Point>& getPoints() const { return points; }
 	// Return the size of the block
 	int getSize() const { return size; }
 	// Return the char of the block
