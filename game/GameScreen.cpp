@@ -5,6 +5,28 @@
 #include <Windows.h>
 #include <conio.h>
 #include <regex>
+#include <filesystem>
+
+GameScreen::GameScreen() {
+	std::filesystem::path pwd = std::filesystem::current_path();
+	std::string currentFileName;
+
+	for (auto& file : std::filesystem::directory_iterator(pwd)) {
+		currentFileName = file.path().filename().string();
+		// Search for all the tb*.screen.txt files in pwd
+		if (file.is_regular_file() && currentFileName.starts_with("tb") && currentFileName.ends_with(".screen.txt")) {
+			screenFileNames.push_back(currentFileName);
+		}
+	}
+	// If there are no screen files
+	if (screenFileNames.size() == 0) {
+		printFileRelatedMessage("Error! There are no screen files in the directory. Exiting to main menu...");
+	}
+	else {
+		// Sort the file names in lexicographical order
+		std::sort(screenFileNames.begin(), screenFileNames.end());
+	}
+}
 
 void GameScreen::returnToFileBeginning() {
 	screenFile.clear();
@@ -21,72 +43,68 @@ void GameScreen::chooseScreen() {
 	while (!isValid) {
 		if (_kbhit()) {
 			playerChoice = _getch();
-			if (playerChoice == '1') {
+			if (playerChoice == Keys::PlayFirstScreen) {
 				isValid = true;
-				// Default file name, the first screen
+				screenNumber = 1;
+				// The first screen
+				screenFileName = screenFileNames[screenNumber - 1];
 			}
-			else if (playerChoice == '2') {
+			else if (playerChoice == Keys::PlaySpecificScreen) {
 				isValid = true;
-				clrscr();
-				std::cout << "Please enter the screen file name:" << std::endl;
-				std::getline(std::cin, screenFileName);
+				getScreenFileNameFromPlayer();
 			}
-			screenNumber = searchScreenNumber();
-			screenFile.open(screenFileName);
+			// If the file name the player entered is valid
+			if (Game::getKeepPlayingSatus()) {
+				screenFile.open(screenFileName);
+				// If there is a problem opening the file
+				if (screenFile.fail()) {
+					printFileRelatedMessage("Error! There was a probelm opening the screen file. Exiting to main menu...");
+				}
+			}
 		}
 	}
-	checkFileOpening(playerChoice);
 }
 
-int GameScreen::searchScreenNumber() {
-	std::regex regexScreenNubmer("[1-9]+");
-	std::smatch m;
-
-	std::regex_search(screenFileName, m, regexScreenNubmer);
-	return stoi(m.str());
-}
-
-void GameScreen::checkFileOpening(char playerChoice = '0') {
+void GameScreen::printFileRelatedMessage(const char* errorMessage) const {
 	clrscr();
-	if (screenFile.fail()) {
-		clrscr();
-		gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y));
-		if (playerChoice == '1') {
-			// In case the player chose '1' - default screen, which is the first screen.
-			// The files names are in lexicographical order,
-			// So we assume there are no screen files in the directory.
-			std::cout << "Error! There are no screen files in the directory. Exiting to main menu..." << std::endl;
+	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y));
+	std::cout << errorMessage << std::endl;
+	Game::stopPlaying();
+	// Sleep for 3 seconds
+	Sleep(3000);
+}
+
+void GameScreen::getScreenFileNameFromPlayer() {
+	bool found = false;
+
+	clrscr();
+	std::cout << "Please enter the screen file name:" << std::endl;
+	std::getline(std::cin, screenFileName);
+
+	for (int i = 0; i < screenFileNames.size() && !found; i++) {
+		if (screenFileName.compare(screenFileNames[i]) == 0) {
+			found = true;
+			screenNumber = i + 1;
 		}
-		else if (playerChoice == '2') {
-			// If The file the player chose doesn't exist
-			std::cout << "Error! File doesn't exist. Exiting to main menu..." << std::endl;
-		}
-		else {
-			// In case of trying to open next screen file,
-			// but there are no screen files left
-			std::cout << "Hooray! You finished the last screen and rescued the Egyptologists!" << std::endl;
-		}
-		Game::stopPlaying();
-		// Sleep for 3 seconds
-		Sleep(3000);
-		clrscr();
+	}
+	// If the file the player chose doesn't exist
+	if (found == false) {
+		printFileRelatedMessage("Error! The file doesn't exist. Exiting to main menu...");
 	}
 }
 
 void GameScreen::openNextScreenFile() {
 	screenNumber++;
-	changeFileName();
 	screenFile.close();
-	screenFile.open(screenFileName);
-	checkFileOpening();
-}
-
-void GameScreen::changeFileName() {
-	if (screenNumber < 10) {
-		screenFileName.replace(2, 1, std::to_string(screenNumber));
+	// In case the player finished the last screen
+	if (screenNumber > screenFileNames.size()) {
+		printFileRelatedMessage("Hooray! You finished the last screen and rescued the Egyptologists!");
 	}
 	else {
-		screenFileName.replace(2, 2, std::to_string(screenNumber));
+		screenFile.open(screenFileNames[screenNumber - 1]);
+		if (screenFile.fail()) {
+			printFileRelatedMessage("Error! There was a probelm opening the screen file. Exiting to main menu...");
+		}
 	}
 }
 

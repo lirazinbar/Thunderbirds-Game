@@ -18,7 +18,7 @@ private:
 		Point legendLocation;
 	public:
 		// Setting the legend location according the the & char on board
-		void setLegendLocation(Point _legendLocation) { legendLocation = _legendLocation; }
+		void setLegendLocation(const Point& _legendLocation) { legendLocation = _legendLocation; }
 		// Return the data member "legendLocation"
 		const Point& getLegendLocation() const { return legendLocation; }
 		// Print the legend to screen
@@ -57,9 +57,9 @@ public:
 	// Load a block on the screen according to a point and a char
 	std::vector<Point> loadBlockWithChar(char ch, int col, int row, std::vector<Block> blocks, std::vector<Point>& checkedPoints);
 	// Check if the points includes the point with the coordinations x, y
-	bool arePointsIncludePoint(std::vector<Point> points, int x, int y) const;
+	bool arePointsIncludePoint(const std::vector<Point>& points, int x, int y) const;
 	// Check if there is a block in the blocks vector which has the Point p
-	bool blocksIncludePoint(std::vector<Block> blocks, Point p);
+	bool blocksIncludePoint(const std::vector<Block>& blocks, Point p);
 	// Print board
 	void print(int activeShip, int timeLeft, int livesCount, int screenNumber) const;
 	// Rturning the first Point object on board with the char ch
@@ -67,7 +67,7 @@ public:
 	// From the points the function takes as parameter, the function return only the points that
 	// don't collide with something that is not empty space or the ch itself,
 	// after moving them dirx, diry
-	std::vector<Point> checkMoving(std::vector<Point> points, int size, char ch, int dirx, int diry);
-	char* getRow(int row) { return currentBoard[row]; }
+	std::vector<Point> checkMoving(const std::vector<Point>& points, int size, char ch, int dirx, int diry);
+	// Searches the hotizontalGhosts from the board and save them
 	std::vector<HorizontalGhost> loadHorizontalGhosts();
 };

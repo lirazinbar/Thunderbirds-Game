@@ -9,30 +9,30 @@
 
 class GameScreen {
 	std::ifstream screenFile;
-	// Default file name, the first screen
-	std::string screenFileName = "tb1.screen.txt";
-	int screenNumber;
+	std::string screenFileName;
+	std::vector<std::string> screenFileNames;
+	int screenNumber = 0;
 public:
+	//Empty Ctor
+	GameScreen();
 	// Destructor - Closing the screen text file
 	~GameScreen() { screenFile.close(); }
-	// Set the file position to the beginning
-	void returnToFileBeginning();
 	// Return the screen file (ifstream)
 	std::ifstream& getScreenFile() { return screenFile; }
 	// Return the screen number
 	int getScreenNumber() { return screenNumber; }
+	// Set the file position to the beginning
+	void returnToFileBeginning();
 	// Choose a screen to play by entering the file name,
 	//or pick the first screen as default
 	void chooseScreen();
-	// Seraches and return the screen file nubmer according to the file txt name
-	int searchScreenNumber();
+	// Prints a message to the screen after encountering a file related error
+	// Exit to main menu
+	void printFileRelatedMessage(const char* errorMessage) const;
+	// Get the screen file name from the player
+	void getScreenFileNameFromPlayer();
 	// Opens the next screen text file in lexicographical order (1, 2, 3,...)
 	void openNextScreenFile();
-	// Changes the file name according to the current screen number
-	void changeFileName();
-	// Checking if the file opens properly. Exiting the current game if not
-	// Default 0 to allow function call without parameters
-	void checkFileOpening(char playerChoice);
 	// Load the file into the SingeGame object
 	// Reads the header and the board
 	void load(Board& board, Timer& timer);
