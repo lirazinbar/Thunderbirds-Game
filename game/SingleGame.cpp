@@ -13,6 +13,8 @@ SingleGame::SingleGame(int _livesCount, GameScreen& screen): livesCount(_livesCo
 	setBlocks();
 	setGhosts();
 	board.print(activeShip, timer.getTimeLeft(), livesCount, screenNumber);
+	printShips();
+	printBlocks();
 }
 
 SingleGame::~SingleGame() {
@@ -41,6 +43,22 @@ void SingleGame::setGhosts() {
 	horizntalGhosts = board.loadHorizontalGhosts();
 }
 
+void SingleGame::printShips() {
+	int i;
+
+	for (i = 0; i < 2; i++) {
+		ships[i].drawOnScreen();
+	}
+}
+
+void SingleGame::printBlocks() {
+	int i;
+
+	for (i = 0; i < blocksAmount; i++) {
+		blocks[i].drawOnScreen();
+	}
+}
+
 void SingleGame::play() {
 	char key = 0;
 
@@ -48,7 +66,7 @@ void SingleGame::play() {
 		moveGhosts();
 		moveShip();
 		checkBlocksVerticalMove();
-		Sleep(50);
+		Sleep(200);
 		timer.tick();
 		if (isTimeRanOut() || isGameWon()) {
 			keepPlayingSingleGame = false;
@@ -63,6 +81,7 @@ void SingleGame::play() {
 void SingleGame::assignKey(char& key) {
 	switch (std::tolower(key)) {
 	case Keys::ESC:
+		dirx = diry = 0;
 		pauseGame();
 		break;
 	case Keys::Up:
@@ -127,6 +146,8 @@ void SingleGame::pauseGame() {
 		else if (key == Keys::ESC) {
 			clrscr();
 			board.print(activeShip, timer.getTimeLeft(), livesCount, screenNumber);
+			printShips();
+			printBlocks();
 		}
 	}
 }
@@ -149,28 +170,47 @@ bool SingleGame::isGameWon() {
 }
 
 void SingleGame::moveGhosts() {
-	int i;
-	char ch;
+	std::vector<HorizontalGhost>::iterator itr = horizntalGhosts.begin();
+	char currentPointCh, nextPointCh;
 	Point p;
 
-	for (i = 0; i < horizntalGhosts.size(); i++) {
-		p = horizntalGhosts[i].getNextPointToMove();
-		ch = board.get(p);
+	while (itr != horizntalGhosts.end()) {
+		p = itr->getNextPointToMove();
+		currentPointCh = board.get(itr->getPoint());
+		nextPointCh = board.get(p);
 
-		if (ch == (char)BoardSymbols::BIG_SHIP || ch == (char)BoardSymbols::SMALL_SHIP) {
+		if (currentPointCh == (char)BoardSymbols::BIG_SHIP || currentPointCh == (char)BoardSymbols::SMALL_SHIP
+			|| nextPointCh == (char)BoardSymbols::BIG_SHIP || nextPointCh == (char)BoardSymbols::SMALL_SHIP) {
 			// kill ships
 			keepPlayingSingleGame = false;
 			printLoseMessage("Your ship has been killed by a ghost! ");
 			return;
 		}
 
-		if (ch == (char)BoardSymbols::BLANK) {
-			horizntalGhosts[i].move();
+		if (areBlocksIncludePoint(itr->getPoint())) {
+				itr = horizntalGhosts.erase(itr);
 		}
 		else {
-			horizntalGhosts[i].changeDir();
+			if (nextPointCh != (char)BoardSymbols::BLANK) {
+				itr->changeDir();
+			}
+			else {
+				itr->move();
+			}
+			++itr;
 		}
 	}
+}
+
+bool SingleGame::areBlocksIncludePoint(Point p) {
+	int blocksIndex;
+	for (blocksIndex = 0; blocksIndex < blocksAmount; blocksIndex++) {
+		if (blocks[blocksIndex].isBlockIncludesPoint(p)) { // the point is collide with the block
+			return true;
+		}
+	}
+	
+	return false;
 }
 
 void SingleGame::moveShip() {
@@ -184,12 +224,21 @@ void SingleGame::moveShip() {
 		checkBlocksAboveShip(ships[activeShip].getAboveShipPoints());
 		return;
 	}
+
 	// Check collision with wall & ships
 	char collisionChars[2] = { (char)BoardSymbols::WALL, ships[(activeShip + 1) % 2].getChar() };
 	if (arePointsHaveChars(points, collisionChars, 2)) {
 		dirx = diry = 0;
 		return;
 	}
+
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+		// kill ships
+		keepPlayingSingleGame = false;
+		printLoseMessage("Your ship has been killed by a ghost! ");
+		return;
+	}
+
 	// check reaching the end point
 	if (areAllPointsIncludeChar(points, (char)BoardSymbols::END_POINT)) {
 		ships[activeShip].setHasReachedEndPoint(true);
@@ -260,6 +309,10 @@ std::set<int> SingleGame::getBlocksCanMoveAfterCollideByShip(std::vector<Point> 
 		return blocksIndexesToMove;
 	}
 
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+		moveGhostAfterCollide(points);
+	}
+
 	// get the blocks that the points are collide with
 	for (pointsIndex = 0; pointsIndex < points.size(); pointsIndex++) {
 		for (blocksIndex = 0; blocksIndex < blocksAmount; blocksIndex++) {
@@ -285,6 +338,42 @@ std::set<int> SingleGame::getBlocksCanMoveAfterCollideByShip(std::vector<Point> 
 
 	std::set<int> emptySet;
 	return emptySet;
+}
+
+void SingleGame::moveGhostAfterCollide(std::vector<Point> points) {
+	std::vector<HorizontalGhost>::iterator itr = horizntalGhosts.begin();
+	int indexToMove;
+	Point p;
+	char ch;
+
+	while (itr != horizntalGhosts.end()) {
+		indexToMove = itr->isGhostExistInPointsVec(points);
+
+		if (indexToMove != -1) {
+			itr->setDir(dirx);
+			p = itr->getNextPointToMove();
+			ch = board.get(p);
+
+			if (ch == (char)BoardSymbols::BIG_SHIP || ch == (char)BoardSymbols::SMALL_SHIP) {
+				// kill ships
+				keepPlayingSingleGame = false;
+				printLoseMessage("Your ship has been killed by a ghost! ");
+				return;
+			}
+
+			if (ch != (char)BoardSymbols::BLANK) {
+				itr = horizntalGhosts.erase(itr);
+				points[indexToMove].deleteFromScreen();
+			}
+			else {
+				itr->move();
+				++itr;
+			}
+		}
+		else {
+			++itr;
+		}
+	}
 }
 
 std::set<int> SingleGame::getAllBlocksAbovePoints(std::vector<Point> points) {
@@ -456,6 +545,12 @@ std::set<int> SingleGame::getBlocksCanMoveVertical(std::vector<Point> points, bo
 		return blocksIndexesToMove;
 	}
 
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+		deleteGhosts(points);
+		canMove = true;
+		return blocksIndexesToMove;
+	}
+
 	// get the blocks that the points are collide with
 	for (pointsIndex = 0; pointsIndex < points.size(); pointsIndex++) {
 		for (blocksIndex = 0; blocksIndex < blocksAmount; blocksIndex++) {
@@ -565,4 +660,19 @@ bool SingleGame::areAllPointsIncludeChars(std::vector<Point> points, char* chars
 	}
 
 	return true;
+}
+
+void SingleGame::deleteGhosts(std::vector<Point> points) {
+	std::vector<HorizontalGhost>::iterator itr = horizntalGhosts.begin();
+	int indexToRem;
+
+	while (itr != horizntalGhosts.end()) {
+		indexToRem = itr->isGhostExistInPointsVec(points);
+
+		if (indexToRem != -1) {
+			itr = horizntalGhosts.erase(itr);
+			points[indexToRem].deleteFromScreen();
+		}
+		else ++itr;
+	}
 }

@@ -18,7 +18,7 @@ class SingleGame {
 	int screenNumber;
 	Board board;
 	Timer timer;
-	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 8}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 2} }; // Index 0 is big ship and 1 is small ship
+	Ship ships[2] = { {char(BoardSymbols::BIG_SHIP), 4, &board, 8}, {char(BoardSymbols::SMALL_SHIP), 2, &board, 20} }; // Index 0 is big ship and 1 is small ship
 	int activeShip = int(ShipsIndex::BIG_SHIP);
 	int blocksAmount;
 	std::vector<Block> blocks;
@@ -91,5 +91,16 @@ public:
 	bool arePointsHaveChars(std::vector<Point> points, char* charsArr, int size) const;;
 	// Return true of all the points have chars
 	bool areAllPointsIncludeChars(std::vector<Point> points, char* charsArr, int size) const;
+	// Moves all the horizontal ghosts
 	void moveGhosts();
+	// Deletes the ghosts that include the points
+	void deleteGhosts(std::vector<Point> points);
+	// Move ghots that moving blocks are collide with
+	void moveGhostAfterCollide(std::vector<Point> points);
+	// Returns true if thw blocks include the given point
+	bool areBlocksIncludePoint(Point p);
+	// Prints the ships on screen
+	void printShips();
+	// Prints the blocks on screen
+	void printBlocks();
 };

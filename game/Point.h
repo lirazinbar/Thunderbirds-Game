@@ -46,4 +46,5 @@ public:
 	void deleteFromScreen() const;
 	// Check if points include the point
 	bool arePointsIncludePoint(std::vector<Point> points) const;
+	bool operator==(const Point& p) { return (x == p.x && y == p.y && ch == p.ch); }
 };
