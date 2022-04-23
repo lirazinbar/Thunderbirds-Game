@@ -13,9 +13,9 @@ WWWWWWW  MMMMMMMMM  WWWWWW      44       W       W 2  W       WWWWWWW       ##
 WWWWWW  IIIIIIIIIII  WWWWW       W       W       W 2          111           @@ W
 WWWWW  DDDDDDDDDDDDD  WWWW     WWWWW  WWW       WWWWWW        111           WWWW
 WWWWWWWWWWWWWWWWWWWWWWWWWW     W    77                WWWWW   WWWWWWWWWWWWWWWWWW
-W E                      W     W    66                    W   W               WW
-W     $                  W     W    55                    W   W     9 9       WW
-W W W W W W W W W W      W     W   WWW  W              WWWWWWWW     9 W       WW
+W E    $                 W     W    66                    W   W               WW
+W                        W     W    55                    W   W     9 9       WW
+W W W           W W      W     W   WWW  W              WWWWWWWW     9 W       WW
 WWWWWWWWWWWWWWWWWWW      W           W  W      $                  WW9 W       WW
 W                        W           W  W                         WWW W       WW
 W                   4WWWWWWWWWWWWWWWWW  W                      88     W       WW
