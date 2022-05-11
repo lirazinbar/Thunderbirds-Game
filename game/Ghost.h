@@ -1,5 +1,6 @@
 #pragma once
 #include "Point.h"
+#include "Color.h"
 
 class Ghost {
 	Point point;
@@ -10,7 +11,7 @@ public:
 	// Pring the ghost on screen
 	void drawOnScreen() const;
 	// Move the ghost by the given dirs
-	void move(int dirx, int diry);
+	void moveGhost(int dirx, int diry);
 	// deletes the ghost from the screen
 	void deleteFromScreen() const;
 	// Returns the ghost point
@@ -23,6 +24,7 @@ public:
 	virtual Point getNextPointToMove() = 0;
 	// Changes the dir to the opposite
 	virtual void changeDir() = 0;
+	virtual void move() = 0;
 	// Set the dir to the given dir
 	virtual void setDir(int _dir) = 0;
 };

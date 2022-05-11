@@ -12,7 +12,7 @@ public:
 	// Set the dir to the given dir
 	void setDir(int _diry) override { diry = _diry; }
 	// Moves the ghost
-	void move() { Ghost::move(0, diry); }
+	void move() { Ghost::moveGhost(0, diry); }
 	// Returns the point after moving
 	Point getNextPointToMove() { return Ghost::calcNextPointToMove(0, diry); }
 };

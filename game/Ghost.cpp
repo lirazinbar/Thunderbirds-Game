@@ -1,7 +1,7 @@
 #include "Ghost.h"
 #include "Color.h"
 
-void Ghost::move(int dirx, int diry) {
+void Ghost::moveGhost(int dirx, int diry) {
 	deleteFromScreen();
 	point.move(dirx, diry);
 	drawOnScreen();

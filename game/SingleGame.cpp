@@ -65,7 +65,7 @@ void SingleGame::play() {
 		moveGhosts();
 		moveShip();
 		checkBlocksVerticalMove();
-		Sleep(200);
+		Sleep(100);
 		timer.tick();
 		if (isTimeRanOut() || isGameWon()) {
 			keepPlayingSingleGame = false;
@@ -184,14 +184,14 @@ void SingleGame::moveGhosts() {
 			return;
 		}
 		if (areBlocksIncludePoint((*itr)->getPoint())) {
-			itr = horizntalGhosts.erase(itr);
+			itr = ghosts.erase(itr);
 		}
 		else {
 			if (nextPointCh != (char)BoardSymbols::BLANK) {
-				itr->changeDir();
+				(*itr)->changeDir();
 			}
 			else {
-				itr->move();
+				(*itr)->move();
 			}
 			++itr;
 		}
@@ -199,15 +199,15 @@ void SingleGame::moveGhosts() {
 }
 
 void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points) {
-	std::vector<HorizontalGhost>::iterator itr = horizntalGhosts.begin();
+	std::vector<Ghost*>::iterator itr = ghosts.begin();
 	int indexToMove;
 	Point p;
 	char ch;
-	while (itr != horizntalGhosts.end()) {
-		indexToMove = itr->isGhostExistInPointsVec(points);
+	while (itr != ghosts.end()) {
+		indexToMove = (*itr)->isGhostExistInPointsVec(points);
 		if (indexToMove != -1) {
-			itr->setDir(dirx);
-			p = itr->getNextPointToMove();
+			(*itr)->setDir(dirx);
+			p = (*itr)->getNextPointToMove();
 			ch = board.get(p);
 			if (ch == (char)BoardSymbols::BIG_SHIP || ch == (char)BoardSymbols::SMALL_SHIP) {
 				// kill ships
@@ -216,11 +216,11 @@ void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points) {
 				return;
 			}
 			if (ch != (char)BoardSymbols::BLANK) {
-				itr = horizntalGhosts.erase(itr);
+				itr = ghosts.erase(itr);
 				points[indexToMove].deleteFromScreen();
 			}
 			else {
-				itr->move();
+				(*itr)->move();
 				++itr;
 			}
 		}
@@ -231,12 +231,12 @@ void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points) {
 }
 
 void SingleGame::deleteGhosts(const std::vector<Point>& points) {
-	std::vector<HorizontalGhost>::iterator itr = horizntalGhosts.begin();
+	std::vector<Ghost*>::iterator itr = ghosts.begin();
 	int indexToRem;
-	while (itr != horizntalGhosts.end()) {
-		indexToRem = itr->isGhostExistInPointsVec(points);
+	while (itr != ghosts.end()) {
+		indexToRem = (*itr)->isGhostExistInPointsVec(points);
 		if (indexToRem != -1) {
-			itr = horizntalGhosts.erase(itr);
+			itr = ghosts.erase(itr);
 			points[indexToRem].deleteFromScreen();
 		}
 		else ++itr;

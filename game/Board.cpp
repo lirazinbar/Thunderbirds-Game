@@ -84,7 +84,8 @@ bool Board::isCharOfBlock(char ch) {
 	return (ch != (char)BoardSymbols::SMALL_SHIP && ch != (char)BoardSymbols::BIG_SHIP
 		&& ch != (char)BoardSymbols::WALL && ch != (char)BoardSymbols::BLANK
 		&& ch != (char)BoardSymbols::END_POINT && ch != (char)BoardSymbols::LEGEND
-		&& ch != (char)BoardSymbols::HORIZONTAL_GHOST);
+		&& ch != (char)BoardSymbols::HORIZONTAL_GHOST && ch != (char)BoardSymbols::VERTICAL_GHOST 
+		&& ch != (char)BoardSymbols::WANDERING_GHOST);
 }
 
 std::vector<Point> Board::loadBlockWithChar(char ch, int col, int row, std::vector<Block> blocks, std::vector<Point>& checkedPoints) {
