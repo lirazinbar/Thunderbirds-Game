@@ -152,6 +152,7 @@
     <ClCompile Include="Ship.cpp" />
     <ClCompile Include="SingleGame.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="VerticalGhost.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="SingleGame.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="VerticalGhost.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="README.txt" />

@@ -35,6 +35,29 @@ std::vector<HorizontalGhost> Board::loadHorizontalGhosts() {
 	return ghosts;
 }
 
+std::vector<Ghost*> Board::loadGhosts() {
+	std::vector<Ghost*> ghosts;
+
+	for (int row = 0; row < Height; ++row) {
+		char curr;
+		for (int col = 0; (curr = get(col, row)) != '\0'; ++col) {
+			if (curr == char(BoardSymbols::HORIZONTAL_GHOST) || curr == char(BoardSymbols::VERTICAL_GHOST) || curr == char(BoardSymbols::WANDERING_GHOST)) {
+				Point p = Point(col, row, curr, this);
+				Ghost* newGhost;
+
+				if(curr == char(BoardSymbols::HORIZONTAL_GHOST))
+					newGhost = new HorizontalGhost(p, 1);
+				else if (curr == char(BoardSymbols::VERTICAL_GHOST))
+					newGhost = new VerticalGhost(p, 1);
+
+				ghosts.push_back(newGhost);
+			}
+		}
+	}
+
+	return ghosts;
+}
+
 std::vector<Block> Board::loadBlocksRec() {
 	std::vector<Point> points;
 	std::vector<Block> blocks;

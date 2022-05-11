@@ -1,3 +1,43 @@
-﻿  SingleGame.cpp
-C:\Users\liraz\Desktop\game-v12\Thunderbirds-Game\game\SingleGame.cpp(39,30): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  Thunderbirds.vcxproj -> C:\Users\liraz\Desktop\game-v12\Thunderbirds-Game\game\x64\Debug\Thunderbirds.exe
+﻿  Block.cpp
+  Board.cpp
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\Board.cpp(74,60): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  Game.cpp
+  GameScreen.cpp
+  Ghost.cpp
+  Point.cpp
+  Ship.cpp
+  SingleGame.cpp
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(39,30): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(187,10): error C2065: 'horizntalGhosts': undeclared identifier
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(191,5): error C2839: invalid return type 'Ghost **' for overloaded 'operator ->'
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(191,10): error C2039: 'changeDir': is not a member of 'std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>'
+          with
+          [
+              _Ty=Ghost *
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\vector(459): message : see declaration of 'std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>'
+          with
+          [
+              _Ty=Ghost *
+          ]
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(194,5): error C2839: invalid return type 'Ghost **' for overloaded 'operator ->'
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(194,10): error C2039: 'move': is not a member of 'std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>'
+          with
+          [
+              _Ty=Ghost *
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\vector(459): message : see declaration of 'std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>'
+          with
+          [
+              _Ty=Ghost *
+          ]
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(202,47): error C2065: 'horizntalGhosts': undeclared identifier
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(206,16): error C2065: 'horizntalGhosts': undeclared identifier
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(219,11): error C2065: 'horizntalGhosts': undeclared identifier
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(234,47): error C2065: 'horizntalGhosts': undeclared identifier
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(236,16): error C2065: 'horizntalGhosts': undeclared identifier
+C:\Users\liraz\Desktop\git-game-v3.0\Thunderbirds-Game\game\SingleGame.cpp(239,10): error C2065: 'horizntalGhosts': undeclared identifier
+  Utils.cpp
+  VerticalGhost.cpp
+  main.cpp
+  Generating Code...

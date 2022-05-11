@@ -40,7 +40,8 @@ void SingleGame::setBlocks() {
 }
 
 void SingleGame::setGhosts() {
-	horizntalGhosts = board.loadHorizontalGhosts();
+	//horizntalGhosts = board.loadHorizontalGhosts();
+	ghosts = board.loadGhosts();
 }
 
 void SingleGame::printShips() {
@@ -168,12 +169,12 @@ bool SingleGame::isGameWon() {
 }
 
 void SingleGame::moveGhosts() {
-	std::vector<HorizontalGhost>::iterator itr = horizntalGhosts.begin();
+	std::vector<Ghost*>::iterator itr = ghosts.begin();
 	char currentPointCh, nextPointCh;
 	Point p;
-	while (itr != horizntalGhosts.end()) {
-		p = itr->getNextPointToMove();
-		currentPointCh = board.get(itr->getPoint());
+	while (itr != ghosts.end()) {
+		p = (*itr)->getNextPointToMove();
+		currentPointCh = board.get((*itr)->getPoint());
 		nextPointCh = board.get(p);
 		if (currentPointCh == (char)BoardSymbols::BIG_SHIP || currentPointCh == (char)BoardSymbols::SMALL_SHIP
 			|| nextPointCh == (char)BoardSymbols::BIG_SHIP || nextPointCh == (char)BoardSymbols::SMALL_SHIP) {
@@ -182,7 +183,7 @@ void SingleGame::moveGhosts() {
 			printLoseMessage("Your ship has been killed by a ghost! ");
 			return;
 		}
-		if (areBlocksIncludePoint(itr->getPoint())) {
+		if (areBlocksIncludePoint((*itr)->getPoint())) {
 			itr = horizntalGhosts.erase(itr);
 		}
 		else {

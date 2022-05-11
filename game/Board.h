@@ -6,6 +6,7 @@
 #include "Block.h"
 #include "GameScreen.h"
 #include "HorizontalGhost.h"
+#include "VerticalGhost.h"
 
 class Block;
 
@@ -70,4 +71,5 @@ public:
 	std::vector<Point> checkMoving(const std::vector<Point>& points, int size, char ch, int dirx, int diry);
 	// Searches the hotizontalGhosts from the board and save them
 	std::vector<HorizontalGhost> loadHorizontalGhosts();
+	std::vector<Ghost*> loadGhosts();
 };

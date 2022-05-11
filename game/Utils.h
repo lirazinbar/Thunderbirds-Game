@@ -10,6 +10,8 @@ enum class BoardSymbols {
 	BLANK = ' ',
 	WALL = 'W',
 	HORIZONTAL_GHOST = '$',
+	VERTICAL_GHOST = '!',
+	WANDERING_GHOST = '%',
 };
 
 enum class PrintPoints {
