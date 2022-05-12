@@ -260,7 +260,9 @@ void SingleGame::moveShip() {
 		dirx = diry = 0;
 		return;
 	}
-	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST) ||
+		areAllPointsIncludeChar(points, (char)BoardSymbols::VERTICAL_GHOST) ||
+		areAllPointsIncludeChar(points, (char)BoardSymbols::WANDERING_GHOST)) {
 		// kill ships
 		keepPlayingSingleGame = false;
 		printLoseMessage("Your ship has been killed by a ghost! ");
@@ -335,7 +337,9 @@ std::set<int> SingleGame::getBlocksCanMoveAfterCollideByShip(const std::vector<P
 		canMove = false;
 		return blocksIndexesToMove;
 	}
-	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST) ||
+		areAllPointsIncludeChar(points, (char)BoardSymbols::VERTICAL_GHOST) ||
+		areAllPointsIncludeChar(points, (char)BoardSymbols::WANDERING_GHOST)) {
 		moveGhostAfterCollide(points);
 	}
 
@@ -535,7 +539,9 @@ std::set<int> SingleGame::getBlocksCanMoveVertical(const std::vector<Point>& poi
 		return blocksIndexesToMove;
 	}
 
-	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST) 
+		|| areAllPointsIncludeChar(points, (char)BoardSymbols::VERTICAL_GHOST)
+		|| areAllPointsIncludeChar(points, (char)BoardSymbols::WANDERING_GHOST)) {
 		deleteGhosts(points);
 		canMove = true;
 		return blocksIndexesToMove;
