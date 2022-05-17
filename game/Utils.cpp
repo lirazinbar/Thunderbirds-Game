@@ -6,6 +6,17 @@
 #include <process.h>
 #include "utils.h"
 #include "Game.h"
+#include <random>
+
+std::random_device rd;     
+std::mt19937 rng(rd());
+
+int getRandomInRange(int min, int max) {
+	std::uniform_int_distribution<int> uni(min, max); 
+
+	int random_integer = uni(rng);
+	return random_integer;
+}
 
 // function definition -- requires windows.h
 void gotoxy(int x, int y) {

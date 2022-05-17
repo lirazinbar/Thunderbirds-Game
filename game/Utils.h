@@ -67,3 +67,5 @@ std::set<int> getIndexesInBothSets(std::set<int> set1, std::set<int> set2);
 std::set<int> reduceSets(std::set<int> set1, std::set<int> set2);
 // Checks if arr has ch in it  
 bool isArrayIncludesChar(char* arr, int size, char ch);
+// Returns random number in range
+int getRandomInRange(int min, int max);

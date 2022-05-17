@@ -49,6 +49,7 @@ std::vector<Ghost*> Board::loadGhosts() {
 					newGhost = new HorizontalGhost(p, 1);
 				else if (curr == char(BoardSymbols::VERTICAL_GHOST))
 					newGhost = new VerticalGhost(p, 1);
+				else newGhost = new WanderingGhost(p);
 
 				ghosts.push_back(newGhost);
 			}

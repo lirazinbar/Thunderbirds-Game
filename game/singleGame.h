@@ -45,6 +45,8 @@ public:
 	void printShips();
 	// Prints the blocks on screen
 	void printBlocks();
+	// Prints the ghosts on screen
+	void printGhosts();
 	// The function who run the single game - until exit, winning or lives decrease
 	void play();
 	// Takes action according to the player's key

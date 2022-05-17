@@ -153,6 +153,7 @@
     <ClCompile Include="SingleGame.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VerticalGhost.cpp" />
+    <ClCompile Include="WanderingGhost.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VerticalGhost.h" />
+    <ClInclude Include="WanderingGhost.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="README.txt" />

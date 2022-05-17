@@ -7,6 +7,7 @@
 #include "GameScreen.h"
 #include "HorizontalGhost.h"
 #include "VerticalGhost.h"
+#include "WanderingGhost.h"
 #include "Color.h"
 
 class Block;

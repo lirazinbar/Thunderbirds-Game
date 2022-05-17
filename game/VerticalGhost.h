@@ -10,7 +10,7 @@ public:
 	// Changes the dir to the opposite
 	void changeDir() override { diry = -1 * diry; }
 	// Set the dir to the given dir
-	void setDir(int _diry) override { diry = _diry; }
+	void setDir(int _dirx, int _diry) override { diry = _diry; }
 	// Moves the ghost
 	void move() { Ghost::moveGhost(0, diry); }
 	// Returns the point after moving

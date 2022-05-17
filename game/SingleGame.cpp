@@ -15,6 +15,7 @@ SingleGame::SingleGame(int _livesCount, GameScreen& screen): livesCount(_livesCo
 	board.print(activeShip, timer.getTimeLeft(), livesCount, screenNumber);
 	printShips();
 	printBlocks();
+	printGhosts();
 }
 
 SingleGame::~SingleGame() {
@@ -55,6 +56,14 @@ void SingleGame::printBlocks() {
 	int i;
 	for (i = 0; i < blocksAmount; i++) {
 		blocks[i].drawOnScreen();
+	}
+}
+
+void SingleGame::printGhosts() {
+	std::vector<Ghost*>::iterator itr = ghosts.begin();
+	while (itr != ghosts.end()) {
+		(*itr)->drawOnScreen();
+		++itr;
 	}
 }
 
@@ -206,7 +215,7 @@ void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points) {
 	while (itr != ghosts.end()) {
 		indexToMove = (*itr)->isGhostExistInPointsVec(points);
 		if (indexToMove != -1) {
-			(*itr)->setDir(dirx);
+ 			(*itr)->setDir(dirx, diry);
 			p = (*itr)->getNextPointToMove();
 			ch = board.get(p);
 			if (ch == (char)BoardSymbols::BIG_SHIP || ch == (char)BoardSymbols::SMALL_SHIP) {
@@ -337,7 +346,7 @@ std::set<int> SingleGame::getBlocksCanMoveAfterCollideByShip(const std::vector<P
 		canMove = false;
 		return blocksIndexesToMove;
 	}
-	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST) ||
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST) || 
 		areAllPointsIncludeChar(points, (char)BoardSymbols::VERTICAL_GHOST) ||
 		areAllPointsIncludeChar(points, (char)BoardSymbols::WANDERING_GHOST)) {
 		moveGhostAfterCollide(points);
@@ -533,7 +542,7 @@ std::set<int> SingleGame::getBlocksCanMoveVertical(const std::vector<Point>& poi
 	}
 
 	char shipsChars[2] = { ships[0].getChar(), ships[1].getChar() };
-	if (areAllPointsIncludeChars(points, shipsChars, 2)) {
+	if (arePointsHaveChars(points, shipsChars, 2)) {
 		isColide = true;
 		canMove = false;
 		return blocksIndexesToMove;
