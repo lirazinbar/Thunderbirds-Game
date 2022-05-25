@@ -41,13 +41,13 @@ void Game::run(int argc, char* argv[]) {
 
 void Game::setGameMode(int argc, char* argv[]) {
 	// Load + Silent modes
-	if (argc >= 2 && argc <= 3 && argv[1] == RecordArgumants::LOAD) {
+	if (argc >= 2 && argc <= 3 && strcmp(argv[1], RecordArgumants::LOAD) == 0) {
 		Game::mode.main = GameMode::LOAD;
-		if (argc == 3 && argv[2] == RecordArgumants::SILENT)
+		if (argc == 3 && strcmp(argv[2], RecordArgumants::SILENT) == 0)
 			Game::mode.secondary = GameMode::SILENT;
 	}
 	// Save mode
-	else if (argc == 2 && argv[1] == RecordArgumants::SAVE)
+	else if (argc == 2 && strcmp(argv[1], RecordArgumants::SAVE) == 0)
 		Game::mode.main = GameMode::SAVE;
 	// Regular mode
 	else if (argc == 1)
