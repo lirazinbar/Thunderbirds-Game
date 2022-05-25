@@ -4,78 +4,64 @@
 #include <iostream>
 #include <Windows.h>
 #include <conio.h>
-#include <regex>
 #include <filesystem>
 
-GameScreen::GameScreen() {
-	std::filesystem::path pwd = std::filesystem::current_path();
-	std::string currentFileName;
-
-	for (auto& file : std::filesystem::directory_iterator(pwd)) {
-		currentFileName = file.path().filename().string();
-		// Search for all the tb*.screen.txt files in pwd
-		if (file.is_regular_file() && currentFileName.starts_with("tb") && currentFileName.ends_with(".screen.txt")) {
-			screenFileNames.push_back(currentFileName);
-		}
-	}
-	// If there are no screen files
-	if (screenFileNames.size() == 0) {
-		printFileRelatedMessage("Error! There are no screen files in the directory. Exiting to main menu...");
-	}
-	else {
-		// Sort the file names in lexicographical order
-		std::sort(screenFileNames.begin(), screenFileNames.end());
-	}
-}
-
-void GameScreen::returnToFileBeginning() {
-	screenFile.clear();
-	screenFile.seekg(0);
-}
-
-void GameScreen::chooseScreen() {
+void GameScreen::chooseScreen(Record& gameRecord) {
 	bool isValid = false;
 	char playerChoice;
 	
 	clrscr();
-	std::cout << "(1) Play the first screen" << std::endl;
-	std::cout << "(2) Play a specific screen" << std::endl;
-	while (!isValid) {
-		if (_kbhit()) {
-			playerChoice = _getch();
-			if (playerChoice == Keys::PlayFirstScreen) {
-				isValid = true;
-				screenNumber = 1;
-				// The first screen
-				screenFileName = screenFileNames[screenNumber - 1];
-			}
-			else if (playerChoice == Keys::PlaySpecificScreen) {
-				isValid = true;
-				getScreenFileNameFromPlayer();
-			}
-			// If the file name the player entered is valid
-			if (Game::getKeepPlayingSatus()) {
-				screenFile.open(screenFileName);
-				// If there is a problem opening the file
-				if (screenFile.fail()) {
-					printFileRelatedMessage("Error! There was a probelm opening the screen file. Exiting to main menu...");
+	// Load mode, read the steps and result files
+	if (Game::getMainGameMode() == GameMode::LOAD) {
+		gameRecord.getRecordFiles();
+		chooseFirstSavedScreen(gameRecord);
+		gameRecord.readSavedGameScreen();
+	}
+	else {
+		std::cout << "(1) Play the first screen" << std::endl;
+		std::cout << "(2) Play a specific screen" << std::endl;
+		while (!isValid) {
+			if (_kbhit()) {
+				playerChoice = _getch();
+				if (playerChoice == Keys::PlayFirstScreen) {
+					isValid = true;
+					screenNumber = 1;
+				}
+				else if (playerChoice == Keys::PlaySpecificScreen) {
+					isValid = true;
+					getScreenFileNameFromPlayer();
+				}
+				// If the file name the player entered is valid
+				if (Game::getKeepPlayingSatus()) {
+					openFile(screenFile, screenFileNames[screenNumber - 1], OpenMode::READ);
 				}
 			}
 		}
 	}
 }
 
-void GameScreen::printFileRelatedMessage(const char* errorMessage) const {
-	clrscr();
-	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y));
-	std::cout << errorMessage << std::endl;
-	Game::stopPlaying();
-	// Sleep for 3 seconds
-	Sleep(3000);
+void GameScreen::chooseFirstSavedScreen(Record& gameRecord) {
+	bool found = false;
+	// The first saved file
+	std::string stepsFileName = gameRecord.getRecordFilesNames()[0];
+	std::string stepsFilePrefix;
+	
+	int prefixLen = stepsFileName.find(".");
+	stepsFilePrefix = stepsFileName.substr(0, prefixLen);
+	for (int i = 0; i < screenFileNames.size() && !found; i++) {
+		std::string screenFilePrefix = screenFileNames[i].substr(0, prefixLen);
+		if (stepsFilePrefix.compare(screenFilePrefix) == 0) {
+			found = true;
+			screenNumber = i + 1;
+			gameRecord.setSavedFileIndex(i);
+			openFile(screenFile, screenFileNames[i], OpenMode::READ);
+		}
+	}
 }
 
 void GameScreen::getScreenFileNameFromPlayer() {
 	bool found = false;
+	std::string screenFileName;
 
 	clrscr();
 	std::cout << "Please enter the screen file name:" << std::endl;
@@ -89,7 +75,7 @@ void GameScreen::getScreenFileNameFromPlayer() {
 	}
 	// If the file the player chose doesn't exist
 	if (found == false) {
-		printFileRelatedMessage("Error! The file doesn't exist. Exiting to main menu...");
+		printErrorFileRelatedMessage(true, "Error! The file doesn't exist. Exiting to main menu...");
 	}
 }
 
@@ -98,13 +84,12 @@ void GameScreen::openNextScreenFile() {
 	screenFile.close();
 	// In case the player finished the last screen
 	if (screenNumber > screenFileNames.size()) {
-		printFileRelatedMessage("Hooray! You finished the last screen and rescued the Egyptologists!");
+		printWinMessage(true);
+		Game::stopPlaying();
 	}
 	else {
-		screenFile.open(screenFileNames[screenNumber - 1]);
-		if (screenFile.fail()) {
-			printFileRelatedMessage("Error! There was a probelm opening the screen file. Exiting to main menu...");
-		}
+		openFile(screenFile, screenFileNames[screenNumber - 1], OpenMode::READ);
+		Game::setGameWinningStatus(false);
 	}
 }
 

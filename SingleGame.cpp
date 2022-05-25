@@ -4,6 +4,7 @@
 #include "SingleGame.h"
 #include "Utils.h"
 #include "Timer.h"
+#include "Record.h"
 
 SingleGame::SingleGame(int _livesCount, GameScreen& screen): livesCount(_livesCount),
 											screenNumber(screen.getScreenNumber()) {
@@ -13,6 +14,8 @@ SingleGame::SingleGame(int _livesCount, GameScreen& screen): livesCount(_livesCo
 	setBlocks();
 	setGhosts();
 	board.print(activeShip, timer.getTimeLeft(), livesCount, screenNumber);
+	printShips();
+	printBlocks();
 }
 
 SingleGame::~SingleGame() {
@@ -38,31 +41,60 @@ void SingleGame::setBlocks() {
 }
 
 void SingleGame::setGhosts() {
-	horizntalGhosts = board.loadHorizontalGhosts();
+	horizontalGhosts = board.loadHorizontalGhosts();
 }
 
-void SingleGame::play() {
-	char key = 0;
+void SingleGame::printShips() {
+	int i;
+	for (i = 0; i < 2; i++) {
+		ships[i].drawOnScreen();
+	}
+}
 
+void SingleGame::printBlocks() {
+	int i;
+	for (i = 0; i < blocksAmount; i++) {
+		blocks[i].drawOnScreen();
+	}
+}
+
+void SingleGame::play(Record& gameRecord) {
+	char key = 0;
+	int pointOfTimeCounter = 0;
+	Record::StepSegment currSegment;
+	
 	while (keepPlayingSingleGame == true) {
+		pointOfTimeCounter++;
+
+		if (Game::getMainGameMode() == GameMode::LOAD) {
+			if (currSegment.getPointOfTime() < pointOfTimeCounter)
+				gameRecord.extractStepSegment(currSegment);
+			if (currSegment.getPointOfTime() == pointOfTimeCounter) {
+				key = currSegment.getKey();
+				assignKey(key);
+			}
+		}
+		else if (_kbhit()) {
+			key = _getch();
+			assignKey(key);
+		}
+		moveGhosts(currSegment.getGhostsVector());
 		moveShip();
-		moveGhosts();
 		checkBlocksVerticalMove();
 		Sleep(200);
 		timer.tick();
 		if (isTimeRanOut() || isGameWon()) {
 			keepPlayingSingleGame = false;
 		}
-		if (_kbhit()) {
-			key = _getch();
-			assignKey(key);
-		}
+		if (Game::getMainGameMode() == GameMode::SAVE)
+			gameRecord.insertStepSegment(currSegment, pointOfTimeCounter, key);
 	}
 }
 
 void SingleGame::assignKey(char& key) {
 	switch (std::tolower(key)) {
 	case Keys::ESC:
+		dirx = diry = 0;
 		pauseGame();
 		break;
 	case Keys::Up:
@@ -112,7 +144,6 @@ bool SingleGame::isTimeRanOut() {
 void SingleGame::pauseGame() {
 	char key = 0;
 
-	dirx = diry = 0;
 	clrscr();
 	gotoxy(10, 10);
 	std::cout << "Game paused, press ESC again to continue or 9 to Exit" << std::endl;
@@ -128,6 +159,8 @@ void SingleGame::pauseGame() {
 		else if (key == Keys::ESC) {
 			clrscr();
 			board.print(activeShip, timer.getTimeLeft(), livesCount, screenNumber);
+			printShips();
+			printBlocks();
 		}
 	}
 }
@@ -144,33 +177,83 @@ bool SingleGame::isGameWon() {
 	if (ships[int(ShipsIndex::BIG_SHIP)].endPointStatus() == true &&
 		ships[int(ShipsIndex::SMALL_SHIP)].endPointStatus() == true) {
 		Game::setGameWinningStatus(true);
-		printWinMessage();
+		printWinMessage(false);
 	}
 	return Game::getGameWinningStatus();
 }
 
-void SingleGame::moveGhosts() {
-	int i;
-	char ch;
+void SingleGame::moveGhosts(std::vector<char>& ghostsDirections) {
+	std::vector<HorizontalGhost>::iterator itr = horizontalGhosts.begin();
+	char currentPointCh, nextPointCh;
 	Point p;
-
-	for (i = 0; i < horizntalGhosts.size(); i++) {
-		p = horizntalGhosts[i].getNextPointToMove();
-		ch = board.get(p);
-
-		if (ch == (char)BoardSymbols::BIG_SHIP || ch == (char)BoardSymbols::SMALL_SHIP) {
+	while (itr != horizontalGhosts.end()) {
+		p = itr->getNextPointToMove();
+		currentPointCh = board.get(itr->getPoint());
+		nextPointCh = board.get(p);
+		if (currentPointCh == (char)BoardSymbols::BIG_SHIP || currentPointCh == (char)BoardSymbols::SMALL_SHIP
+			|| nextPointCh == (char)BoardSymbols::BIG_SHIP || nextPointCh == (char)BoardSymbols::SMALL_SHIP) {
 			// kill ships
 			keepPlayingSingleGame = false;
 			printLoseMessage("Your ship has been killed by a ghost! ");
 			return;
 		}
-
-		if (ch == (char)BoardSymbols::BLANK) {
-			horizntalGhosts[i].move();
+		if (areBlocksIncludePoint(itr->getPoint())) {
+			itr = horizontalGhosts.erase(itr);
 		}
 		else {
-			horizntalGhosts[i].changeDir();
+			if (nextPointCh != (char)BoardSymbols::BLANK) {
+				itr->changeDir();
+			}
+			else {
+				itr->move();
+			}
+			++itr;
 		}
+	}
+}
+
+void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points) {
+	std::vector<HorizontalGhost>::iterator itr = horizontalGhosts.begin();
+	int indexToMove;
+	Point p;
+	char ch;
+	while (itr != horizontalGhosts.end()) {
+		indexToMove = itr->isGhostExistInPointsVec(points);
+		if (indexToMove != -1) {
+			itr->setDir(dirx);
+			p = itr->getNextPointToMove();
+			ch = board.get(p);
+			if (ch == (char)BoardSymbols::BIG_SHIP || ch == (char)BoardSymbols::SMALL_SHIP) {
+				// kill ships
+				keepPlayingSingleGame = false;
+				printLoseMessage("Your ship has been killed by a ghost! ");
+				return;
+			}
+			if (ch != (char)BoardSymbols::BLANK) {
+				itr = horizontalGhosts.erase(itr);
+				points[indexToMove].deleteFromScreen();
+			}
+			else {
+				itr->move();
+				++itr;
+			}
+		}
+		else {
+			++itr;
+		}
+	}
+}
+
+void SingleGame::deleteGhosts(const std::vector<Point>& points) {
+	std::vector<HorizontalGhost>::iterator itr = horizontalGhosts.begin();
+	int indexToRem;
+	while (itr != horizontalGhosts.end()) {
+		indexToRem = itr->isGhostExistInPointsVec(points);
+		if (indexToRem != -1) {
+			itr = horizontalGhosts.erase(itr);
+			points[indexToRem].deleteFromScreen();
+		}
+		else ++itr;
 	}
 }
 
@@ -189,6 +272,12 @@ void SingleGame::moveShip() {
 	char collisionChars[2] = { (char)BoardSymbols::WALL, ships[(activeShip + 1) % 2].getChar() };
 	if (arePointsHaveChars(points, collisionChars, 2)) {
 		dirx = diry = 0;
+		return;
+	}
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+		// kill ships
+		keepPlayingSingleGame = false;
+		printLoseMessage("Your ship has been killed by a ghost! ");
 		return;
 	}
 	// check reaching the end point
@@ -259,6 +348,9 @@ std::set<int> SingleGame::getBlocksCanMoveAfterCollideByShip(const std::vector<P
 		isColide = true;
 		canMove = false;
 		return blocksIndexesToMove;
+	}
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+		moveGhostAfterCollide(points);
 	}
 
 	// get the blocks that the points are collide with
@@ -457,6 +549,12 @@ std::set<int> SingleGame::getBlocksCanMoveVertical(const std::vector<Point>& poi
 		return blocksIndexesToMove;
 	}
 
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+		deleteGhosts(points);
+		canMove = true;
+		return blocksIndexesToMove;
+	}
+
 	// get the blocks that the points are collide with
 	for (pointsIndex = 0; pointsIndex < points.size(); pointsIndex++) {
 		for (blocksIndex = 0; blocksIndex < blocksAmount; blocksIndex++) {
@@ -566,4 +664,15 @@ bool SingleGame::areAllPointsIncludeChars(const std::vector<Point>& points, char
 	}
 
 	return true;
+}
+
+bool SingleGame::areBlocksIncludePoint(Point p) {
+	int blocksIndex;
+	for (blocksIndex = 0; blocksIndex < blocksAmount; blocksIndex++) {
+		if (blocks[blocksIndex].isBlockIncludesPoint(p)) { // the point is collide with the block
+			return true;
+		}
+	}
+
+	return false;
 }

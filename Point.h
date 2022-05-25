@@ -20,6 +20,8 @@ public:
 	Point(int x1, int y1, char c, Board* _pBoard) : x(x1), y(y1), ch(c), pBoard(_pBoard) {}
 	// = operator
 	Point& operator=(const Point& other) = default;
+	// == operator
+	bool operator==(const Point& p) { return (x == p.x && y == p.y && ch == p.ch); }
 	// ! operator
 	bool operator!() const { return x == -1 && y == -1; }
 	// << operator

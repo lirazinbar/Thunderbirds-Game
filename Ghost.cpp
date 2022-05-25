@@ -16,3 +16,13 @@ void Ghost::drawOnScreen() const {
 void Ghost::deleteFromScreen() const {
 	point.deleteFromScreen();
 }
+
+int Ghost::isGhostExistInPointsVec(const std::vector<Point>& points) {
+	for (int i = 0; i < points.size(); i++) {
+		if (point == points[i]) {
+			return i;
+		}
+	}
+
+	return -1;
+}

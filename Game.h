@@ -1,14 +1,27 @@
 #pragma once
 
 #include "GameScreen.h"
+#include "Utils.h"
+
+typedef struct mode {
+	GameMode main;
+	GameMode secondary = GameMode::REGULAR;
+} Mode;
 
 class Game {
 	static int livesCount;
 	static bool keepPlaying;
 	static bool gameWon;
+	static Mode mode;
 public:
 	// Run the whole game program
-	void run();
+	void run(int argc, char* argv[]);
+	// Determine which game mode the player chose
+	void setGameMode(int argc, char* argv[]);
+	// Return the main game mode
+	static GameMode getMainGameMode() { return mode.main; }
+	// Return the secondary game mode
+	static GameMode getSecondaryGameMode() { return mode.secondary; }
 	// This function runs the while game, until exit, losing or winning
 	void play();
 	// Return the current lives count
