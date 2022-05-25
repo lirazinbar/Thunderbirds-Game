@@ -4,31 +4,31 @@
 #include "Timer.h"
 #include "Ship.h"
 #include "Block.h"
+#include "Files.h"
+#include "Record.h"
 #include <string>
 #include <fstream>
 
+class Record;
+
 class GameScreen {
-	std::ifstream screenFile;
-	std::string screenFileName;
+	std::fstream screenFile;
 	std::vector<std::string> screenFileNames;
 	int screenNumber = 0;
 public:
-	//Empty Ctor
-	GameScreen();
+	//Ctor which get the suffix of the files to be opened.
+	GameScreen() { getRelevantFiles(screenFileNames, FileSuffix::SCREEN); }
 	// Destructor - Closing the screen text file
 	~GameScreen() { screenFile.close(); }
 	// Return the screen file (ifstream)
-	std::ifstream& getScreenFile() { return screenFile; }
+	std::fstream& getScreenFile() { return screenFile; }
 	// Return the screen number
 	int getScreenNumber() { return screenNumber; }
-	// Set the file position to the beginning
-	void returnToFileBeginning();
 	// Choose a screen to play by entering the file name,
 	//or pick the first screen as default
-	void chooseScreen();
-	// Prints a message to the screen after encountering a file related error
-	// Exit to main menu
-	void printFileRelatedMessage(const char* errorMessage) const;
+	void chooseScreen(Record& gameRecord);
+	// Set the first saved screen as the first screen to play
+	void chooseFirstSavedScreen(Record& gameRecord);
 	// Get the screen file name from the player
 	void getScreenFileNameFromPlayer();
 	// Opens the next screen text file in lexicographical order (1, 2, 3,...)

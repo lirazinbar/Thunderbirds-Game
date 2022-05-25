@@ -20,6 +20,13 @@ enum class PrintPoints {
 	SCREEN_X = 65
 };
 
+enum class GameMode {
+	REGULAR = 0,
+	SAVE = 1,
+	LOAD = 2,
+	SILENT = 3
+};
+
 struct Keys {
 	constexpr static char ESC = 27;
 	constexpr static char Up = 'w';
@@ -52,11 +59,15 @@ void checkFileOpening(std::ifstream& screenFile, char playerChoice);
 // Presnting the game instrucions and asks the user if he wants to play in color
 bool presentInstructions();
 // Printing winning message
-void printWinMessage();
+void printWinMessage(bool finishLastScreen);
 // Printing losing message
 void printLoseMessage(const char* deathReason);
 // Printing an exit message
 void printExitMessage();
+// Print a message to screen when the player entered invalid input to the cmd
+void printInvalidCmdInput();
+// Print error due to an incompatibility between the saved files to the running game
+void printGameLoadError();
 // return true if the parameter exists in set
 bool isExistInSet(std::set<int> setToCheck, int num);
 // get the common indexes that exist in both sets

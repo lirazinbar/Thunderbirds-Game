@@ -89,12 +89,23 @@ bool presentInstructions() {
 	return returnedValue;
 }
 
-void printWinMessage() {
+void printWinMessage(bool finishLastScreen) {
 	clrscr();
 	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y));
-	std::cout << "Good job! You finished the screen!\n" << std::endl;
+
+	if (finishLastScreen) {
+		std::cout << "Hooray! You finished the last screen and rescued the Egyptologists!" << std::endl;
+	}
+	else {
+		std::cout << "Good job! You finished the screen!\n" << std::endl;
+	}
 	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y) + 2);
-	system("pause");
+	if (Game::getMainGameMode() == GameMode::LOAD) {
+		// Sleep for 3 seconds
+		Sleep(3000);
+	}
+	else
+		system("pause");
 }
 
 void printLoseMessage(const char* deathReason) {
@@ -112,7 +123,12 @@ void printLoseMessage(const char* deathReason) {
 		std::cout << "Game Over! You lost!";
 	}
 	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y) + 4);
-	system("pause");
+	if (Game::getMainGameMode() == GameMode::LOAD) {
+		// Sleep for 3 seconds
+		Sleep(3000);
+	}
+	else
+		system("pause");;
 }
 
 void printExitMessage() {
@@ -121,6 +137,22 @@ void printExitMessage() {
 	std::cout << "Goodbye, thank you for playing!" << std::endl;
 	gotoxy(40, 12);
 	system("pause");
+}
+
+void printInvalidCmdInput() {
+	//clrscr();
+	std::cout << "Invalid input. Run the game with the following flags:" << std::endl;
+	std::cout << "-load: Load the previous game";
+	std::cout << " Add -silent in order to load without printing to the screen" << std::endl;
+	std::cout << "-save: Save the current game" << std::endl;
+	Game::stopPlaying();
+}
+
+void printGameLoadError() {
+	clrscr();
+	std::cout << "Error: There is an incompatibility between the saved files to the running game - ";
+	std::cout << "There are more game loops in the steps file then needed";
+	Game::stopPlaying();
 }
 
 bool isExistInSet(std::set<int> setToCheck, int num) {
