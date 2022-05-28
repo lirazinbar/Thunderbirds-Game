@@ -79,7 +79,7 @@ void SingleGame::play(Record& gameRecord) {
 			assignKey(key);
 		}
 		moveGhosts(currSegment.getGhostsVector());
-		moveShip();
+		moveShip(currSegment.getGhostsVector());
 		checkBlocksVerticalMove();
 		Sleep(100);
 		timer.tick();
@@ -183,9 +183,12 @@ bool SingleGame::isGameWon() {
 }
 
 void SingleGame::moveGhosts(std::vector<char>& ghostsDirections) {
+	if (Game::getMainGameMode() != GameMode::LOAD) ghostsDirections.clear();
 	std::vector<Ghost*>::iterator itr = ghosts.begin();
 	char currentPointCh, nextPointCh;
 	Point p;
+	int index = 0;
+
 	while (itr != ghosts.end()) {
 		p = (*itr)->getNextPointToMove();
 		currentPointCh = board.get((*itr)->getPoint());
@@ -203,16 +206,27 @@ void SingleGame::moveGhosts(std::vector<char>& ghostsDirections) {
 		else {
 			if (nextPointCh != (char)BoardSymbols::BLANK) {
 				(*itr)->changeDir();
+				ghostsDirections.push_back(0);
 			}
 			else {
-				(*itr)->move();
+				// TODO
+				if (Game::getMainGameMode() == GameMode::LOAD) {
+					if(ghostsDirections[index] != 0) (*itr)->setDir(ghostsDirections[index]);
+					(*itr)->move();
+				}
+				else {
+					ghostsDirections.push_back((*itr)->getDir());
+					(*itr)->move();
+				}
 			}
 			++itr;
 		}
+		++index;
 	}
 }
 
-void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points) {
+void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points, std::vector<char>& ghostsDirections) {
+	int index = 0;
 	std::vector<Ghost*>::iterator itr = ghosts.begin();
 	int indexToMove;
 	Point p;
@@ -234,13 +248,24 @@ void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points) {
 				points[indexToMove].deleteFromScreen();
 			}
 			else {
-				(*itr)->move();
+				if (Game::getMainGameMode() == GameMode::LOAD) {
+					if (ghostsDirections[index] != 0) (*itr)->setDir(ghostsDirections[index]);
+					(*itr)->move();
+				}
+				else {
+					ghostsDirections[index] = ((*itr)->getDir());
+					(*itr)->move();
+				}
+				// TODO
+				/*(*itr)->move();
+				ghostsDirections[index]=((*itr)->getDir());*/
 				++itr;
 			}
 		}
 		else {
 			++itr;
 		}
+		++index;
 	}
 }
 
@@ -257,7 +282,7 @@ void SingleGame::deleteGhosts(const std::vector<Point>& points) {
 	}
 }
 
-void SingleGame::moveShip() {
+void SingleGame::moveShip(std::vector<char>& ghostsDirections) {
 	// If there is no change in direction
 	if (dirx == 0 && diry == 0) return;
 	// Get the points that will collide with another object
@@ -265,7 +290,7 @@ void SingleGame::moveShip() {
 
 	// If the ships doesn't collide with anything
 	if (points.size() == 0) {
-		checkBlocksAboveShip(ships[activeShip].getAboveShipPoints());
+		checkBlocksAboveShip(ships[activeShip].getAboveShipPoints(), ghostsDirections);
 		return;
 	}
 	// Check collision with wall & ships
@@ -290,14 +315,14 @@ void SingleGame::moveShip() {
 		return;
 	}
 	// Check collision with block(s)
-	checkShipPushBlock(points);
+	checkShipPushBlock(points, ghostsDirections);
 }
 
-void SingleGame::checkShipPushBlock(std::vector<Point>& points) {
+void SingleGame::checkShipPushBlock(std::vector<Point>& points, std::vector<char>& ghostsDirections) {
 	bool canMove, isColide;
 	std::set<int> blocksAbove, blocksAboveToMove, blocksAboveBlocks, allBlocksToMove, blocksAboveShip;
 	// get all the blocks the ship collide with + the blocks above them to carry
-	std::set<int> blocksIndexesToMove = getBlocksCanMoveAfterCollideByShip(points, canMove, isColide, blocksAboveBlocks);
+	std::set<int> blocksIndexesToMove = getBlocksCanMoveAfterCollideByShip(points, canMove, isColide, blocksAboveBlocks, ghostsDirections);
 
 	// get all the blocks above the ship
 	blocksAboveShip = getAllBlocksAbovePoints(ships[activeShip].getAboveShipPoints());
@@ -316,7 +341,7 @@ void SingleGame::checkShipPushBlock(std::vector<Point>& points) {
 	if (isColide) {
 		moveBlocks(blocksIndexesToMove, dirx, diry);
 		// move blocks above after checking if they can move
-		checkBlocksAboveAndMove(blocksAboveToMove);
+		checkBlocksAboveAndMove(blocksAboveToMove, ghostsDirections);
 	}
 }
 
@@ -331,7 +356,7 @@ std::set<int> SingleGame::getOnlyBlocksAboveToMove(std::set<int> blocksAbove, st
 	return blocksAboveToMove;
 }
 
-std::set<int> SingleGame::getBlocksCanMoveAfterCollideByShip(const std::vector<Point>& points, bool& canMove, bool& isColide, std::set<int>& blocksAbove) {
+std::set<int> SingleGame::getBlocksCanMoveAfterCollideByShip(const std::vector<Point>& points, bool& canMove, bool& isColide, std::set<int>& blocksAbove, std::vector<char>& ghostsDirections) {
 	int blocksIndex, pointsIndex;
 	std::set<int> blocksIndexesToMove, nextBlocksIndexesToMove, tempBlocks;
 	std::vector<Point> allCollisionPoints, collisionPointsAbove;
@@ -354,7 +379,7 @@ std::set<int> SingleGame::getBlocksCanMoveAfterCollideByShip(const std::vector<P
 	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST) ||
 		areAllPointsIncludeChar(points, (char)BoardSymbols::VERTICAL_GHOST) ||
 		areAllPointsIncludeChar(points, (char)BoardSymbols::WANDERING_GHOST)) {
-		moveGhostAfterCollide(points);
+		moveGhostAfterCollide(points, ghostsDirections);
 	}
 
 	// get the blocks that the points are collide with
@@ -372,7 +397,7 @@ std::set<int> SingleGame::getBlocksCanMoveAfterCollideByShip(const std::vector<P
 	}
 
 	allCollisionPoints = getTheNextCollisionPointsOfBlocks(blocksIndexesToMove, dirx, diry);
-	nextBlocksIndexesToMove = getBlocksCanMoveAfterCollideByShip(allCollisionPoints, canMove, isColide, blocksAbove);
+	nextBlocksIndexesToMove = getBlocksCanMoveAfterCollideByShip(allCollisionPoints, canMove, isColide, blocksAbove, ghostsDirections);
 
 	if (canMove) {
 		std::set<int> newSet;
@@ -439,7 +464,7 @@ std::vector<Point> SingleGame::getTheNextCollisionPointsOfBlocks(std::set<int> b
 	return points;
 }
 
-void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove) {
+void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove, std::vector<char>& ghostsDirections) {
 	bool canMove, isColide;
 	std::set<int> blocksAbove, getblocksToMove, movedBlocks, blocksAboveNotToMove, checkedBlocks, blocksToMove, temp;
 	std::set<int>::iterator itr;
@@ -452,7 +477,7 @@ void SingleGame::checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove) {
 	if (totalSizeOfBlocks <= ships[activeShip].getBlockSizeCapacity()) {
 		for (itr = blocksIndexesToMove.begin(); itr != blocksIndexesToMove.end(); itr++) {
 			if (!isExistInSet(checkedBlocks, *itr)) {
-				getblocksToMove = getBlocksCanMoveAfterCollideByShip(blocks[*itr].getPoints(), canMove, isColide, blocksAbove);
+				getblocksToMove = getBlocksCanMoveAfterCollideByShip(blocks[*itr].getPoints(), canMove, isColide, blocksAbove, ghostsDirections);
 				if (canMove) {
 					std::set_union(getblocksToMove.begin(), getblocksToMove.end(), movedBlocks.begin(), movedBlocks.end(), std::inserter(movedBlocks, movedBlocks.begin()));
 				}
@@ -599,14 +624,14 @@ bool SingleGame::isBlockCanMove(int blockIndex) {
 	return (collisionPoints.size() == 0 || areAllPointsIncludeChar(collisionPoints, ships[activeShip].getChar()));
 }
 
-void SingleGame::checkBlocksAboveShip(const std::vector<Point>& aboveShipPoints) {
+void SingleGame::checkBlocksAboveShip(const std::vector<Point>& aboveShipPoints, std::vector<char>& ghostsDirections) {
 	std::set<int> blocksAbove = getAllBlocksAbovePoints(aboveShipPoints);
 	if (blocksAbove.size() == 0) {
 		ships[activeShip].move(dirx, diry);
 		return;
 	}
 
-	checkBlocksAboveAndMove(blocksAbove);
+	checkBlocksAboveAndMove(blocksAbove, ghostsDirections);
 }
 
 void SingleGame::getBlocksFallOnShipTopPoints(const std::vector<Point>& pointsAbove, std::set<int>& blocksIndexesAbove, int shipIndex) {

@@ -27,4 +27,6 @@ public:
 	virtual void move() = 0;
 	// Set the dir to the given dir
 	virtual void setDir(int _dirx, int _diry) = 0;
+	virtual void setDir(int _dir) = 0;
+	virtual int getDir() = 0;
 };

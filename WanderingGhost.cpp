@@ -2,7 +2,11 @@
 
 void WanderingGhost::changeDir() {
 	int dir = getRandomInRange(1, 4);
-	switch (dir) {
+	setDir(dir);
+}
+
+void WanderingGhost::setDir(int _dir) {
+	switch (_dir) {
 	case 1:
 		dirx = 0;
 		diry = 1;
@@ -21,6 +25,14 @@ void WanderingGhost::changeDir() {
 		break;
 	}
 }
+
+int WanderingGhost::getDir() {
+	if (dirx == 0 && diry == 1) return 1;
+	if (dirx == 0 && diry == -1) return 2;
+	if (dirx == 1 && diry == 0) return 3;
+	if (dirx == -1 && diry == 0) return 4;
+}
+
 
 void WanderingGhost::move() {
 	Ghost::moveGhost(dirx, diry);

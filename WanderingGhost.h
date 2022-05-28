@@ -14,8 +14,11 @@ public:
 	void changeDir() override;
 	// Set the dir to the given dir
 	void setDir(int _dirx, int _diry) override { dirx = _dirx; diry = _diry; }
+	void setDir(int _dir) override;
 	// Moves the ghost
 	void move();
 	// Returns the point after moving
 	Point getNextPointToMove() { return Ghost::calcNextPointToMove(dirx, diry); }
+	// Returns the dir
+	int getDir() override;
 };
