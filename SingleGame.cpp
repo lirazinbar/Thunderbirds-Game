@@ -41,7 +41,7 @@ void SingleGame::setBlocks() {
 }
 
 void SingleGame::setGhosts() {
-	horizontalGhosts = board.loadHorizontalGhosts();
+	ghosts = board.loadGhosts();
 }
 
 void SingleGame::printShips() {
@@ -81,7 +81,7 @@ void SingleGame::play(Record& gameRecord) {
 		moveGhosts(currSegment.getGhostsVector());
 		moveShip();
 		checkBlocksVerticalMove();
-		Sleep(200);
+		Sleep(100);
 		timer.tick();
 		if (isTimeRanOut() || isGameWon()) {
 			keepPlayingSingleGame = false;
@@ -183,12 +183,12 @@ bool SingleGame::isGameWon() {
 }
 
 void SingleGame::moveGhosts(std::vector<char>& ghostsDirections) {
-	std::vector<HorizontalGhost>::iterator itr = horizontalGhosts.begin();
+	std::vector<Ghost*>::iterator itr = ghosts.begin();
 	char currentPointCh, nextPointCh;
 	Point p;
-	while (itr != horizontalGhosts.end()) {
-		p = itr->getNextPointToMove();
-		currentPointCh = board.get(itr->getPoint());
+	while (itr != ghosts.end()) {
+		p = (*itr)->getNextPointToMove();
+		currentPointCh = board.get((*itr)->getPoint());
 		nextPointCh = board.get(p);
 		if (currentPointCh == (char)BoardSymbols::BIG_SHIP || currentPointCh == (char)BoardSymbols::SMALL_SHIP
 			|| nextPointCh == (char)BoardSymbols::BIG_SHIP || nextPointCh == (char)BoardSymbols::SMALL_SHIP) {
@@ -197,15 +197,15 @@ void SingleGame::moveGhosts(std::vector<char>& ghostsDirections) {
 			printLoseMessage("Your ship has been killed by a ghost! ");
 			return;
 		}
-		if (areBlocksIncludePoint(itr->getPoint())) {
-			itr = horizontalGhosts.erase(itr);
+		if (areBlocksIncludePoint((*itr)->getPoint())) {
+			itr = ghosts.erase(itr);
 		}
 		else {
 			if (nextPointCh != (char)BoardSymbols::BLANK) {
-				itr->changeDir();
+				(*itr)->changeDir();
 			}
 			else {
-				itr->move();
+				(*itr)->move();
 			}
 			++itr;
 		}
@@ -213,15 +213,15 @@ void SingleGame::moveGhosts(std::vector<char>& ghostsDirections) {
 }
 
 void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points) {
-	std::vector<HorizontalGhost>::iterator itr = horizontalGhosts.begin();
+	std::vector<Ghost*>::iterator itr = ghosts.begin();
 	int indexToMove;
 	Point p;
 	char ch;
-	while (itr != horizontalGhosts.end()) {
-		indexToMove = itr->isGhostExistInPointsVec(points);
+	while (itr != ghosts.end()) {
+		indexToMove = (*itr)->isGhostExistInPointsVec(points);
 		if (indexToMove != -1) {
-			itr->setDir(dirx);
-			p = itr->getNextPointToMove();
+			(*itr)->setDir(dirx, diry);
+			p = (*itr)->getNextPointToMove();
 			ch = board.get(p);
 			if (ch == (char)BoardSymbols::BIG_SHIP || ch == (char)BoardSymbols::SMALL_SHIP) {
 				// kill ships
@@ -230,11 +230,11 @@ void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points) {
 				return;
 			}
 			if (ch != (char)BoardSymbols::BLANK) {
-				itr = horizontalGhosts.erase(itr);
+				itr = ghosts.erase(itr);
 				points[indexToMove].deleteFromScreen();
 			}
 			else {
-				itr->move();
+				(*itr)->move();
 				++itr;
 			}
 		}
@@ -245,12 +245,12 @@ void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points) {
 }
 
 void SingleGame::deleteGhosts(const std::vector<Point>& points) {
-	std::vector<HorizontalGhost>::iterator itr = horizontalGhosts.begin();
+	std::vector<Ghost*>::iterator itr = ghosts.begin();
 	int indexToRem;
-	while (itr != horizontalGhosts.end()) {
-		indexToRem = itr->isGhostExistInPointsVec(points);
+	while (itr != ghosts.end()) {
+		indexToRem = (*itr)->isGhostExistInPointsVec(points);
 		if (indexToRem != -1) {
-			itr = horizontalGhosts.erase(itr);
+			itr = ghosts.erase(itr);
 			points[indexToRem].deleteFromScreen();
 		}
 		else ++itr;
@@ -274,7 +274,9 @@ void SingleGame::moveShip() {
 		dirx = diry = 0;
 		return;
 	}
-	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST) ||
+		areAllPointsIncludeChar(points, (char)BoardSymbols::VERTICAL_GHOST) ||
+		areAllPointsIncludeChar(points, (char)BoardSymbols::WANDERING_GHOST)) {
 		// kill ships
 		keepPlayingSingleGame = false;
 		printLoseMessage("Your ship has been killed by a ghost! ");
@@ -349,7 +351,9 @@ std::set<int> SingleGame::getBlocksCanMoveAfterCollideByShip(const std::vector<P
 		canMove = false;
 		return blocksIndexesToMove;
 	}
-	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST) ||
+		areAllPointsIncludeChar(points, (char)BoardSymbols::VERTICAL_GHOST) ||
+		areAllPointsIncludeChar(points, (char)BoardSymbols::WANDERING_GHOST)) {
 		moveGhostAfterCollide(points);
 	}
 
@@ -513,7 +517,6 @@ void SingleGame::checkBlocksSmashShips(std::set<int> blocksToCheck) {
 	totalSizeSmall = getTotalSizeOfBlocks(smallCheck);
 	totalSizeBig = getTotalSizeOfBlocks(bigCheck);
 
-	// TODO also check recursive if the blocks on air or on wall at the end
 	if (totalSizeOfBlocks > ships[0].getBlockSizeCapacity() + ships[1].getBlockSizeCapacity() ||
 		totalSizeSmall > ships[1].getBlockSizeCapacity() ||
 		totalSizeBig > ships[0].getBlockSizeCapacity()) {
@@ -543,13 +546,15 @@ std::set<int> SingleGame::getBlocksCanMoveVertical(const std::vector<Point>& poi
 	}
 
 	char shipsChars[2] = { ships[0].getChar(), ships[1].getChar() };
-	if (areAllPointsIncludeChars(points, shipsChars, 2)) {
+	if (arePointsHaveChars(points, shipsChars, 2)) {
 		isColide = true;
 		canMove = false;
 		return blocksIndexesToMove;
 	}
 
-	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)) {
+	if (areAllPointsIncludeChar(points, (char)BoardSymbols::HORIZONTAL_GHOST)
+		|| areAllPointsIncludeChar(points, (char)BoardSymbols::VERTICAL_GHOST)
+		|| areAllPointsIncludeChar(points, (char)BoardSymbols::WANDERING_GHOST)) {
 		deleteGhosts(points);
 		canMove = true;
 		return blocksIndexesToMove;
@@ -610,6 +615,7 @@ void SingleGame::getBlocksFallOnShipTopPoints(const std::vector<Point>& pointsAb
 	int pointsIndex, blocksIndex;
 	bool found = false;
 
+	// TODO
 	if (pointsAbove.size() == 0 ||
 		areAllPointsIncludeChar(pointsAbove, (char)BoardSymbols::WALL) ||
 		areAllPointsIncludeChar(pointsAbove, (char)BoardSymbols::END_POINT) ||

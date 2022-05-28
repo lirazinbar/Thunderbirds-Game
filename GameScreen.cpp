@@ -14,8 +14,10 @@ void GameScreen::chooseScreen(Record& gameRecord) {
 	// Load mode, read the steps and result files
 	if (Game::getMainGameMode() == GameMode::LOAD) {
 		gameRecord.getRecordFiles();
-		chooseFirstSavedScreen(gameRecord);
-		gameRecord.readSavedGameScreen();
+		if (Game::getKeepPlayingSatus()) {
+			chooseFirstSavedScreen(gameRecord);
+			gameRecord.readSavedGameScreen();
+		}
 	}
 	else {
 		std::cout << "(1) Play the first screen" << std::endl;

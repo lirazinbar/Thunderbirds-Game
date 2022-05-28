@@ -17,17 +17,23 @@ std::vector<Point> Board::getPoints(char _ch, int _size) {
 	return points;
 }
 
-std::vector<HorizontalGhost> Board::loadHorizontalGhosts() {
-	std::vector<HorizontalGhost> ghosts;
+std::vector<Ghost*> Board::loadGhosts() {
+	std::vector<Ghost*> ghosts;
 
 	for (int row = 0; row < Height; ++row) {
 		char curr;
 		for (int col = 0; (curr = get(col, row)) != '\0'; ++col) {
-			if (curr == char(BoardSymbols::HORIZONTAL_GHOST)) {
-				Point p = Point(col, row, char(BoardSymbols::HORIZONTAL_GHOST), this);
-				HorizontalGhost ghost = HorizontalGhost(p, 1);
+			if (curr == char(BoardSymbols::HORIZONTAL_GHOST) || curr == char(BoardSymbols::VERTICAL_GHOST) || curr == char(BoardSymbols::WANDERING_GHOST)) {
+				Point p = Point(col, row, curr, this);
+				Ghost* newGhost;
 
-				ghosts.push_back(ghost);
+				if (curr == char(BoardSymbols::HORIZONTAL_GHOST))
+					newGhost = new HorizontalGhost(p, 1);
+				else if (curr == char(BoardSymbols::VERTICAL_GHOST))
+					newGhost = new VerticalGhost(p, 1);
+				else newGhost = new WanderingGhost(p);
+
+				ghosts.push_back(newGhost);
 			}
 		}
 	}
@@ -61,7 +67,8 @@ bool Board::isCharOfBlock(char ch) {
 	return (ch != (char)BoardSymbols::SMALL_SHIP && ch != (char)BoardSymbols::BIG_SHIP
 		&& ch != (char)BoardSymbols::WALL && ch != (char)BoardSymbols::BLANK
 		&& ch != (char)BoardSymbols::END_POINT && ch != (char)BoardSymbols::LEGEND
-		&& ch != (char)BoardSymbols::HORIZONTAL_GHOST);
+		&& ch != (char)BoardSymbols::HORIZONTAL_GHOST && ch != (char)BoardSymbols::VERTICAL_GHOST
+		&& ch != (char)BoardSymbols::WANDERING_GHOST);
 }
 
 std::vector<Point> Board::loadBlockWithChar(char ch, int col, int row, std::vector<Block> blocks, std::vector<Point>& checkedPoints) {

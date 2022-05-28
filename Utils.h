@@ -10,6 +10,8 @@ enum class BoardSymbols {
 	BLANK = ' ',
 	WALL = 'W',
 	HORIZONTAL_GHOST = '$',
+	VERTICAL_GHOST = '!',
+	WANDERING_GHOST = '%',
 };
 
 enum class PrintPoints {
@@ -52,10 +54,6 @@ void clrscr();
 void hide_cursor();
 // Printing the main menu
 void printMainMenu(char& userChoice);
-// Print the screen menu. The screen of the game will be set in this function
-void printScreenMenu(std::ifstream& screenFile);
-// Check if the file opened successfully
-void checkFileOpening(std::ifstream& screenFile, char playerChoice);
 // Presnting the game instrucions and asks the user if he wants to play in color
 bool presentInstructions();
 // Printing winning message
@@ -76,3 +74,5 @@ std::set<int> getIndexesInBothSets(std::set<int> set1, std::set<int> set2);
 std::set<int> reduceSets(std::set<int> set1, std::set<int> set2);
 // Checks if arr has ch in it  
 bool isArrayIncludesChar(char* arr, int size, char ch);
+// Returns random number in range
+int getRandomInRange(int min, int max);

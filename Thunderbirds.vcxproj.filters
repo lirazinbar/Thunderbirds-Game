@@ -54,6 +54,12 @@
     <ClCompile Include="Files.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VerticalGhost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WanderingGhost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h">
@@ -96,6 +102,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Files.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VerticalGhost.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WanderingGhost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

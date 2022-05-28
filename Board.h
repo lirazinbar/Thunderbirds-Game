@@ -6,6 +6,9 @@
 #include "Block.h"
 #include "GameScreen.h"
 #include "HorizontalGhost.h"
+#include "VerticalGhost.h"
+#include "WanderingGhost.h"
+#include "Color.h"
 
 class Block;
 
@@ -68,6 +71,6 @@ public:
 	// don't collide with something that is not empty space or the ch itself,
 	// after moving them dirx, diry
 	std::vector<Point> checkMoving(const std::vector<Point>& points, int size, char ch, int dirx, int diry);
-	// Searches the hotizontalGhosts from the board and save them
-	std::vector<HorizontalGhost> loadHorizontalGhosts();
+	// Searches the ghosts from the board and save them
+	std::vector<Ghost*> loadGhosts();
 };

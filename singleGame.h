@@ -24,7 +24,7 @@ class SingleGame {
 	int activeShip = int(ShipsIndex::BIG_SHIP);
 	int blocksAmount;
 	std::vector<Block> blocks;
-	std::vector<HorizontalGhost> horizontalGhosts;
+	std::vector<Ghost*> ghosts;
 	int livesCount;
 	Color color;
 	int dirx = 0;
