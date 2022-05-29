@@ -29,4 +29,5 @@ public:
 	virtual void setDir(int _dirx, int _diry) = 0;
 	virtual void setDir(int _dir) = 0;
 	virtual int getDir() = 0;
+	virtual GhostsTypes getType() = 0;
 };

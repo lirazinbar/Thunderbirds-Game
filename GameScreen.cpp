@@ -34,7 +34,7 @@ void GameScreen::chooseScreen(Record& gameRecord) {
 					getScreenFileNameFromPlayer();
 				}
 				// If the file name the player entered is valid
-				if (Game::getKeepPlayingSatus()) {
+				if (Game::getKeepPlayingSatus() && isValid) {
 					openFile(screenFile, screenFileNames[screenNumber - 1], OpenMode::READ);
 				}
 			}

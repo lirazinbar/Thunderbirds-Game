@@ -1,6 +1,6 @@
 *Header*
 Time of the screen:
-120 
+1200 
 
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 W    &                                                                         W
@@ -10,13 +10,13 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW    W               W                 W    W
 W                 W                W    W                WWWW         WWWWW    W
 W                WW       WW       W    W       $                         W    W
 W                         W        W    WWWWWWWWWWWWWWWWWWWW   1          W 555W
-W                         WWW      W         %                111         W 555W
+W                         WWW      W                          111         W 555W
 W    WWWWWW  WWWWWW        W   WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  WWWWWWWWWWW 555W
 W    W            W        W                              W               W    W
-W    W   WWWWWWWWWW        W          $      %            3               W    W
+W    W   WWWWWWWWWW        W          $                   3               W    W
 W    W            W         WWWWWWWWWWWWWWWWWWWWWWWWW     W               W    W
 W    WWWWWWWWWW   W                                 WWWWWWWWW    WWW           W
-W    W            W                 4               W           W 6 W     !   $W
+W    W            W                 4               W           W 6 W         $W
 W    W  WWWWWWWWWWW    W     WWWWWW WWWWWWW         W           WWWWW         WW
 W    W       W         W     W            W   W     W                          W
 W    W       W         W     W            W   W  !  W                          W

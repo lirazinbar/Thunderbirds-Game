@@ -153,6 +153,7 @@
     <ClCompile Include="Record.cpp" />
     <ClCompile Include="Ship.cpp" />
     <ClCompile Include="SingleGame.cpp" />
+    <ClCompile Include="StepSegment.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VerticalGhost.cpp" />
     <ClCompile Include="WanderingGhost.cpp" />
@@ -170,12 +171,14 @@
     <ClInclude Include="Record.h" />
     <ClInclude Include="Ship.h" />
     <ClInclude Include="SingleGame.h" />
+    <ClInclude Include="StepSegment.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VerticalGhost.h" />
     <ClInclude Include="WanderingGhost.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="file_format.txt" />
     <Text Include="README.txt" />
     <Text Include="tb1.screen.txt" />
     <Text Include="tb2.screen.txt" />

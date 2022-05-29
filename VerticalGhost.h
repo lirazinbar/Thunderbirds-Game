@@ -11,11 +11,14 @@ public:
 	void changeDir() override { diry = -1 * diry; }
 	// Set the dir to the given dir
 	void setDir(int _dirx, int _diry) override { diry = _diry; }
-	void setDir(int _dir) override { diry = _dir; }
+	void setDir(int _dir) override { if (_dir != 0) diry = _dir; }
 	// Moves the ghost
 	void move() { Ghost::moveGhost(0, diry); }
 	// Returns the point after moving
 	Point getNextPointToMove() { return Ghost::calcNextPointToMove(0, diry); }
 	// Returns the dir(to the file saving - 0)
 	int getDir() override { return 0; }
+	GhostsTypes getType() override {
+		return GhostsTypes::VERTICAL_GHOST_TYPE;
+	}
 };

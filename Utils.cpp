@@ -102,6 +102,7 @@ bool presentInstructions() {
 }
 
 void printWinMessage(bool finishLastScreen) {
+	if (Game::getSecondaryGameMode() == GameMode::SILENT) return;
 	clrscr();
 	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y));
 
@@ -121,6 +122,7 @@ void printWinMessage(bool finishLastScreen) {
 }
 
 void printLoseMessage(const char* deathReason) {
+	if (Game::getSecondaryGameMode() == GameMode::SILENT) return;
 	clrscr();
 	gotoxy(int(PrintPoints::MESSAGE_X), int(PrintPoints::MESSAGE_Y));
 	int currentLivesCount = Game::getLivesCount() - 1;
@@ -157,6 +159,7 @@ void printInvalidCmdInput() {
 	std::cout << "-load: Load the previous game";
 	std::cout << " Add -silent in order to load without printing to the screen" << std::endl;
 	std::cout << "-save: Save the current game" << std::endl;
+	Sleep(3000);
 	Game::stopPlaying();
 }
 
@@ -164,6 +167,27 @@ void printGameLoadError() {
 	clrscr();
 	std::cout << "Error: There is an incompatibility between the saved files to the running game - ";
 	std::cout << "There are more game loops in the steps file then needed";
+	Sleep(3000);
+	Game::stopPlaying();
+}
+
+void printGameResultError() {
+	clrscr();
+	std::cout << "Error: There is an incompatibility between the saved file to the result file - ";
+	Sleep(3000);
+	Game::stopPlaying();
+}
+
+void printPassTest() {
+	clrscr();
+	std::cout << "test passed";
+	Sleep(3000);
+}
+
+void printFailTest() {
+	clrscr();
+	std::cout << "test failed";
+	Sleep(3000);
 	Game::stopPlaying();
 }
 
@@ -210,3 +234,72 @@ bool isArrayIncludesChar(char* arr, int size, char ch) {
 	}
 	return false;
 }
+
+//TODO maybe add &
+StepSegment readSegment(std::fstream& stepsFile) {
+	// char time = stepsFile.get();
+	int pointOfTime;
+	stepsFile >> pointOfTime;
+	char key = ' ';
+	stepsFile.ignore(256, '\n');
+	char tmpChar = stepsFile.get();
+	if (tmpChar != '\n') {
+		key = tmpChar;
+		stepsFile.ignore(256, '\n');
+	}
+	std::vector<int> wanderingGhostsDirections = readGhosts(stepsFile);
+	StepSegment tmpSegment = StepSegment(pointOfTime, key, wanderingGhostsDirections);
+	return tmpSegment;
+}
+
+std::vector<int> readGhosts(std::fstream& stepsFile) {
+	std::string line;
+	std::stringstream ss;
+	std::vector<int> wanderingGhostsDirections;
+	char tmpChar;
+
+	std::getline(stepsFile, line);
+	ss << line;
+	ss >> tmpChar;
+	while (!ss.eof()) {
+		wanderingGhostsDirections.push_back(tmpChar-'0');
+		ss >> tmpChar;
+	}
+
+	return wanderingGhostsDirections;
+}
+//
+//void setAndCheckResultFile(Record& gameRecord, int pointOfTime, bool isGameWon) {
+//	if (Game::getMainGameMode() == GameMode::SAVE) {
+//		if (isGameWon) {
+//			gameRecord.setScreenFinishTimePoint(pointOfTime);
+//		}
+//		else {
+//			gameRecord.addDeathPointOfTime(pointOfTime);
+//		}
+//	}
+//	else if (Game::getMainGameMode() == GameMode::LOAD) {
+//		if (isGameWon) {
+//			if (Game::getSecondaryGameMode() == GameMode::SILENT) {
+//				if (gameRecord.getsScreenFinishTimePoint() != pointOfTime) {
+//					printFailTest();
+//				}
+//				else printPassTest();
+//			}
+//			else {
+//				if (gameRecord.getsScreenFinishTimePoint() != pointOfTime) {
+//					printGameResultError();
+//				}
+//			}
+//		}
+//		else {
+//			if (Game::getSecondaryGameMode() == GameMode::SILENT) {
+//				if (gameRecord.getNextDeathTimePoint() != pointOfTime) {
+//					printFailTest();
+//				}
+//				else printPassTest();
+//			}
+//			if (gameRecord.getNextDeathTimePoint() != pointOfTime) printGameResultError();
+//		}
+//	}
+//}

@@ -9,7 +9,6 @@
 #include <string>
 #include <fstream>
 
-class Record;
 
 class GameScreen {
 	std::fstream screenFile;

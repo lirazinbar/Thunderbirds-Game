@@ -15,7 +15,7 @@
 #include <fstream>
 
 class SingleGame {
-	Record gameRecord;
+	// Record gameRecord;
 	bool keepPlayingSingleGame = true;
 	int screenNumber;
 	Board board;
@@ -47,7 +47,7 @@ public:
 	// Prints the blocks on screen
 	void printBlocks();
 	// The function who run the single game - until exit, winning or lives decrease
-	void play(Record& gameRecord);
+	int play(Record& gameRecord);
 	// Takes action according to the player's key
 	void assignKey(char& key);
 	//Checks if time is up
@@ -59,19 +59,19 @@ public:
 	// Checks if the player won the game (Both ships have reached the end point)
 	bool isGameWon();
 	// Moves all the horizontal ghosts
-	void moveGhosts(std::vector<char>& ghostsDirections);
+	void moveGhosts(std::vector<int>& ghostsDirections);
 	// Move ghots that moving blocks are collide with
-	void moveGhostAfterCollide(const std::vector<Point>& points, std::vector<char>& ghostsDirections);
+	void moveGhostAfterCollide(const std::vector<Point>& points, std::vector<int>& ghostsDirections);
 	// Deletes the ghosts that include the points
 	void deleteGhosts(const std::vector<Point>& points);
 	// Moving the ships
-	void moveShip(std::vector<char>& ghostsDirections);
+	void moveShip(std::vector<int>& ghostsDirections);
 	// Checks if the ship can push the block(s)
-	void checkShipPushBlock(std::vector<Point>& points, std::vector<char>& ghostsDirections);
+	void checkShipPushBlock(std::vector<Point>& points, std::vector<int>& ghostsDirections);
 	// get only the blocks above that the ship is not collide with
 	std::set<int> getOnlyBlocksAboveToMove(std::set<int> blocksAbove, std::set<int> blocksIndexesToMove);
 	// Return all the blocks indexes in "blocks" array which can move after a ship pushed them
-	std::set<int> getBlocksCanMoveAfterCollideByShip(const std::vector<Point>& points, bool& canMove, bool& isColide, std::set<int>& blocksAbove, std::vector<char>& ghostsDirections);
+	std::set<int> getBlocksCanMoveAfterCollideByShip(const std::vector<Point>& points, bool& canMove, bool& isColide, std::set<int>& blocksAbove, std::vector<int>& ghostsDirections);
 	// get all the blocks above the points recursive
 	std::set<int> getAllBlocksAbovePoints(const std::vector<Point>& points);
 	// Clculate the total size of all the blocks in "blocksIndexesToMove"
@@ -80,7 +80,7 @@ public:
 	// The points which are not BLANK or the points char itself
 	std::vector<Point> getTheNextCollisionPointsOfBlocks(std::set<int> blocksIndexesToMove, int _dirx, int _diry);
 	// Move the blocks in "blocksToMove"
-	void checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove, std::vector<char>& ghostsDirections);
+	void checkBlocksAboveAndMove(std::set<int> blocksIndexesToMove, std::vector<int>& ghostsDirections);
 	// Move all the blocks vertically, "Free fall"
 	void checkBlocksVerticalMove();
 	// check if the blocks smash ship
@@ -92,7 +92,7 @@ public:
 	// Chceks if the block can move on board
 	bool isBlockCanMove(int blockIndex);
 	// Checks if there are block above the ships and move the accordingly
-	void checkBlocksAboveShip(const std::vector<Point>& aboveShipPoints, std::vector<char>& ghostsDirections);
+	void checkBlocksAboveShip(const std::vector<Point>& aboveShipPoints, std::vector<int>& ghostsDirections);
 	// get the blocks that fall on ship recursive
 	void getBlocksFallOnShipTopPoints(const std::vector<Point>& pointsAbove, std::set<int>& blocksIndexesAbove, int shipIndex);
 	// get all the points above the blocksIndexes
@@ -105,5 +105,5 @@ public:
 	bool areAllPointsIncludeChars(const std::vector<Point>& points, char* charsArr, int size) const;
 	// Returns true if thw blocks include the given point
 	bool areBlocksIncludePoint(Point p);
-
+	void setAndCheckResultFile(Record& gameRecord, int pointOfTime);
 };

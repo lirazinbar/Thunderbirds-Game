@@ -1,6 +1,10 @@
 #pragma once
 #include <set>
 #include <iterator>
+#include "StepSegment.h"
+//#include "Record.h"
+#include <string>
+#include <iostream>
 
 enum class BoardSymbols {
 	END_POINT = 'E',
@@ -12,6 +16,12 @@ enum class BoardSymbols {
 	HORIZONTAL_GHOST = '$',
 	VERTICAL_GHOST = '!',
 	WANDERING_GHOST = '%',
+};
+
+enum class GhostsTypes {
+	HORIZONTAL_GHOST_TYPE = 'H',
+	VERTICAL_GHOST_TYPE = 'V',
+	WANDERING_GHOST_TYPE = 'W',
 };
 
 enum class PrintPoints {
@@ -76,3 +86,9 @@ std::set<int> reduceSets(std::set<int> set1, std::set<int> set2);
 bool isArrayIncludesChar(char* arr, int size, char ch);
 // Returns random number in range
 int getRandomInRange(int min, int max);
+StepSegment readSegment(std::fstream& stepsFile);
+std::vector<int> readGhosts(std::fstream& stepsFile);
+void printGameResultError();
+void printPassTest();
+void printFailTest();
+//void setAndCheckResultFile(Record& gameRecord, int pointOfTime, bool isGameWon);

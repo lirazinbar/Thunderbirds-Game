@@ -1,6 +1,6 @@
 #include "Point.h"
-#include "Utils.h"
 #include "Board.h"
+#include "Game.h"
 
 void Point::move(int& difx, int& dify) {
 	x += difx;
@@ -8,8 +8,10 @@ void Point::move(int& difx, int& dify) {
 }
 
 void Point::drawOnScreen() const {
-	gotoxy(x, y);
-	std::cout << ch;
+	if (Game::getSecondaryGameMode() != GameMode::SILENT) {
+		gotoxy(x, y);
+		std::cout << ch;
+	}
 	pBoard->set(x, y, ch); // draw also in board!
 }
 

@@ -6,6 +6,9 @@
 #include <queue>
 #include "Files.h"
 #include "Ship.h"
+#include "StepSegment.h"
+
+class GameScreen;
 
 struct RecordArgumants {
 	constexpr static const char* SAVE = "-save";
@@ -19,29 +22,6 @@ typedef struct result {
 } Result;
 
 class Record {
-public:
-	class StepSegment {
-		char pointOfTime = 0;
-		/*int activeShip = int(ShipsIndex::BIG_SHIP);
-		char activeShip = -1;
-		char shipDirection = -1;*/
-		char key = 0;
-		std::vector<char> wanderingGhostsDirections{0};
-		friend class Record;
-	public:
-		// Return pointOfTime
-		int getPointOfTime() const { return pointOfTime; }
-		// Return the key
-		char getKey() const { return key; }
-		// Return the wandering ghosts directions vector
-		std::vector<char>& getGhostsVector() { return wanderingGhostsDirections; }
-		// Change the pointOfTime
-		void setPointOfTime(int _pointOfTim) { pointOfTime = _pointOfTim; }
-		// Change the key
-		void setKey(int _key) { key = _key; }
-		// For the save mode ghosts vector
-		void ghostsVectorResize(int size) { wanderingGhostsDirections.resize(size, 0); };
-	};
 private:
 	std::vector<std::string> stepsFileNames;
 	std::vector<std::string> resultFileNames;
@@ -72,27 +52,30 @@ public:
 	// Deletes all record files (steps and result) that were in the directory, before saving a new game
 	void deleteRecordFiles();
 	// Open the steps and result files for reading or writing
-	void openFiles(OpenMode mode) { openFile(stepsFile, stepsFileNames[savedFileIndex], mode), openFile(resultFile, resultFileNames[savedFileIndex], mode); }
+	void openFiles(OpenMode mode) {
+		openFile(stepsFile, stepsFileNames[savedFileIndex], mode);
+		openFile(resultFile, resultFileNames[savedFileIndex], mode);
+	}
 	// Search the names of the relevant files in pwd and return a vector taht stores them
 	void getRecordFiles();
 	// Opens the next steps and result text files in lexicographical order and load them
-	void openNextSavedGameScreen();
+	void openNextSavedGameScreen(int screenNumber);
 	// Load the saved screen game from files into a vector
 	void readSavedGameScreen();
 	// Save a screen game to files
-	void writeSavedGameScreen();
-	// Read a steps segment from a file into a StepSegment obj
-	Record::StepSegment readSegment();
+	void writeSavedGameScreen(int screenNumber);
+	//// Read a steps segment from a file into a StepSegment obj
+	//Record::StepSegment readSegment();
 	// Write a step segment obj to the steps file
 	void writeSegment(const StepSegment& segment);
 	// Write the ghosts directions to a line
 	void writeGhosts(const StepSegment& segment);
-	// Read the ghosts directions from a line
-	void readGhosts(StepSegment& tmpSegment);
+	//// Read the ghosts directions from a line
+	//void readGhosts(StepSegment& tmpSegment);
 	// Read the data from result file
 	void readResultFile();
 	// Extract the next step segment from the steps queue
-	void extractStepSegment(StepSegment& segment);
+	bool extractStepSegment(StepSegment& segment);
 	// Insert a step segment into the steps queue
 	void insertStepSegment(StepSegment& segment, int pointOfTime, int key);
 	// Return the next deathTimePoint

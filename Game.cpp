@@ -40,20 +40,28 @@ void Game::run(int argc, char* argv[]) {
 }
 
 void Game::setGameMode(int argc, char* argv[]) {
-	// Load + Silent modes
-	if (argc >= 2 && argc <= 3 && strcmp(argv[1], RecordArgumants::LOAD) == 0) {
-		Game::mode.main = GameMode::LOAD;
-		if (argc == 3 && strcmp(argv[2], RecordArgumants::SILENT) == 0)
-			Game::mode.secondary = GameMode::SILENT;
-	}
-	// Save mode
-	else if (argc == 2 && strcmp(argv[1], RecordArgumants::SAVE) == 0)
-		Game::mode.main = GameMode::SAVE;
-	// Regular mode
-	else if (argc == 1)
-		Game::mode.main = GameMode::REGULAR;
-	else
-		printInvalidCmdInput();
+	// // Load + Silent modes
+	//Game::modeSleep = 100;
+
+	//if (argc >= 2 && argc <= 3 && strcmp(argv[1], RecordArgumants::LOAD) == 0) {
+	//	Game::mode.main = GameMode::LOAD;
+	//	Game::modeSleep = 50;
+	//	if (argc == 3 && strcmp(argv[2], RecordArgumants::SILENT) == 0) {
+	//		Game::mode.secondary = GameMode::SILENT;
+	//		Game::modeSleep = 0;
+	//	}
+	//}
+	//// Save mode
+	//else if (argc == 2 && strcmp(argv[1], RecordArgumants::SAVE) == 0)
+	//	Game::mode.main = GameMode::SAVE;
+	//// Regular mode
+	//else if (argc == 1)
+	//	Game::mode.main = GameMode::REGULAR;
+	//else
+	//	printInvalidCmdInput();
+	Game::mode.main = GameMode::LOAD;
+	//Game::mode.secondary= GameMode::SILENT;
+	//Game::modeSleep = 0;
 }
 
 void Game::play() {
@@ -62,23 +70,27 @@ void Game::play() {
 	Game::livesCount = 3;
 	GameScreen screen;
 	Record gameRecord;
+	int pointOfTime = 0;
 		
 	// If there at least one relevant file in the directory
 	if (Game::keepPlaying) {
 		screen.chooseScreen(gameRecord);
 		while (!isGameLost() && Game::keepPlaying) {
-			SingleGame(livesCount, screen).play(gameRecord);
+			pointOfTime = SingleGame(livesCount, screen).play(gameRecord);
 			returnToFileBeginning(screen.getScreenFile());
 			if (Game::gameWon == true) {
+				// gameRecord.setScreenFinishTimePoint(pointOfTime);
 				Game::livesCount = 3; // Reset lives
 				screen.openNextScreenFile();
 				if (Game::mode.main != GameMode::REGULAR)
-					gameRecord.openNextSavedGameScreen();
+					gameRecord.openNextSavedGameScreen(screen.getScreenNumber()-1);
 			}
 		}
 		// If you didn't finish last screen
-		if (Game::gameWon == false && Game::mode.main == GameMode::SAVE)
-			gameRecord.writeSavedGameScreen();
+		if (Game::gameWon == false && Game::mode.main == GameMode::SAVE) {
+			// gameRecord.addDeathPointOfTime(pointOfTime);
+			gameRecord.writeSavedGameScreen(screen.getScreenNumber());
+		}
 	}
 }
 

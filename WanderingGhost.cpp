@@ -7,6 +7,10 @@ void WanderingGhost::changeDir() {
 
 void WanderingGhost::setDir(int _dir) {
 	switch (_dir) {
+	case 0:
+		dirx = 0;
+		diry = 0;
+		break;
 	case 1:
 		dirx = 0;
 		diry = 1;
@@ -27,6 +31,7 @@ void WanderingGhost::setDir(int _dir) {
 }
 
 int WanderingGhost::getDir() {
+	if (dirx == 0 && diry == 0) return 0;
 	if (dirx == 0 && diry == 1) return 1;
 	if (dirx == 0 && diry == -1) return 2;
 	if (dirx == 1 && diry == 0) return 3;

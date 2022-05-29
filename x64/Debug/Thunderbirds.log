@@ -1,0 +1,5 @@
+﻿  Game.cpp
+  SingleGame.cpp
+C:\Users\liraz\Documents\thunder-game-v3.0.1\Thunderbirds-Game\SingleGame.cpp(40,30): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+  Thunderbirds.vcxproj -> C:\Users\liraz\Documents\thunder-game-v3.0.1\Thunderbirds-Game\x64\Debug\Thunderbirds.exe

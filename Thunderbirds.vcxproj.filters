@@ -60,6 +60,9 @@
     <ClCompile Include="WanderingGhost.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StepSegment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h">
@@ -110,6 +113,9 @@
     <ClInclude Include="WanderingGhost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StepSegment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="README.txt">
@@ -122,6 +128,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="tb3.screen.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="file_format.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

@@ -29,9 +29,9 @@ void Record::getRecordFiles() {
 	}
 }
 
-void Record::openNextSavedGameScreen() {
+void Record::openNextSavedGameScreen(int screenNumber) {
 	if (Game::getMainGameMode() == GameMode::SAVE)
-		writeSavedGameScreen();
+		writeSavedGameScreen(screenNumber);
 	// If there is another screen to play
 	if (Game::getGameWinningStatus() == false)
 		savedFileIndex++;
@@ -49,7 +49,7 @@ void Record::readSavedGameScreen() {
 
 	// Read steps file until end of file, line by line
 	while (!stepsFile.eof()) {
-		StepSegment tmpSegment = readSegment();
+		StepSegment tmpSegment = readSegment(stepsFile);
 		//ss << line;
 		//ss >> tmpSegment.pointOfTime;
 		//std::getline(stepsFile, line)
@@ -71,54 +71,32 @@ void Record::readSavedGameScreen() {
 	stepsFile.close(), resultFile.close();
 }
 
-Record::StepSegment Record::readSegment() {
-	std::stringstream ss;
-	std::string line;
-	StepSegment tmpSegment;
-	char tmpChar;
-
-	tmpSegment.pointOfTime = stepsFile.get();
-	stepsFile.ignore(256, '\n');
-	tmpChar = stepsFile.get();
-	if (tmpChar != '\n') {
-		tmpSegment.key = tmpChar;
-		stepsFile.ignore(256, '\n');
-	}
-	readGhosts(tmpSegment);
-	return tmpSegment;
-}
-
-void Record::readGhosts(StepSegment& tmpSegment) {
-	std::string line;
-	std::stringstream ss;
-	char tmpChar;
-
-	std::getline(stepsFile, line);
-	ss << line;
-	while (!ss.eof()) {
-		ss >> tmpChar;
-		tmpSegment.wanderingGhostsDirections.push_back(tmpChar);
-	}
-}
-
 void Record::readResultFile() {
 	std::string line;
 	std::stringstream ss;
-	char tmpChar;
+	int tmp;
 
 	// Read deathTimePoints
-	std::getline(stepsFile, line);
+	std::getline(resultFile, line);
 	ss << line;
+	ss >> tmp;
 	while (!ss.eof()) {
-		ss >> tmpChar;
-		resultData.deathTimePoints.push(tmpChar);
+		resultData.deathTimePoints.push(tmp);
+		ss >> tmp;
 	}
 	// Read screenFinishTimePoint. -1 if the player didn't finish the screen
-	resultData.screenFinishTimePoint = stepsFile.get();
+	int finishTime;
+	resultFile >> finishTime;
+	resultData.screenFinishTimePoint = finishTime;
 }
 
-void Record::writeSavedGameScreen() {
-	openFiles(OpenMode::WRITE);
+void Record::writeSavedGameScreen(int screenNumber) {
+	// openFiles(OpenMode::WRITE);
+	std::string currentStepsFileName = "tb0" + std::to_string(screenNumber) + ".steps.txt";
+ 	std::string currentResultFileName = "tb0"+std::to_string(screenNumber)+".result.txt";
+	openFile(stepsFile, currentStepsFileName, OpenMode::WRITE);
+	openFile(resultFile, currentResultFileName, OpenMode::WRITE);
+
 	StepSegment tmpSegment;
 
 	while (!stepsQueue.empty()) {
@@ -126,7 +104,8 @@ void Record::writeSavedGameScreen() {
 		stepsQueue.pop();
 		writeSegment(tmpSegment);
 	}
-	readResultFile();
+	//readResultFile();
+	writeResultFile();
 	stepsFile.close(), resultFile.close();
 }
 
@@ -134,8 +113,9 @@ void Record::writeSegment(const StepSegment& segment) {
 	std::stringstream ss;
 	std::string line;
 
-	stepsFile.put(segment.pointOfTime);
-	stepsFile << std::endl;
+	stepsFile << segment.pointOfTime << std::endl;
+	// stepsFile.put(segment.pointOfTime);
+	// stepsFile << std::endl;
 	if (segment.key != 0)
 		stepsFile.put(segment.key);
 	stepsFile << std::endl;
@@ -163,13 +143,14 @@ void Record::writeResultFile() {
 	resultFile << resultData.screenFinishTimePoint;
 }
 
-void Record::extractStepSegment(StepSegment& segment) {
+bool Record::extractStepSegment(StepSegment& segment) {
 	if (!stepsQueue.empty()) {
 		segment = stepsQueue.front();
 		stepsQueue.pop();
+		return true;
 	}
-	else
-		printGameLoadError();
+	printGameLoadError();
+	return false;
 }
 
 void Record::insertStepSegment(StepSegment& segment, int pointOfTime, int key) {
