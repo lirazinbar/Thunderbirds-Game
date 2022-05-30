@@ -72,7 +72,7 @@ void Record::readSavedGameScreen() {
 }
 
 void Record::readResultFile() {
-	std::string line;
+ 	std::string line;
 	std::stringstream ss;
 	int tmp;
 

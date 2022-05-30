@@ -86,7 +86,6 @@ int SingleGame::play(Record& gameRecord) {
 		moveShip(currSegment.getGhostsVector());
 		checkBlocksVerticalMove();
 		Sleep(modeSleep);
-		//Sleep(Game::getModeSleep());
 		timer.tick();
 		if (isTimeRanOut() || isGameWon()) {
 			keepPlayingSingleGame = false;
@@ -96,41 +95,6 @@ int SingleGame::play(Record& gameRecord) {
 	}
 
 	setAndCheckResultFile(gameRecord, pointOfTimeCounter);
-
-
-   	/*if (Game::getMainGameMode() == GameMode::SAVE) {
-		if (isGameWon()) {
-			gameRecord.setScreenFinishTimePoint(pointOfTimeCounter);
-		}
-		else {
-			gameRecord.addDeathPointOfTime(pointOfTimeCounter);
-		}
-	}
-	else if (Game::getMainGameMode() == GameMode::LOAD) {
-		if (isGameWon()) {
-			if (Game::getSecondaryGameMode() == GameMode::SILENT) {
-				if (gameRecord.getsScreenFinishTimePoint() != pointOfTimeCounter) {
-					printFailTest();
-				}
-				else printPassTest();
-			}
-			else {
-				if (gameRecord.getsScreenFinishTimePoint() != pointOfTimeCounter) {
-					printGameResultError();
-				}
-			}
-		}
-		else {
-			if (Game::getSecondaryGameMode() == GameMode::SILENT) {
-				if (gameRecord.getNextDeathTimePoint() != pointOfTimeCounter) {
-					printFailTest();
-				}
-				else printPassTest();
-			}
-			if (gameRecord.getNextDeathTimePoint() != pointOfTimeCounter) printGameResultError();
-		}
-	}*/
-
 	return pointOfTimeCounter;
 }
 
@@ -155,18 +119,23 @@ void SingleGame::setAndCheckResultFile(Record& gameRecord, int pointOfTime) {
 			}
 			else {
 				if (gameRecord.getsScreenFinishTimePoint() != pointOfTime) {
-					printGameResultError();
+					printGameResultError("result finish point time - " + std::to_string(gameRecord.getsScreenFinishTimePoint()) 
+						+ "actual point of time - " + std::to_string(pointOfTime));
 				}
 			}
 		}
 		else {
+			int deathPoint = gameRecord.getNextDeathTimePoint();
 			if (Game::getSecondaryGameMode() == GameMode::SILENT) {
-				if (gameRecord.getNextDeathTimePoint() != pointOfTime) {
+				if (deathPoint != pointOfTime) {
 					printFailTest();
 				}
 				else printPassTest();
 			}
-			if (gameRecord.getNextDeathTimePoint() != pointOfTime) printGameResultError();
+			else if (deathPoint != pointOfTime) {
+				printGameResultError("result death point time - " + std::to_string(deathPoint)
+					+ "actual point of time - " + std::to_string(pointOfTime));
+			}
 		}
 	}
 }
@@ -283,19 +252,31 @@ void SingleGame::moveGhosts(std::vector<int>& ghostsDirections) {
 		if (areBlocksIncludePoint((*itr)->getPoint())) {
 			itr = ghosts.erase(itr);
 		}
+		else if ((*itr)->getType() == GhostsTypes::WANDERING_GHOST_TYPE && Game::getMainGameMode() == GameMode::LOAD) {
+			if (index < ghostsDirections.size()) {
+				(*itr)->setDir(ghostsDirections[index]);
+				(*itr)->move();
+			}
+			++itr;
+		}		
 		else {
 			if (nextPointCh != (char)BoardSymbols::BLANK) {
 				(*itr)->changeDir();
-				if (Game::getMainGameMode() != GameMode::LOAD) ghostsDirections.push_back(0);
+				if (Game::getMainGameMode() == GameMode::SAVE) ghostsDirections.push_back(0);
 			}
 			else {
 				// TODO
-				if (Game::getMainGameMode() == GameMode::LOAD) {
-					if (index < ghostsDirections.size()) (*itr)->setDir(ghostsDirections[index]);
-				}
-				else {
-					ghostsDirections.push_back((*itr)->getDir());
-				}
+				if (Game::getMainGameMode() == GameMode::SAVE) ghostsDirections.push_back((*itr)->getDir());
+
+				/*if ((*itr)->getType() == GhostsTypes::WANDERING_GHOST_TYPE) {
+					if (Game::getMainGameMode() == GameMode::LOAD) {
+						if (index < ghostsDirections.size()) (*itr)->setDir(ghostsDirections[index]);
+					}
+					else {*/
+				/*if (Game::getMainGameMode() == GameMode::SAVE)
+					ghostsDirections.push_back(0);*/
+					/*}
+				}*/
 				(*itr)->move();
 			}
 			++itr;
@@ -332,12 +313,12 @@ void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points, std::ve
 					itr = ghosts.erase(itr);
 					points[indexToMove].deleteFromScreen();
 				}*/
-				if (Game::getMainGameMode() == GameMode::LOAD) {
+				/*if (Game::getMainGameMode() == GameMode::LOAD) {
 					if (index < ghostsDirections.size()) (*itr)->setDir(ghostsDirections[index]);
 				}
 				else {
 					ghostsDirections[index] = ((*itr)->getDir());
-				}
+				}*/
 				(*itr)->move();
 				// TODO
 				/*(*itr)->move();

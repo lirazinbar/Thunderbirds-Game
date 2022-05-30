@@ -87,7 +87,7 @@ bool isArrayIncludesChar(char* arr, int size, char ch);
 int getRandomInRange(int min, int max);
 StepSegment readSegment(std::fstream& stepsFile);
 std::vector<int> readGhosts(std::fstream& stepsFile);
-void printGameResultError();
+void printGameResultError(std::string message);
 void printPassTest();
 void printFailTest();
 //void setAndCheckResultFile(Record& gameRecord, int pointOfTime, bool isGameWon);

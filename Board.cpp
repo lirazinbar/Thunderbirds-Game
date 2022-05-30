@@ -202,7 +202,11 @@ void Board::Legend::printTimer(int timeLeft) const {
 	int y = getLegendLocation().getY();
 	gotoxy(x, y);
 	std::cout << timeLeft;
-	if (timeLeft == 99) {
+	if (timeLeft == 999) {
+		gotoxy(x + 3, y);
+		std::cout << char(BoardSymbols::BLANK);  // Erase last digit
+	}
+	else if (timeLeft == 99) {
 		gotoxy(x + 2, y);
 		std::cout << char(BoardSymbols::BLANK);  // Erase last digit
 	}

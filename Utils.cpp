@@ -171,9 +171,9 @@ void printGameLoadError() {
 	Game::stopPlaying();
 }
 
-void printGameResultError() {
+void printGameResultError(std::string message) {
 	clrscr();
-	std::cout << "Error: There is an incompatibility between the saved file to the result file - ";
+	std::cout << "Error: There is an incompatibility between the saved file to the result file - " << message;
 	Sleep(3000);
 	Game::stopPlaying();
 }
