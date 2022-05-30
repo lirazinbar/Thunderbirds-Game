@@ -63,6 +63,7 @@ int SingleGame::play(Record& gameRecord) {
 	int pointOfTimeCounter = 0;
 	std::vector<int> emptyVec;
 	StepSegment currSegment;
+	int modeSleep = getModeSleepTime();
 	
 	while (keepPlayingSingleGame == true) {
 		pointOfTimeCounter++;
@@ -84,7 +85,7 @@ int SingleGame::play(Record& gameRecord) {
 		moveGhosts(currSegment.getGhostsVector());
 		moveShip(currSegment.getGhostsVector());
 		checkBlocksVerticalMove();
-		Sleep(10);
+		Sleep(modeSleep);
 		//Sleep(Game::getModeSleep());
 		timer.tick();
 		if (isTimeRanOut() || isGameWon()) {
@@ -788,4 +789,16 @@ bool SingleGame::areBlocksIncludePoint(Point p) {
 	}
 
 	return false;
+}
+
+int SingleGame::getModeSleepTime() {
+	// Load + Silent modes
+	int modeSleep = 100;
+	if (Game::getMainGameMode() == GameMode::LOAD){
+		modeSleep = 50;
+		if (Game::getSecondaryGameMode() == GameMode::SILENT) {
+			modeSleep = 0;
+		}
+	}
+	return modeSleep;
 }

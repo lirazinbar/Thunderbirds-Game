@@ -106,4 +106,5 @@ public:
 	// Returns true if thw blocks include the given point
 	bool areBlocksIncludePoint(Point p);
 	void setAndCheckResultFile(Record& gameRecord, int pointOfTime);
+	int getModeSleepTime();
 };

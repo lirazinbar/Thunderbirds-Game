@@ -40,28 +40,22 @@ void Game::run(int argc, char* argv[]) {
 }
 
 void Game::setGameMode(int argc, char* argv[]) {
-	// // Load + Silent modes
-	//Game::modeSleep = 100;
+	 // Load + Silent modes
 
-	//if (argc >= 2 && argc <= 3 && strcmp(argv[1], RecordArgumants::LOAD) == 0) {
-	//	Game::mode.main = GameMode::LOAD;
-	//	Game::modeSleep = 50;
-	//	if (argc == 3 && strcmp(argv[2], RecordArgumants::SILENT) == 0) {
-	//		Game::mode.secondary = GameMode::SILENT;
-	//		Game::modeSleep = 0;
-	//	}
-	//}
-	//// Save mode
-	//else if (argc == 2 && strcmp(argv[1], RecordArgumants::SAVE) == 0)
-	//	Game::mode.main = GameMode::SAVE;
-	//// Regular mode
-	//else if (argc == 1)
-	//	Game::mode.main = GameMode::REGULAR;
-	//else
-	//	printInvalidCmdInput();
-	Game::mode.main = GameMode::LOAD;
-	//Game::mode.secondary= GameMode::SILENT;
-	//Game::modeSleep = 0;
+	if (argc >= 2 && argc <= 3 && strcmp(argv[1], RecordArgumants::LOAD) == 0) {
+		Game::mode.main = GameMode::LOAD;
+		if (argc == 3 && strcmp(argv[2], RecordArgumants::SILENT) == 0) {
+			Game::mode.secondary = GameMode::SILENT;
+		}
+	}
+	// Save mode
+	else if (argc == 2 && strcmp(argv[1], RecordArgumants::SAVE) == 0)
+		Game::mode.main = GameMode::SAVE;
+	// Regular mode
+	else if (argc == 1)
+		Game::mode.main = GameMode::REGULAR;
+	else
+		printInvalidCmdInput();
 }
 
 void Game::play() {
