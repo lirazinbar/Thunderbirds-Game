@@ -40,6 +40,7 @@ enum class GameMode {
 
 struct Keys {
 	constexpr static char ESC = 27;
+	constexpr static char FINISH_FILE = '*';
 	constexpr static char Up = 'w';
 	constexpr static char Right = 'd';
 	constexpr static char Down = 'x';

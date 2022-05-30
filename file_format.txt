@@ -2,3 +2,9 @@ we kept the information in the steps file in this structure:
 first line - Point Of Time
 second line - the key user pressed (if he pressed)
 third line - the wandering ghosts directions vector
+
+* we support saving game after user exit, we mark the key in the file by - *
+
+we kept the information in the steps file in this structure:
+first line - Points Of Time of death (if there are)
+second line - point of win screen (-1 if not)

@@ -66,16 +66,22 @@ int SingleGame::play(Record& gameRecord) {
 	int modeSleep = getModeSleepTime();
 	
 	while (keepPlayingSingleGame == true) {
+		key = ' ';
 		pointOfTimeCounter++;
 
 		if (Game::getMainGameMode() == GameMode::LOAD) {
-			if (currSegment.getPointOfTime() < pointOfTimeCounter)
-				if (!gameRecord.extractStepSegment(currSegment)) return -1;
-			if (currSegment.getPointOfTime() == pointOfTimeCounter) {
-				key = currSegment.getKey();
-				assignKey(key);
-				/*moveGhosts(currSegment.getGhostsVector());
-				moveShip(currSegment.getGhostsVector());*/
+			if (currSegment.getKey() == Keys::FINISH_FILE) {
+				keepPlayingSingleGame = false;
+				setAndCheckResultFile(gameRecord, pointOfTimeCounter - 1);
+				return -1;
+			}
+			else {
+				if (currSegment.getPointOfTime() < pointOfTimeCounter)
+					if (!gameRecord.extractStepSegment(currSegment)) return -1;
+				if (currSegment.getPointOfTime() == pointOfTimeCounter) {
+					key = currSegment.getKey();
+					assignKey(key);
+				}
 			}
 		}
 		else if (_kbhit()) {
@@ -90,11 +96,15 @@ int SingleGame::play(Record& gameRecord) {
 		if (isTimeRanOut() || isGameWon()) {
 			keepPlayingSingleGame = false;
 		}
+		if (key == Keys::ESC) {
+			key = ' ';
+			if (!keepPlayingSingleGame) key = Keys::FINISH_FILE;
+		}
 		if (Game::getMainGameMode() == GameMode::SAVE)
 			gameRecord.insertStepSegment(currSegment, pointOfTimeCounter, key);
 	}
 
-	setAndCheckResultFile(gameRecord, pointOfTimeCounter);
+   	setAndCheckResultFile(gameRecord, pointOfTimeCounter);
 	return pointOfTimeCounter;
 }
 
@@ -120,7 +130,7 @@ void SingleGame::setAndCheckResultFile(Record& gameRecord, int pointOfTime) {
 			else {
 				if (gameRecord.getsScreenFinishTimePoint() != pointOfTime) {
 					printGameResultError("result finish point time - " + std::to_string(gameRecord.getsScreenFinishTimePoint()) 
-						+ "actual point of time - " + std::to_string(pointOfTime));
+						+ ", actual point of time - " + std::to_string(pointOfTime));
 				}
 			}
 		}
@@ -134,7 +144,7 @@ void SingleGame::setAndCheckResultFile(Record& gameRecord, int pointOfTime) {
 			}
 			else if (deathPoint != pointOfTime) {
 				printGameResultError("result death point time - " + std::to_string(deathPoint)
-					+ "actual point of time - " + std::to_string(pointOfTime));
+					+ ", actual point of time - " + std::to_string(pointOfTime));
 			}
 		}
 	}
@@ -239,6 +249,11 @@ void SingleGame::moveGhosts(std::vector<int>& ghostsDirections) {
 	int index = 0;
 
 	while (itr != ghosts.end()) {
+		if ((*itr)->getType() == GhostsTypes::WANDERING_GHOST_TYPE && Game::getMainGameMode() == GameMode::LOAD) {
+			if (index < ghostsDirections.size()) {
+				(*itr)->setDir(ghostsDirections[index]);
+			}
+		}
 		p = (*itr)->getNextPointToMove();
 		currentPointCh = board.get((*itr)->getPoint());
 		nextPointCh = board.get(p);
@@ -247,6 +262,7 @@ void SingleGame::moveGhosts(std::vector<int>& ghostsDirections) {
 			// kill ships
 			keepPlayingSingleGame = false;
 			printLoseMessage("Your ship has been killed by a ghost! ");
+			if (Game::getMainGameMode() == GameMode::SAVE) ghostsDirections.push_back((*itr)->getDir());
 			return;
 		}
 		if (areBlocksIncludePoint((*itr)->getPoint())) {

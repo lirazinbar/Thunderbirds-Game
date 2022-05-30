@@ -41,7 +41,6 @@ void Game::run(int argc, char* argv[]) {
 
 void Game::setGameMode(int argc, char* argv[]) {
 	// // Load + Silent modes
-
 	//if (argc >= 2 && argc <= 3 && strcmp(argv[1], RecordArgumants::LOAD) == 0) {
 	//	Game::mode.main = GameMode::LOAD;
 	//	if (argc == 3 && strcmp(argv[2], RecordArgumants::SILENT) == 0) {
@@ -57,7 +56,6 @@ void Game::setGameMode(int argc, char* argv[]) {
 	//else
 	//	printInvalidCmdInput();
 	Game::mode.main = GameMode::LOAD;
-	//Game::mode.secondary = GameMode::SILENT;
 
 }
 
@@ -74,6 +72,9 @@ void Game::play() {
 		screen.chooseScreen(gameRecord);
 		while (!isGameLost() && Game::keepPlaying) {
 			pointOfTime = SingleGame(livesCount, screen).play(gameRecord);
+			if (pointOfTime == -1) {
+				Game::keepPlaying = false;
+			}
 			returnToFileBeginning(screen.getScreenFile());
 			if (Game::gameWon == true) {
 				// gameRecord.setScreenFinishTimePoint(pointOfTime);
