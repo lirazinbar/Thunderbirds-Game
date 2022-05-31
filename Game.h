@@ -13,7 +13,6 @@ class Game {
 	static bool keepPlaying;
 	static bool gameWon;
 	static Mode mode;
-	//static int modeSleep;
 public:
 	// Run the whole game program
 	void run(int argc, char* argv[]);
@@ -35,8 +34,6 @@ public:
 	static void stopPlaying() { Game::keepPlaying = false; }
 	// Return the current game winning status
 	static bool getGameWinningStatus() { return gameWon; }
-	// Return the current mode sleep
-	//static int getModeSleep() { return Game::modeSleep; }
 	// Set the game winning status (True or false)
 	static void setGameWinningStatus(bool gameWinningStatus) { Game::gameWon = gameWinningStatus;}
 	// Check if the user lost the game

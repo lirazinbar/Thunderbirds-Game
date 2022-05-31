@@ -118,7 +118,6 @@ void SingleGame::setAndCheckResultFile(Record& gameRecord, int pointOfTime) {
 			gameRecord.addDeathPointOfTime(pointOfTime);
 		}
 	}
-
 	else if (Game::getMainGameMode() == GameMode::LOAD) {
 		if (isGameWon()) {
 			if (Game::getSecondaryGameMode() == GameMode::SILENT) {
@@ -186,17 +185,11 @@ void SingleGame::assignKey(char& key) {
 }
 
 bool SingleGame::isTimeRanOut() {
-	// If the time past is grater than 1 sec
-	//if (timer.getDeltaTime() >= 1000) {
-	//	timer.reduceTimeLeft();
-		board.getLegend().printTimer(timer.getTimeLeft());
-		// timer.resetTickStartTime();
-		// if time runs out
-		if (timer.getTimeLeft() <= 0) {
-			printLoseMessage("Time is up!");
-			return true;
-		}
-	// }
+	board.getLegend().printTimer(timer.getTimeLeft());
+	if (timer.getTimeLeft() <= 0) {
+		printLoseMessage("Time is up!");
+		return true;
+	}
 	return false;
 };
 
@@ -281,18 +274,7 @@ void SingleGame::moveGhosts(std::vector<int>& ghostsDirections) {
 				if (Game::getMainGameMode() == GameMode::SAVE) ghostsDirections.push_back(0);
 			}
 			else {
-				// TODO
 				if (Game::getMainGameMode() == GameMode::SAVE) ghostsDirections.push_back((*itr)->getDir());
-
-				/*if ((*itr)->getType() == GhostsTypes::WANDERING_GHOST_TYPE) {
-					if (Game::getMainGameMode() == GameMode::LOAD) {
-						if (index < ghostsDirections.size()) (*itr)->setDir(ghostsDirections[index]);
-					}
-					else {*/
-				/*if (Game::getMainGameMode() == GameMode::SAVE)
-					ghostsDirections.push_back(0);*/
-					/*}
-				}*/
 				(*itr)->move();
 			}
 			++itr;
@@ -324,21 +306,7 @@ void SingleGame::moveGhostAfterCollide(const std::vector<Point>& points, std::ve
 				points[indexToMove].deleteFromScreen();
 			}
 			else {
-				// TODO - kill wandering
-				/*if ((*itr)->getType() == GhostsTypes::WANDERING_GHOST_TYPE) {
-					itr = ghosts.erase(itr);
-					points[indexToMove].deleteFromScreen();
-				}*/
-				/*if (Game::getMainGameMode() == GameMode::LOAD) {
-					if (index < ghostsDirections.size()) (*itr)->setDir(ghostsDirections[index]);
-				}
-				else {
-					ghostsDirections[index] = ((*itr)->getDir());
-				}*/
 				(*itr)->move();
-				// TODO
-				/*(*itr)->move();
-				ghostsDirections[index]=((*itr)->getDir());*/
 				++itr;
 			}
 		}
@@ -720,7 +688,6 @@ void SingleGame::getBlocksFallOnShipTopPoints(const std::vector<Point>& pointsAb
 	int pointsIndex, blocksIndex;
 	bool found = false;
 
-	// TODO
 	if (pointsAbove.size() == 0 ||
 		areAllPointsIncludeChar(pointsAbove, (char)BoardSymbols::WALL) ||
 		areAllPointsIncludeChar(pointsAbove, (char)BoardSymbols::END_POINT) ||

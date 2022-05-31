@@ -91,4 +91,3 @@ std::vector<int> readGhosts(std::fstream& stepsFile);
 void printGameResultError(std::string message);
 void printPassTest();
 void printFailTest();
-//void setAndCheckResultFile(Record& gameRecord, int pointOfTime, bool isGameWon);

@@ -24,6 +24,5 @@ public:
 	void setKey(int _key) { key = _key; }
 	// For the save mode ghosts vector
 	void ghostsVectorResize(int size) { wanderingGhostsDirections.resize(size, 0); };
-	// Read a steps segment from a file into a StepSegment obj
 };
 

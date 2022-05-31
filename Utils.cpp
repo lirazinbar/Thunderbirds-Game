@@ -18,7 +18,6 @@ int getRandomInRange(int min, int max) {
 	return random_integer;
 }
 
-
 // function definition -- requires windows.h
 void gotoxy(int x, int y) {
 	HANDLE hConsoleOutput;
@@ -154,7 +153,6 @@ void printExitMessage() {
 }
 
 void printInvalidCmdInput() {
-	//clrscr();
 	std::cout << "Invalid input. Run the game with the following flags:" << std::endl;
 	std::cout << "-load: Load the previous game";
 	std::cout << " Add -silent in order to load without printing to the screen" << std::endl;
@@ -235,9 +233,7 @@ bool isArrayIncludesChar(char* arr, int size, char ch) {
 	return false;
 }
 
-//TODO maybe add &
 StepSegment readSegment(std::fstream& stepsFile) {
-	// char time = stepsFile.get();
 	int pointOfTime;
 	stepsFile >> pointOfTime;
 	char key = ' ';
@@ -268,38 +264,3 @@ std::vector<int> readGhosts(std::fstream& stepsFile) {
 
 	return wanderingGhostsDirections;
 }
-//
-//void setAndCheckResultFile(Record& gameRecord, int pointOfTime, bool isGameWon) {
-//	if (Game::getMainGameMode() == GameMode::SAVE) {
-//		if (isGameWon) {
-//			gameRecord.setScreenFinishTimePoint(pointOfTime);
-//		}
-//		else {
-//			gameRecord.addDeathPointOfTime(pointOfTime);
-//		}
-//	}
-//	else if (Game::getMainGameMode() == GameMode::LOAD) {
-//		if (isGameWon) {
-//			if (Game::getSecondaryGameMode() == GameMode::SILENT) {
-//				if (gameRecord.getsScreenFinishTimePoint() != pointOfTime) {
-//					printFailTest();
-//				}
-//				else printPassTest();
-//			}
-//			else {
-//				if (gameRecord.getsScreenFinishTimePoint() != pointOfTime) {
-//					printGameResultError();
-//				}
-//			}
-//		}
-//		else {
-//			if (Game::getSecondaryGameMode() == GameMode::SILENT) {
-//				if (gameRecord.getNextDeathTimePoint() != pointOfTime) {
-//					printFailTest();
-//				}
-//				else printPassTest();
-//			}
-//			if (gameRecord.getNextDeathTimePoint() != pointOfTime) printGameResultError();
-//		}
-//	}
-//}

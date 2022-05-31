@@ -50,21 +50,6 @@ void Record::readSavedGameScreen() {
 	// Read steps file until end of file, line by line
 	while (!stepsFile.eof()) {
 		StepSegment tmpSegment = readSegment(stepsFile);
-		//ss << line;
-		//ss >> tmpSegment.pointOfTime;
-		//std::getline(stepsFile, line)
-		//ss >> tmpChar;
-		//// Ship direction or active ship change
-		//if (tmpChar == 'k')
-		//	ss >> tmpSegment.key;
-		//// Wandering ghosts direction change
-		//if (tmpChar == 'g') {
-		//	while (!ss.eof()) {
-		//		ss >> tmpChar;
-		//		tmpSegment.wanderingGhostsDirections.push_back(tmpChar);
-		//	}
-		//}
-		//stepsArr.push_back(tmpSegment);
 		stepsQueue.push(tmpSegment);
 	}
 	readResultFile();
@@ -91,7 +76,6 @@ void Record::readResultFile() {
 }
 
 void Record::writeSavedGameScreen(int screenNumber) {
-	// openFiles(OpenMode::WRITE);
 	std::string currentStepsFileName = "tb0" + std::to_string(screenNumber) + ".steps.txt";
  	std::string currentResultFileName = "tb0"+std::to_string(screenNumber)+".result.txt";
 	openFile(stepsFile, currentStepsFileName, OpenMode::WRITE);
@@ -104,7 +88,6 @@ void Record::writeSavedGameScreen(int screenNumber) {
 		stepsQueue.pop();
 		writeSegment(tmpSegment);
 	}
-	//readResultFile();
 	writeResultFile();
 	stepsFile.close(), resultFile.close();
 }
@@ -114,8 +97,6 @@ void Record::writeSegment(const StepSegment& segment) {
 	std::string line;
 
 	stepsFile << segment.pointOfTime << std::endl;
-	// stepsFile.put(segment.pointOfTime);
-	// stepsFile << std::endl;
 	if (segment.key != 0)
 		stepsFile.put(segment.key);
 	stepsFile << std::endl;

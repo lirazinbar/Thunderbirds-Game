@@ -55,7 +55,6 @@ void GameScreen::chooseFirstSavedScreen(Record& gameRecord) {
 		if (stepsFilePrefix.compare(screenFilePrefix) == 0) {
 			found = true;
 			screenNumber = i + 1;
-			//gameRecord.setSavedFileIndex(i);
 			openFile(screenFile, screenFileNames[i], OpenMode::READ);
 		}
 	}

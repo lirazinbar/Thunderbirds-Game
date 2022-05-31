@@ -64,14 +64,10 @@ public:
 	void readSavedGameScreen();
 	// Save a screen game to files
 	void writeSavedGameScreen(int screenNumber);
-	//// Read a steps segment from a file into a StepSegment obj
-	//Record::StepSegment readSegment();
 	// Write a step segment obj to the steps file
 	void writeSegment(const StepSegment& segment);
 	// Write the ghosts directions to a line
 	void writeGhosts(const StepSegment& segment);
-	//// Read the ghosts directions from a line
-	//void readGhosts(StepSegment& tmpSegment);
 	// Read the data from result file
 	void readResultFile();
 	// Extract the next step segment from the steps queue
